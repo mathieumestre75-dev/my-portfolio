@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Spline+Sans+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/* Self-hosted fonts */
+@font-face {
+  font-family: 'P22 Mackinac Medium';
+  src: url('/fonts/P22MackinacMedium.woff2') format('woff2'),
+       url('/fonts/P22MackinacMedium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal Medium';
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2'),
+       url('/fonts/PPNeueMontreal-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-page-bg:           rgb(241, 245, 251);
+  --color-white-page:        rgb(255, 255, 255);
+  --color-inner-bg:          rgb(252, 252, 252);
+  --color-text-primary:      rgba(0, 0, 0, 0.75);
+  --color-text-secondary:    rgba(0, 0, 0, 0.35);
+  --color-border:            rgba(0, 0, 0, 0.08);
+  --color-music-divider:     rgba(0, 0, 0, 0.15);
+  --color-dot-outer:         rgb(200, 220, 232);
+  --color-dot-inner:         rgb(255, 80, 80);
+  --color-right-fade-start:  rgb(252, 252, 252);
+
+  /* Legacy tokens kept for inner pages */
+  --bg: #f1f5fb;
+  --fg: rgba(0, 0, 0, 0.75);
+  --fg-secondary: rgba(0, 0, 0, 0.45);
+  --fg-muted: rgba(0, 0, 0, 0.35);
+  --fg-faint: rgba(0, 0, 0, 0.23);
+  --surface: rgba(255, 255, 255, 0.3);
+  --surface-solid: #ffffff;
+  --accent-blue: #0059ff;
+  --accent-orange: rgb(255, 95, 51);
+  --card-shadow: rgba(79, 44, 9, 0.06) 0px 5px 25px 3px;
+  --dock-shadow: rgba(79, 44, 9, 0.02) 0px 5px 25px 3px;
+  --tag-bg: rgba(0, 0, 0, 0.06);
+}
+
+@theme inline {
+  --font-sans: var(--font-caveat);
+  --font-display: var(--font-caveat);
+  --font-mono: var(--font-spline-sans-mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-page-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

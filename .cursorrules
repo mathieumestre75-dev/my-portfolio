@@ -1,0 +1,128 @@
+You are building a product designer portfolio that is a faithful clone of elishajeon.com, adapted for a B2B/SaaS product designer.
+
+## Stack
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- next-themes (dark mode)
+- lucide-react (icons)
+
+## REAL values extracted from elishajeon.com
+
+### Colors (exact)
+- Background light: #F1F5FB (rgb(241, 245, 251))
+- Background dark: #0F0F0F
+- Text primary: rgba(0,0,0,0.75) light / rgba(255,255,255,0.85) dark
+- Text muted: rgba(0,0,0,0.45) light / rgba(255,255,255,0.45) dark
+- Text very muted: rgba(0,0,0,0.23)
+- Accent: #E8643A
+- Preview card bg: rgba(255,255,255,0.30) with backdrop-filter: blur(5px)
+- Mockup card bg: rgba(0,0,0,0.03)
+- Surface: #FFFFFF
+
+### Typography (exact fonts from site)
+- Display/Name: Caveat (handwritten), weight 400, letter-spacing -0.02em
+  → Used for "Hiya! I'm Elisha" at 32.64px
+- Heading serif: P22 Mackinac Medium (substitute: Lora or Playfair Display)
+  → H1: 32px, line-height 1.2
+  → H2: 22.4px, line-height 1.4, weight 500
+  → H3: 18.4px, line-height 1.4
+- Mono: Spline Sans Mono (substitute: JetBrains Mono)
+  → Used for clock, breadcrumbs, labels: 13.28px
+- UI/Body: PP Neue Montreal Medium (substitute: Inter Medium)
+  → Body text: 14px, line-height 1.6
+
+### Spacing & Layout
+- Page padding: 20px sides
+- Preview card (left): 308px wide, 303px tall, position absolute left 20px top 203px
+- Content area (case study): 648px wide, starts at x=432px (sidebar ~220px)
+- Mockup cards: border-radius 12px, bg rgba(0,0,0,0.03)
+- Preview card: border-radius 8px, box-shadow rgba(79,44,9,0.06) 0px 5px 25px 3px, backdrop-filter blur(5px)
+
+### Dock (exact)
+- Position: fixed, bottom 20px, left 20px (NOT centered — left aligned!)
+- Width: 230px, height: 33px
+- Contains: music player info + pause indicator
+- The REAL nav dock is centered bottom with icons
+
+### Shadows
+- Preview card: rgba(79, 44, 9, 0.06) 0px 5px 25px 3px (warm brown shadow)
+- Mockup cards: rgba(102, 46, 0, 0) — very subtle warm shadow
+
+## Layout — Homepage
+- Top bar: name top-left in Caveat font, live clock top-right in Spline Sans Mono
+- Left panel: absolute positioned, ~308px wide, preview card with project highlights
+- Right canvas: floating mockup cards at different positions/z-depths, slight overlaps
+  → Card 1 (Noto gradient): ~370x250px at top-right area
+  → Card 2 (fitness app): ~370x250px overlapping bottom-right
+  → Card 3 (OMRO product): top-right corner, smaller
+  → Card 4 (dashboard): bottom-center-right
+- Bottom-left: music player bar (paused state, song name)
+- Bottom-center: floating dock with 5 icons
+- NO top navigation
+- Background: #F1F5FB
+
+## Layout — Case Study page
+- Top-left: "← Back" small link
+- Top-right: theme toggle
+- Left sticky sidebar: ~220px, nav items (Overview, Problem, Research, Solution, Outcome, What I Learned)
+  → Active item: slightly darker, weight 500
+  → Inactive: rgba(0,0,0,0.45)
+  → Font: Spline Sans Mono substitute at ~13px
+- Right content: 648px wide
+  → Breadcrumb: "Project / Type" in mono, rgba(0,0,0,0.45)
+  → H1: 32px P22 Mackinac (Lora substitute), rgba(0,0,0,0.75)
+  → H2: 22.4px P22 Mackinac Medium, rgba(0,0,0,0.75)
+  → Body: 14px PP Neue Montreal (Inter), line-height 1.6
+  → Metadata grid: Role / Timeline / Team / Skills (pill tags)
+
+## Layout — About page
+- Left: photo card (polaroid style) + handwritten quote + signature
+- Right: "About" label in mono, bio paragraphs, social links
+
+## Layout — All Work page
+- Grid of project cards, 2-3 columns
+- Each card: gradient bg, project name, category tag
+
+## Animations (Framer Motion)
+- Floating mockups: y-axis loop, amplitude 10-14px, duration 4-7s, staggered delays
+- Page enter: opacity 0→1 + y 16→0, 0.5s easeOut
+- Card hover: scale 1.02, 0.2s
+- Dock icon hover: scale 1.2, 0.15s
+
+## Font substitutions (free/Google Fonts)
+Since P22 Mackinac and PP Neue Montreal are paid fonts, use:
+- Caveat → Google Fonts Caveat (exact match, free)
+- P22 Mackinac → Google Fonts Lora (closest free serif)
+- PP Neue Montreal → Inter (closest free sans)
+- Spline Sans Mono → JetBrains Mono (closest free mono)
+
+## Components to build
+- components/Dock.tsx — bottom center floating nav
+- components/Clock.tsx — live clock top right in mono
+- components/TopBar.tsx — name top-left + clock top-right
+- components/PreviewCard.tsx — left panel hover card
+- components/MockupCanvas.tsx — right floating mockups
+- components/MusicBar.tsx — bottom-left music player
+- components/CaseStudySidebar.tsx — sticky left nav
+- components/ProjectCard.tsx — work grid card
+- lib/projects.ts — placeholder data
+- app/page.tsx — homepage
+- app/all-work/page.tsx — project grid
+- app/work/[slug]/page.tsx — case study
+- app/about/page.tsx — about
+
+## Placeholder projects
+1. "Nucleus" — SaaS analytics dashboard redesign — gradient: linear-gradient(135deg, #667eea, #764ba2) — tags: Redesign, B2B, Dashboard
+2. "Flowdesk" — 0→1 CRM for freelancers — gradient: linear-gradient(135deg, #f093fb, #f5576c) — tags: 0→1, SaaS, Mobile
+3. "Arcal" — Enterprise data platform UX research — gradient: linear-gradient(135deg, #4facfe, #00f2fe) — tags: Research, Enterprise, B2B
+4. "Meridian" — Internal ops tool for scale-up — gradient: linear-gradient(135deg, #43e97b, #38f9d7) — tags: Redesign, Ops, Desktop
+
+## Code rules
+- CSS variables in globals.css for all colors
+- Dark mode via Tailwind dark: classes + next-themes
+- No inline styles except dynamic values
+- All animations via Framer Motion
+- TypeScript strict, proper interfaces
+- Import Caveat from Google Fonts in layout.tsx

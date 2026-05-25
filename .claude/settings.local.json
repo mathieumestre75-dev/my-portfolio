@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(zip -r ~/portfolio-code.zip . --exclude \"*/node_modules/*\" --exclude \"*/.next/*\" --exclude \"*/.git/*\")",
+      "Bash(open ~)",
+      "Bash(grep -E \"\\\\.\\(tsx|css|ts\\)$\")",
+      "Bash(lsof -ti:3000)",
+      "Bash(python3 -c \"import sys,json; data=json.loads\\(sys.stdin.read\\(\\)\\); print\\(data['message']['content']\\)\")",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git init *)"
+    ]
+  }
+}
