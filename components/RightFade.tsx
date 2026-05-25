@@ -5,11 +5,11 @@ export default function RightFade() {
       style={{
         position: 'absolute',
         top: 0,
-        right: 0,
-        width: 148.539,
+        left: 0,
+        width: 594,
         height: '100%',
-        background: 'linear-gradient(270deg, rgb(252, 252, 252) -55%, rgba(252, 252, 252, 0) 100%)',
-        zIndex: 20,
+        background: 'linear-gradient(90deg, rgb(252, 252, 252) 0%, transparent 100%)',
+        zIndex: 3,
         pointerEvents: 'none',
         overflow: 'clip',
       }}

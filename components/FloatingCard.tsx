@@ -5,16 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import TagChip from './TagChip'
 import { springs } from '@/lib/springs'
-
-export interface HomeProject {
-  slug: string
-  title: string
-  description: string
-  gradient: string
-  tags: string[]
-  top: number
-  left: number
-}
+import type { HomeProject } from '@/lib/projects'
 
 interface FloatingCardProps {
   project: HomeProject
@@ -24,6 +15,7 @@ interface FloatingCardProps {
 
 export default function FloatingCard({ project, index, onHover }: FloatingCardProps) {
   const [isDragging, setIsDragging] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const router = useRouter()
 
   return (
@@ -34,8 +26,9 @@ export default function FloatingCard({ project, index, onHover }: FloatingCardPr
         left: project.left,
         width: 388,
         height: 261,
-        cursor: 'pointer',
-        zIndex: 10 - index,
+        cursor: isDragging ? 'grabbing' : 'pointer',
+        zIndex: isHovered ? 20 : project.zIndex,
+        rotate: project.rotate,
       }}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
@@ -47,16 +40,16 @@ export default function FloatingCard({ project, index, onHover }: FloatingCardPr
       whileHover={{
         boxShadow: 'rgba(102, 46, 0, 0.10) 0px 8px 32px 4px',
         scale: 1.02,
-        zIndex: 20,
         transition: springs.card,
       }}
-      whileDrag={{ scale: 1.04, cursor: 'grabbing', zIndex: 30 }}
+      whileDrag={{ scale: 1.04 }}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setTimeout(() => setIsDragging(false), 50)}
-      onMouseEnter={() => onHover(project.slug)}
-      onMouseLeave={() => onHover(null)}
+      onMouseEnter={() => { setIsHovered(true); onHover(project.slug) }}
+      onMouseLeave={() => { setIsHovered(false); onHover(null) }}
       onClick={() => { if (!isDragging) router.push(`/work/${project.slug}`) }}
     >
+      {/* Card shell */}
       <div
         style={{
           background: 'rgba(0, 0, 0, 0.03)',
@@ -64,42 +57,67 @@ export default function FloatingCard({ project, index, onHover }: FloatingCardPr
           backdropFilter: 'blur(5px)',
           WebkitBackdropFilter: 'blur(5px)',
           padding: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 10,
           width: '100%',
           height: '100%',
         }}
       >
+        {/* Media area */}
         <div
           style={{
             borderRadius: 8,
             overflow: 'clip',
             width: 372,
             height: 245,
-            backgroundImage: `${project.gradient}`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            background: project.gradient,
             position: 'relative',
           }}
         >
-          <div
+          {project.video && (
+            <video
+              src={project.video}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          )}
+
+          {/* Title overlay (Noto only) */}
+          {project.titleOverlay && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 12,
+                left: 16,
+                fontFamily: "'Caveat', var(--font-caveat), sans-serif",
+                fontSize: 22,
+                fontWeight: 400,
+                color: 'rgba(255, 255, 255, 0.9)',
+                pointerEvents: 'none',
+              }}
+            >
+              {project.titleOverlay}
+            </div>
+          )}
+
+          {/* Tag chips — hidden until hover */}
+          <motion.div
             style={{
               position: 'absolute',
-              bottom: 12,
-              left: 12,
+              bottom: 20,
+              left: 20,
               display: 'flex',
               flexDirection: 'row',
               gap: 6,
-              flexWrap: 'wrap',
             }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
           >
             {project.tags.map((tag, i) => (
               <TagChip key={i} label={tag} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>

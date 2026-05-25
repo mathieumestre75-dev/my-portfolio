@@ -43,7 +43,7 @@ export default function TextBlock() {
           letterSpacing: -0.6528,
           color: 'rgba(0, 0, 0, 0.75)',
           whiteSpace: 'pre-wrap',
-          width: 253,
+          width: 225,
         }}
       >
         {"Hiya! I'm Mathieu."}

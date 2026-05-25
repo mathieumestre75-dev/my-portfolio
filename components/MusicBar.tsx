@@ -1,16 +1,21 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { springs } from '@/lib/springs'
 
-const MARQUEE_WIDTH = 737
+const MARQUEE_TEXT = 'Elevator Music by Bobbir'
+const MARQUEE_WIDTH = 400
 
 export default function MusicBar() {
+  const [playing, setPlaying] = useState(false)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...springs.drag, delay: 0.6 }}
+      onClick={() => setPlaying(p => !p)}
       style={{
         position: 'fixed',
         bottom: 20,
@@ -18,7 +23,7 @@ export default function MusicBar() {
         zIndex: 50,
         width: 230,
         height: 33,
-        pointerEvents: 'none',
+        cursor: 'pointer',
       }}
     >
       <div
@@ -43,19 +48,21 @@ export default function MusicBar() {
             width: 15,
             height: 15,
             borderRadius: '50%',
-            background: 'rgb(200, 220, 232)',
+            background: 'rgba(255, 95, 51, 0.2)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
           }}
         >
-          <div
+          <motion.div
+            animate={playing ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+            transition={playing ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : {}}
             style={{
               width: 6,
               height: 6,
               borderRadius: '50%',
-              background: 'rgb(255, 80, 80)',
+              background: '#FF5F33',
             }}
           />
         </div>
@@ -74,7 +81,7 @@ export default function MusicBar() {
             height: 12,
           }}
         >
-          PAUSED
+          {playing ? 'PLAYING' : 'PAUSED'}
         </span>
 
         {/* Divider */}
@@ -97,7 +104,7 @@ export default function MusicBar() {
               width: 'max-content',
             }}
             animate={{ x: [0, -MARQUEE_WIDTH] }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
           >
             {[0, 1].map(n => (
               <span
@@ -107,13 +114,11 @@ export default function MusicBar() {
                   paddingRight: 32,
                   fontFamily: "'PP Neue Montreal Medium', sans-serif",
                   fontSize: 11,
+                  fontWeight: 500,
                   color: 'rgba(0, 0, 0, 0.75)',
                 }}
               >
-                <span style={{ fontWeight: 500 }}>Elevator Music</span>
-                <span style={{ opacity: 0.5, fontWeight: 400 }}>
-                  {' '}by Bobbing (feat. Nay Mapalo, Marcos Mena &amp; Forrest Rice) —{' '}
-                </span>
+                {MARQUEE_TEXT}
               </span>
             ))}
           </motion.div>

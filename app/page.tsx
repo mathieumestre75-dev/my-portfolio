@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
 import { homeProjects } from '@/lib/projects'
 import GridBackground from '@/components/GridBackground'
 import DotParticles from '@/components/DotParticles'
@@ -10,6 +9,7 @@ import HomeTopBar from '@/components/HomeTopBar'
 import TextBlock from '@/components/TextBlock'
 import PreviewCard from '@/components/PreviewCard'
 import FloatingCard from '@/components/FloatingCard'
+import FloatingLabels from '@/components/FloatingLabels'
 import DockNavigation from '@/components/DockNavigation'
 import MusicBar from '@/components/MusicBar'
 
@@ -26,7 +26,6 @@ export default function Home() {
         position: 'relative',
       }}
     >
-      {/* White page surface */}
       <div
         style={{
           background: 'rgb(255, 255, 255)',
@@ -40,78 +39,38 @@ export default function Home() {
       >
         <GridBackground />
         <DotParticles />
+        <FloatingLabels />
         <RightFade />
         <HomeTopBar />
 
-        {/* Main content row */}
+        {/* Left panel — top-left anchored */}
         <div
           style={{
+            position: 'absolute',
+            left: 20,
+            top: 20,
+            width: 225,
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 210,
-            padding: 20,
-            width: '100%',
-            height: '100%',
-            overflow: 'clip',
-            position: 'relative',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            gap: 50,
+            zIndex: 10,
           }}
         >
-          {/* Left panel */}
-          <div
-            style={{
-              width: 224.617,
-              height: 566,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              gap: 50,
-              paddingBottom: 80,
-              position: 'relative',
-              zIndex: 10,
-              flexShrink: 0,
-            }}
-          >
-            <TextBlock />
-            <PreviewCard hoveredSlug={hoveredSlug} />
-          </div>
-
-          {/* Cards area */}
-          <div
-            style={{
-              width: 586.383,
-              height: 566,
-              position: 'relative',
-              overflow: 'visible',
-              zIndex: 10,
-              flexShrink: 0,
-            }}
-          >
-            {/* Floating canvas */}
-            <div
-              style={{
-                position: 'absolute',
-                width: 1271.18,
-                height: 665,
-                top: -82,
-                left: -80,
-              }}
-            >
-              <AnimatePresence>
-                {homeProjects.map((p, i) => (
-                  <FloatingCard
-                    key={p.slug}
-                    project={p}
-                    index={i}
-                    onHover={setHoveredSlug}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          </div>
+          <TextBlock />
+          <PreviewCard hoveredSlug={hoveredSlug} />
         </div>
+
+        {/* Cards — absolutely positioned on the page */}
+        {homeProjects.map((p, i) => (
+          <FloatingCard
+            key={p.slug}
+            project={p}
+            index={i}
+            onHover={setHoveredSlug}
+          />
+        ))}
 
         <DockNavigation />
         <MusicBar />

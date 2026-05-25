@@ -4,10 +4,14 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sun, LayoutGrid, Mail, Briefcase, Play, User } from 'lucide-react'
+import { Sun, Moon, LayoutGrid, Mail, Home, Bookmark, User } from 'lucide-react'
 import { springs } from '@/lib/springs'
+import { useView } from '@/app/providers'
+import { useTheme } from 'next-themes'
 
 type Item =
+  | { kind: 'theme'; label: string; icon: typeof Sun }
+  | { kind: 'view'; label: string; icon: typeof Sun }
   | { kind: 'copy'; label: string; icon: typeof Sun }
   | { kind: 'link'; href: string; label: string; icon: typeof Sun; active: boolean }
 
@@ -15,20 +19,21 @@ export default function DockNavigation() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
   const pathname = usePathname()
+  const { view, setView } = useView()
+  const { theme, setTheme } = useTheme()
+  const isOrganized = view === 'organized'
 
-  const leftItems: Item[] = [
+  const items: Item[] = [
+    { kind: 'theme', label: theme === 'dark' ? 'Light Mode' : 'Dark Mode', icon: theme === 'dark' ? Sun : Moon },
+    { kind: 'view', label: isOrganized ? 'Scattered' : 'Organized', icon: LayoutGrid },
     { kind: 'copy', label: copied ? 'Copied!' : 'Copy email', icon: Mail },
-    { kind: 'link', href: '/', label: 'Home', icon: Sun, active: pathname === '/' },
-    { kind: 'link', href: '/', label: 'Organized', icon: LayoutGrid, active: false },
   ]
 
-  const rightItems: Item[] = [
-    { kind: 'link', href: '/work', label: 'Work', icon: Briefcase, active: pathname.startsWith('/work') },
-    { kind: 'link', href: '/', label: 'Play', icon: Play, active: false },
+  const navItems: Item[] = [
+    { kind: 'link', href: '/', label: 'Home', icon: Home, active: pathname === '/' },
+    { kind: 'link', href: '/work', label: 'Work', icon: Bookmark, active: pathname.startsWith('/work') },
     { kind: 'link', href: '/about', label: 'About', icon: User, active: pathname === '/about' },
   ]
-
-  const allItems = [...leftItems, null, ...rightItems]
 
   const handleCopy = () => {
     navigator.clipboard.writeText('mathieu.mestre@usercentrics.com').catch(() => {})
@@ -36,57 +41,20 @@ export default function DockNavigation() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const renderIcon = (item: Item, i: number) => {
-    const opacity = hoveredIndex === i ? 1 : 0.4
-    const iconEl =
-      item.kind === 'copy' ? (
-        <button
-          onClick={handleCopy}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 20,
-            height: 20,
-            color: 'rgba(0,0,0,0.75)',
-            opacity,
-            transition: 'opacity 0.2s ease',
-          }}
-        >
-          <item.icon size={16} strokeWidth={1.5} />
-        </button>
-      ) : (
-        <Link
-          href={item.href}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 20,
-            height: 20,
-            color: 'rgba(0,0,0,0.75)',
-            opacity: item.active ? 1 : opacity,
-            transition: 'opacity 0.2s ease',
-            textDecoration: 'none',
-          }}
-        >
-          <item.icon size={16} strokeWidth={1.5} />
-        </Link>
-      )
+  const renderIcon = (item: Item, i: number, offset = 0) => {
+    const idx = offset + i
+    const isActive = item.kind === 'link' ? item.active : false
+    const opacity = isActive || hoveredIndex === idx ? 1 : 0.3
 
     return (
       <div
-        key={i}
+        key={idx}
         style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        onMouseEnter={() => setHoveredIndex(i)}
+        onMouseEnter={() => setHoveredIndex(idx)}
         onMouseLeave={() => setHoveredIndex(null)}
       >
         <AnimatePresence>
-          {hoveredIndex === i && (
+          {hoveredIndex === idx && (
             <motion.div
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -97,14 +65,12 @@ export default function DockNavigation() {
                 bottom: 'calc(100% + 8px)',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                background: 'rgba(0, 0, 0, 0.6)',
-                borderRadius: 6,
-                padding: '4px 8px',
+                background: 'rgb(255,95,51)',
+                borderRadius: 100,
+                padding: '6px 12px',
                 fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
                 fontSize: 11.68,
-                fontWeight: 400,
-                lineHeight: '14.016px',
-                color: 'rgb(255, 255, 255)',
+                color: '#fff',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
                 zIndex: 100,
@@ -114,11 +80,62 @@ export default function DockNavigation() {
             </motion.div>
           )}
         </AnimatePresence>
-        <motion.div
-          whileHover={{ scale: 1.2 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
-        >
-          {iconEl}
+        <motion.div whileHover={{ scale: 1.2 }} transition={{ duration: 0.15, ease: 'easeOut' }}>
+          {item.kind === 'theme' && (
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                opacity,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              <item.icon size={16} strokeWidth={1.5} />
+            </button>
+          )}
+          {item.kind === 'view' && (
+            <button
+              onClick={() => setView(view === 'scattered' ? 'organized' : 'scattered')}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                opacity: isOrganized || hoveredIndex === idx ? 1 : 0.3,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              <item.icon size={16} strokeWidth={1.5} />
+            </button>
+          )}
+          {item.kind === 'copy' && (
+            <button
+              onClick={handleCopy}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                opacity,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              <item.icon size={16} strokeWidth={1.5} />
+            </button>
+          )}
+          {item.kind === 'link' && (
+            <Link
+              href={item.href}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                opacity,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              <item.icon size={16} strokeWidth={1.5} />
+            </Link>
+          )}
         </motion.div>
       </div>
     )
@@ -131,14 +148,13 @@ export default function DockNavigation() {
       transition={{ ...springs.entrance, delay: 0.4 }}
       style={{
         position: 'absolute',
-        top: 542,
+        bottom: 20,
         left: 0,
         right: 0,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0px 20px 0px 280px',
+        justifyContent: 'center',
         height: 40,
         zIndex: 10,
         pointerEvents: 'none',
@@ -146,34 +162,27 @@ export default function DockNavigation() {
     >
       <div
         style={{
-          background: 'rgba(255, 255, 255, 0.3)',
+          background: 'rgba(255, 255, 255, 0.1)',
           borderRadius: 1100,
+          border: '1px solid rgba(0, 0, 0, 0.06)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          boxShadow: 'rgba(79, 44, 9, 0.02) 0px 5px 25px 3px',
+          boxShadow: '0px 5px 25px 3px rgba(79, 44, 9, 0.02)',
           padding: '10px 14px',
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 17.6,
-          width: 240.188,
+          gap: 14,
           height: 40,
           pointerEvents: 'auto',
         }}
       >
-        {/* Left group */}
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-          {leftItems.map((item, i) => renderIcon(item, i))}
-        </div>
+        {items.map((item, i) => renderIcon(item, i))}
 
-        {/* Divider */}
-        <div style={{ width: 1, height: 12, background: 'rgba(0, 0, 0, 0.08)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 12, background: 'rgba(0, 0, 0, 0.06)', flexShrink: 0 }} />
 
-        {/* Right group */}
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 17.6 }}>
-          {rightItems.map((item, i) => renderIcon(item, leftItems.length + 1 + i))}
-        </div>
+        {navItems.map((item, i) => renderIcon(item, i, items.length + 1))}
       </div>
     </motion.div>
   )

@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat&family=Spline+Sans+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
-/* Self-hosted fonts */
 @font-face {
   font-family: 'P22 Mackinac Medium';
-  src: url('/fonts/P22MackinacMedium.woff2') format('woff2'),
-       url('/fonts/P22MackinacMedium.woff') format('woff');
+  src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -13,9 +11,16 @@
 
 @font-face {
   font-family: 'PP Neue Montreal Medium';
-  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2'),
-       url('/fonts/PPNeueMontreal-Medium.woff') format('woff');
+  src: url('https://framerusercontent.com/assets/6uIfYl8bnz9kOy3KOuV7PxhFPhA.woff2') format('woff2');
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal Bold';
+  src: url('https://framerusercontent.com/assets/wa1QQCb6cXOn2xBXS059rEsCfsc.woff2') format('woff2');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }

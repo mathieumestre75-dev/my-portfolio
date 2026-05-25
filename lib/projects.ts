@@ -3,47 +3,64 @@ export interface HomeProject {
   title: string
   description: string
   gradient: string
+  video?: string
+  titleOverlay?: string
   tags: string[]
   top: number
   left: number
+  rotate: number
+  zIndex: number
 }
 
 export const homeProjects: HomeProject[] = [
   {
-    slug: 'nucleus',
-    title: 'Nucleus',
-    description: 'SaaS analytics dashboard redesign',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    tags: ['Redesign', 'B2B', 'Dashboard'],
-    top: -52,
-    left: 273.891,
-  },
-  {
-    slug: 'flowdesk',
-    title: 'Flowdesk',
-    description: '0→1 CRM for freelancers',
+    slug: 'omro',
+    title: 'Omro',
+    description: 'Mobile and brand design',
     gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    tags: ['0→1', 'SaaS'],
-    top: 26.703,
-    left: 38,
+    video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
+    tags: ['Mobile Design', 'Brand Design'],
+    top: -42,
+    left: 703,
+    rotate: 0,
+    zIndex: 4,
   },
   {
-    slug: 'arcal',
-    title: 'Arcal',
-    description: 'Enterprise data platform UX research',
+    slug: 'noto',
+    title: 'Noto',
+    description: 'Mobile design',
+    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    video: 'https://framerusercontent.com/assets/vJartkUm1cgJd6nwHHK6tzamQ0.mp4',
+    titleOverlay: 'Noto',
+    tags: ['Mobile Design'],
+    top: 37,
+    left: 467,
+    rotate: 0,
+    zIndex: 3,
+  },
+  {
+    slug: 'azure-iot',
+    title: 'Azure IoT',
+    description: 'Mobile and desktop design',
     gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    tags: ['Research', 'Enterprise'],
-    top: 72.484,
-    left: 60,
+    video: 'https://framerusercontent.com/assets/oDc5CCQvvQoL6t8EpijysOmqemY.mp4',
+    tags: ['Mobile Design', 'Desktop Design'],
+    top: 321,
+    left: 417,
+    rotate: 0,
+    zIndex: 2,
   },
   {
-    slug: 'meridian',
-    title: 'Meridian',
-    description: 'Internal ops tool for a scale-up',
+    slug: 'desa',
+    title: 'Desa',
+    description: 'Mobile design',
     gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-    tags: ['Redesign', 'Ops'],
-    top: -8,
-    left: 402.047,
+    video: 'https://framerusercontent.com/assets/JqE2KiKbDDfKSaHI6MfBg8LJkwo.mp4',
+    tags: ['Mobile Design'],
+    top: 241,
+    left: 759,
+    rotate: 0,
+    zIndex: 1,
   },
 ]
 

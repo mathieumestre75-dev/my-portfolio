@@ -29,24 +29,6 @@ export default function HomeTopBar() {
         pointerEvents: 'none',
       }}
     >
-      {/* Name — top-left */}
-      <motion.a
-        href="/"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ ...springs.entrance, delay: 0.1 }}
-        style={{
-          ...monoStyle,
-          textDecoration: 'none',
-          pointerEvents: 'auto',
-          position: 'absolute',
-          top: 20,
-          left: 20,
-        }}
-      >
-        MATHIEU MESTRE
-      </motion.a>
-
       {/* Kaomoji — top-center */}
       <motion.div
         initial={{ opacity: 0 }}
