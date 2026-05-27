@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Saved Illustrations — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Spline+Sans+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'P22 Mackinac Medium';
+      src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
+      font-weight: 500;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: rgb(252,252,252);
+      font-family: 'Spline Sans Mono', monospace;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+    h1 {
+      font-family: 'Caveat', cursive;
+      font-size: 28px; font-weight: 400;
+      color: rgba(0,0,0,0.6);
+      letter-spacing: -0.5px;
+    }
+    .section { display: flex; flex-direction: column; gap: 16px; }
+    .section-title {
+      font-size: 10px; color: rgba(0,0,0,0.35);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .cards-row { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+    .card-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .card-label { font-size: 9px; color: rgba(0,0,0,0.3); letter-spacing: 0.06em; text-transform: uppercase; }
+    .preview-card {
+      width: 220px; height: 280px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.07);
+      box-shadow: rgba(79,44,9,0.06) 0px 5px 25px 3px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+    }
+    .hover-text {
+      font-family: 'Caveat', cursive; font-size: 18px;
+      color: rgba(0,0,0,0.23); letter-spacing: -0.3px;
+    }
+    .note {
+      font-size: 10px; color: rgba(0,0,0,0.3);
+      max-width: 220px; line-height: 1.6;
+    }
+    hr { border: none; border-top: 1px solid rgba(0,0,0,0.07); }
+
+    /* Palm tree sway animation */
+    @keyframes palmSway {
+      0%, 100% { transform: rotate(0deg); }
+      35%  { transform: rotate(1.6deg); }
+      65%  { transform: rotate(-1deg); }
+      80%  { transform: rotate(0.5deg); }
+    }
+    @keyframes frondSway {
+      0%, 100% { transform: rotate(0deg); }
+      35%  { transform: rotate(2.8deg); }
+      65%  { transform: rotate(-2deg); }
+      80%  { transform: rotate(0.8deg); }
+    }
+    .palm-tree { transform-origin: 40px 78px; animation: palmSway 4s ease-in-out infinite; }
+    .palm-fronds { transform-origin: 44px 22px; animation: frondSway 3.4s ease-in-out infinite; animation-delay: 0.2s; }
+  </style>
+</head>
+<body>
+
+  <h1>Saved Illustrations ✦</h1>
+  <p style="font-size:10px; color:rgba(0,0,0,0.3); margin-top:-36px;">Candidates for the PreviewCard idle state — not yet implemented</p>
+
+  <hr/>
+
+  <!-- PALM TREE -->
+  <div class="section">
+    <div class="section-title">Option A — Palm Tree (Beach Lean) · with breeze animation</div>
+    <div class="cards-row">
+      <div class="card-wrap">
+        <div class="preview-card">
+          <svg class="palm-tree" width="86" height="90" viewBox="0 0 86 90" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g class="palm-fronds">
+              <path d="M43 20 C36 12 26 6 14 4 C21 10 32 16 43 22 Z" fill="#BDD490" stroke="#96B468" stroke-width="1.1"/>
+              <path d="M43 21 C34 18 22 20 13 28 C22 23 34 21 43 23 Z" fill="#C8DD98" stroke="#A0BF72" stroke-width="1.1"/>
+              <path d="M43 20 C48 12 56 6 66 5 C60 11 51 16 43 22 Z" fill="#B8D086" stroke="#90B260" stroke-width="1.1"/>
+              <path d="M43 20 C49 18 60 20 68 28 C60 23 49 21 43 22 Z" fill="#C0D890" stroke="#9CBE6E" stroke-width="1.1"/>
+              <path d="M43 22 C48 28 52 38 50 48 C47 40 45 30 43 24 Z" fill="#A8C874" stroke="#86A854" stroke-width="1.1"/>
+              <path d="M43 20 C41 12 40 6 42 2 C43 6 44 12 45 20 Z" fill="#C2D88E" stroke="#9ABE6A" stroke-width="1.1"/>
+              <circle cx="43" cy="21" r="3.5" fill="#C8A858" stroke="#A88840" stroke-width="1.1"/>
+              <circle cx="40" cy="26" r="3" fill="#D4A84A" stroke="#B88A38" stroke-width="1"/>
+              <circle cx="45" cy="24" r="2.5" fill="#D4A84A" stroke="#B88A38" stroke-width="1"/>
+            </g>
+            <path d="M39 80 C39.5 70 40 58 41 46 C42 36 42.5 28 43 21" stroke="#C8A870" stroke-width="4.5" fill="none"/>
+            <path d="M39.5 72 C40 68 40.5 64 41 60" stroke="#A88848" stroke-width="1.2" opacity="0.45"/>
+            <path d="M40.5 56 C41 50 41.8 44 42 38" stroke="#A88848" stroke-width="1.2" opacity="0.4"/>
+            <path d="M30 82 C35 80 47 80 52 82" stroke="#C8C0A8" stroke-width="1.5" fill="none"/>
+            <circle cx="22" cy="46" r="2.2" fill="#B8C8E0"/>
+            <circle cx="64" cy="53" r="2.8" fill="#F0DC6A"/>
+          </svg>
+          <span class="hover-text">hover a project</span>
+        </div>
+        <div class="card-label">Beach Lean</div>
+        <div class="note">Fronds sway gently with CSS animation. Blue dot + yellow dot accents. Same palette as reference.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- MOON -->
+  <div class="section">
+    <div class="section-title">Option B — Moon + Stars · 4 colour / style variants</div>
+    <div class="cards-row">
+
+      <!-- B1: Close match -->
+      <div class="card-wrap">
+        <div class="preview-card">
+          <svg width="72" height="60" viewBox="0 0 72 60" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 30 8 C 18 10 10 20 10 32 C 10 44 18 54 30 56 C 20 50 16 42 16 32 C 16 22 20 14 30 8 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1.2"/>
+            <path d="M 46 16 L 47.2 20 L 51 20 L 48 22.5 L 49.2 26.5 L 46 24 L 42.8 26.5 L 44 22.5 L 41 20 L 44.8 20 Z"
+              fill="none" stroke="#C4B46A" stroke-width="1.2"/>
+            <path d="M 50 36 L 50 42 M 47 39 L 53 39" stroke="#C4B46A" stroke-width="1.3" opacity="0.7"/>
+            <circle cx="16" cy="48" r="2.5" fill="#E0D090"/>
+          </svg>
+          <span class="hover-text">hover a project</span>
+        </div>
+        <div class="card-label">B1 — Close match (starred)</div>
+      </div>
+
+      <!-- B2: Filled star -->
+      <div class="card-wrap">
+        <div class="preview-card">
+          <svg width="72" height="60" viewBox="0 0 72 60" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 30 8 C 18 10 10 20 10 32 C 10 44 18 54 30 56 C 20 50 16 42 16 32 C 16 22 20 14 30 8 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1.2"/>
+            <path d="M 46 14 L 47.4 18.5 L 52 18.5 L 48.3 21.2 L 49.7 25.7 L 46 23 L 42.3 25.7 L 43.7 21.2 L 40 18.5 L 44.6 18.5 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1.1"/>
+            <circle cx="54" cy="34" r="1.8" fill="#C4B46A" opacity="0.5"/>
+            <circle cx="20" cy="52" r="1.5" fill="#C4B46A" opacity="0.4"/>
+            <circle cx="58" cy="46" r="1.2" fill="#C4B46A" opacity="0.35"/>
+          </svg>
+          <span class="hover-text">hover a project</span>
+        </div>
+        <div class="card-label">B2 — Filled star</div>
+      </div>
+
+      <!-- B3: Two stars -->
+      <div class="card-wrap">
+        <div class="preview-card">
+          <svg width="72" height="60" viewBox="0 0 72 60" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 32 6 C 18 9 8 19 8 32 C 8 45 18 55 32 58 C 19 52 14 43 14 32 C 14 21 19 12 32 6 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1.2"/>
+            <path d="M 48 12 L 49 15 L 52 15 L 49.6 16.8 L 50.6 19.8 L 48 18 L 45.4 19.8 L 46.4 16.8 L 44 15 L 47 15 Z"
+              fill="none" stroke="#C4B46A" stroke-width="1.1"/>
+            <path d="M 54 30 L 54.7 32.2 L 57 32.2 L 55.2 33.6 L 55.9 35.8 L 54 34.4 L 52.1 35.8 L 52.8 33.6 L 51 32.2 L 53.3 32.2 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1"/>
+            <circle cx="20" cy="50" r="2.2" fill="#D8C880" opacity="0.7"/>
+          </svg>
+          <span class="hover-text">hover a project</span>
+        </div>
+        <div class="card-label">B3 — Two stars</div>
+      </div>
+
+      <!-- B4: Minimal crosses -->
+      <div class="card-wrap">
+        <div class="preview-card">
+          <svg width="72" height="60" viewBox="0 0 72 60" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 32 8 C 22 11 15 20 15 32 C 15 44 22 53 32 56 C 24 50 20 42 20 32 C 20 22 24 14 32 8 Z"
+              fill="#E0D090" stroke="#C4B46A" stroke-width="1.2"/>
+            <path d="M 48 14 L 48 20 M 45 17 L 51 17" stroke="#C4B46A" stroke-width="1.3" opacity="0.65"/>
+            <path d="M 54 34 L 54 38 M 52 36 L 56 36" stroke="#C4B46A" stroke-width="1.1" opacity="0.45"/>
+            <circle cx="10" cy="36" r="2" fill="#D8C880" opacity="0.6"/>
+            <circle cx="38" cy="56" r="1.5" fill="#D8C880" opacity="0.45"/>
+          </svg>
+          <span class="hover-text">hover a project</span>
+        </div>
+        <div class="card-label">B4 — Minimal crosses</div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

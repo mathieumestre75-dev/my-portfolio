@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import ClockWidget from './ClockWidget'
 import { springs } from '@/lib/springs'
 
@@ -9,14 +10,19 @@ const monoStyle: React.CSSProperties = {
   fontSize: 11.2,
   fontWeight: 400,
   lineHeight: '13.44px',
-  color: 'rgba(0, 0, 0, 0.35)',
+  color: 'var(--color-text-secondary)',
 }
 
 export default function HomeTopBar() {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) return null
+
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
@@ -29,37 +35,20 @@ export default function HomeTopBar() {
         pointerEvents: 'none',
       }}
     >
-      {/* Kaomoji — top-center */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ ...springs.entrance, delay: 0.2 }}
-        style={{
-          ...monoStyle,
-          position: 'absolute',
-          top: 20,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          letterSpacing: -0.224,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 10,
-        }}
-      >
-        (⁰▿⁰)◜✧˖°
-      </motion.div>
+      {/* Left: empty placeholder for layout balance */}
+      <div />
 
-      {/* Clock — top-right */}
+      {/* Right: Clock + Toggle */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ ...springs.entrance, delay: 0.3 }}
         style={{
-          pointerEvents: 'none',
-          position: 'absolute',
-          top: 20,
-          right: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          gap: 10,
+          pointerEvents: 'auto',
         }}
       >
         <ClockWidget />

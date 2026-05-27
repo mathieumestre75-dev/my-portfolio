@@ -15,19 +15,14 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
   return (
     <div
       style={{
-        width: 224.617,
-        height: 261.727,
-        background: 'rgba(255, 255, 255, 0.3)',
+        width: 300,
+        height: 395,
+        background: 'var(--color-preview-bg)',
         borderRadius: 8,
         backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(5px)',
+        border: '1px solid rgba(0,0,0,0.06)',
         boxShadow: 'rgba(79, 44, 9, 0.06) 0px 5px 25px 3px',
-        padding: '12px 16px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 12,
         overflow: 'clip',
         position: 'relative',
         flexShrink: 0,
@@ -42,16 +37,22 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             style={{
+              position: 'absolute',
+              top: 12, bottom: 12, left: 16, right: 16,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               gap: 8,
-              width: '100%',
-              height: '100%',
             }}
           >
-            <span style={{ fontSize: 40, lineHeight: 1, display: 'block', width: 67, height: 63, textAlign: 'center' }}>🪐</span>
+            <div style={{ position: 'relative', width: 67, height: 63, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img
+                src="https://framerusercontent.com/images/0dCPqqRu4fUorwKpVyneDoZZs.png?width=318&height=293"
+                alt=""
+                style={{ width: 67, height: 63, objectFit: 'contain', display: 'block' }}
+              />
+            </div>
             <p
               style={{
                 fontFamily: "'Caveat', var(--font-caveat), sans-serif",
@@ -59,7 +60,7 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
                 fontWeight: 400,
                 lineHeight: '23.04px',
                 letterSpacing: -0.384,
-                color: 'rgba(0, 0, 0, 0.23)',
+                color: 'var(--color-text-faint)',
                 textAlign: 'center',
               }}
             >
@@ -69,49 +70,46 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
         ) : (
           <motion.div
             key={project.slug}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             style={{
-              width: '100%',
-              height: '100%',
+              position: 'absolute',
+              top: 12, bottom: 12, left: 16, right: 16,
               display: 'flex',
               flexDirection: 'column',
-              gap: 10,
-              justifyContent: 'center',
+              gap: 8,
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
             }}
           >
-            <div
-              style={{
-                width: '100%',
-                height: 120,
-                borderRadius: 6,
-                background: project.gradient,
-                flexShrink: 0,
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "'PP Neue Montreal Medium', sans-serif",
-                fontSize: 14,
-                fontWeight: 500,
-                color: 'rgba(0, 0, 0, 0.75)',
-                lineHeight: '1.4',
-              }}
-            >
-              {project.title}
+            <p style={{
+              fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
+              fontSize: 10,
+              fontWeight: 400,
+              color: 'var(--color-text-secondary)',
+              lineHeight: '1.4',
+              marginBottom: 4,
+              flexShrink: 0,
+            }}>
+              Highlights
             </p>
-            <p
-              style={{
-                fontFamily: "'P22 Mackinac Medium', serif",
-                fontSize: 12,
-                color: 'rgba(0, 0, 0, 0.5)',
-                lineHeight: '1.5',
-              }}
-            >
-              {project.description}
-            </p>
+            {project.highlights.map((img, i) => (
+              img ? (
+                <img
+                  key={i}
+                  src={img}
+                  alt=""
+                  style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', borderRadius: 6, display: 'block' }}
+                />
+              ) : (
+                <div
+                  key={i}
+                  style={{ width: '100%', flex: 1, minHeight: 0, borderRadius: 6, background: project.gradient, opacity: 0.7 }}
+                />
+              )
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

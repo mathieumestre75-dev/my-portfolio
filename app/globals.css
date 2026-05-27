@@ -2,6 +2,22 @@
 @import "tailwindcss";
 
 @font-face {
+  font-family: 'P22 Mackinac';
+  src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'P22 Mackinac';
+  src: url('https://framerusercontent.com/assets/JLbyVPPdBcGfVWkBJKAxnSvTFA.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'P22 Mackinac Medium';
   src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
   font-weight: 500;
@@ -26,16 +42,26 @@
 }
 
 :root {
-  --color-page-bg:           rgb(241, 245, 251);
+  --color-page-bg:           rgb(252, 252, 252);
   --color-white-page:        rgb(255, 255, 255);
   --color-inner-bg:          rgb(252, 252, 252);
   --color-text-primary:      rgba(0, 0, 0, 0.75);
   --color-text-secondary:    rgba(0, 0, 0, 0.35);
   --color-border:            rgba(0, 0, 0, 0.08);
   --color-music-divider:     rgba(0, 0, 0, 0.15);
+  --color-card-bg:           rgba(0, 0, 0, 0.03);
+  --color-card-border:       rgba(0, 0, 0, 0.03);
+  --color-nav-link:          rgba(0, 0, 0, 0.75);
+  --color-status-text:       rgba(0, 0, 0, 0.45);
   --color-dot-outer:         rgb(200, 220, 232);
   --color-dot-inner:         rgb(255, 80, 80);
   --color-right-fade-start:  rgb(252, 252, 252);
+  --color-icon:              rgba(0, 0, 0, 0.75);
+  --color-text-faint:        rgba(0, 0, 0, 0.23);
+  --color-dock-bg:           rgba(255, 255, 255, 0.1);
+  --color-dock-border:       rgba(0, 0, 0, 0.06);
+  --color-dock-divider:      rgba(0, 0, 0, 0.06);
+  --color-preview-bg:        rgba(255, 255, 255, 0.3);
 
   /* Legacy tokens kept for inner pages */
   --bg: #f1f5fb;
@@ -50,6 +76,39 @@
   --card-shadow: rgba(79, 44, 9, 0.06) 0px 5px 25px 3px;
   --dock-shadow: rgba(79, 44, 9, 0.02) 0px 5px 25px 3px;
   --tag-bg: rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  --color-page-bg:           #191413;
+  --color-white-page:        #191413;
+  --color-inner-bg:          #191413;
+  --color-text-primary:      rgba(255, 255, 255, 0.85);
+  --color-text-secondary:    rgba(255, 255, 255, 0.45);
+  --color-border:            rgba(255, 255, 255, 0.08);
+  --color-music-divider:     rgba(255, 255, 255, 0.15);
+  --color-card-bg:           rgba(255, 255, 255, 0.03);
+  --color-card-border:       rgba(0, 0, 0, 0.03);
+  --color-nav-link:          rgb(255, 255, 255);
+  --color-status-text:       rgba(255, 255, 255, 0.45);
+  /* right-fade-start unused in dark mode — RightFade is hidden */
+  --color-icon:              rgba(255, 255, 255, 0.75);
+  --color-text-faint:        rgba(255, 255, 255, 0.25);
+  --color-dock-bg:           rgba(255, 255, 255, 0.04);
+  --color-dock-border:       rgba(255, 255, 255, 0.1);
+  --color-dock-divider:      rgba(255, 255, 255, 0.1);
+  --color-preview-bg:        rgba(255, 255, 255, 0.05);
+
+  /* Legacy tokens */
+  --bg: rgb(8, 10, 24);
+  --fg: rgba(255, 255, 255, 0.85);
+  --fg-secondary: rgba(255, 255, 255, 0.45);
+  --fg-muted: rgba(255, 255, 255, 0.35);
+  --fg-faint: rgba(255, 255, 255, 0.23);
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-solid: rgb(20, 25, 35);
+  --tag-bg: rgba(255, 255, 255, 0.08);
+  --card-shadow: rgba(0, 0, 0, 0.3) 0px 5px 25px 3px;
+  --dock-shadow: rgba(0, 0, 0, 0.2) 0px 5px 25px 3px;
 }
 
 @theme inline {
@@ -76,4 +135,5 @@ body {
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: auto;
 }

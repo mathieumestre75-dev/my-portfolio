@@ -1,28 +1,38 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { springs } from '@/lib/springs'
 
-const MARQUEE_TEXT = 'Elevator Music by Bobbir'
-const MARQUEE_WIDTH = 400
-
 export default function MusicBar() {
   const [playing, setPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  const toggle = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (playing) {
+      audio.pause()
+      setPlaying(false)
+    } else {
+      audio.play()
+        .then(() => setPlaying(true))
+        .catch(err => console.error('Audio play failed:', err))
+    }
+  }
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...springs.drag, delay: 0.6 }}
-      onClick={() => setPlaying(p => !p)}
+      onClick={toggle}
       style={{
         position: 'fixed',
         bottom: 20,
         left: 20,
         zIndex: 50,
-        width: 230,
-        height: 33,
         cursor: 'pointer',
       }}
     >
@@ -32,23 +42,20 @@ export default function MusicBar() {
           flexDirection: 'row',
           alignItems: 'center',
           gap: 8,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(0, 0, 0, 0.03)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
+          height: 30,
+          background: '#eceff4',
           borderRadius: 100,
-          padding: '0 12px 0 8px',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
+          padding: '0 13px 0 7px',
+          border: 'none',
         }}
       >
         {/* Status dot */}
         <div
           style={{
-            width: 15,
-            height: 15,
+            width: 17,
+            height: 17,
             borderRadius: '50%',
-            background: 'rgba(255, 95, 51, 0.2)',
+            background: 'var(--color-dot-outer)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -56,13 +63,13 @@ export default function MusicBar() {
           }}
         >
           <motion.div
-            animate={playing ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+            animate={playing ? { scale: [1, 1.25, 1] } : { scale: 1 }}
             transition={playing ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : {}}
             style={{
               width: 6,
               height: 6,
               borderRadius: '50%',
-              background: '#FF5F33',
+              background: '#F07055',
             }}
           />
         </div>
@@ -73,12 +80,10 @@ export default function MusicBar() {
             fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
             fontSize: 10,
             fontWeight: 500,
-            color: 'rgba(0, 0, 0, 0.45)',
+            color: 'var(--color-status-text)',
             letterSpacing: '0.05em',
             lineHeight: 1,
             flexShrink: 0,
-            width: 45,
-            height: 12,
           }}
         >
           {playing ? 'PLAYING' : 'PAUSED'}
@@ -88,42 +93,47 @@ export default function MusicBar() {
         <div
           style={{
             width: 1,
-            height: 13,
-            background: 'rgba(0, 0, 0, 0.15)',
+            height: 12,
+            background: 'var(--color-music-divider)',
             flexShrink: 0,
           }}
         />
 
-        {/* Marquee */}
-        <div style={{ width: 120, height: 31, overflow: 'clip', flexShrink: 0 }}>
-          <motion.div
+        {/* Song title — scrolls when playing */}
+        {playing && (
+          <style>{`
+            @keyframes marquee {
+              0%   { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .marquee { animation: marquee 9s linear infinite; }
+          `}</style>
+        )}
+        <div style={{ maxWidth: 148, overflow: 'hidden' }}>
+          <span
+            className={playing ? 'marquee' : ''}
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              width: 'max-content',
+              display: 'inline-block',
+              whiteSpace: 'nowrap',
+              fontFamily: "'PP Neue Montreal Medium', sans-serif",
+              fontSize: 11,
+              color: 'var(--color-text-primary)',
             }}
-            animate={{ x: [0, -MARQUEE_WIDTH] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
           >
-            {[0, 1].map(n => (
-              <span
-                key={n}
-                style={{
-                  whiteSpace: 'nowrap',
-                  paddingRight: 32,
-                  fontFamily: "'PP Neue Montreal Medium', sans-serif",
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: 'rgba(0, 0, 0, 0.75)',
-                }}
-              >
-                {MARQUEE_TEXT}
+            <span style={{ fontWeight: 500 }}>Manhã de Carnaval</span>
+            <span style={{ fontWeight: 400, opacity: 0.5 }}>{' by João Donato'}</span>
+            {playing && (
+              <span>
+                <span style={{ opacity: 0.3 }}>&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                <span style={{ fontWeight: 500 }}>Manhã de Carnaval</span>
+                <span style={{ fontWeight: 400, opacity: 0.5 }}>{' by João Donato'}</span>
               </span>
-            ))}
-          </motion.div>
+            )}
+          </span>
         </div>
       </div>
     </motion.div>
+    <audio ref={audioRef} src="/manha-de-carnaval.mp3" loop />
+    </>
   )
 }

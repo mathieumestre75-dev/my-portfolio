@@ -28,7 +28,7 @@ export default function FloatingLabels() {
             fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
             fontSize: 11.2,
             fontWeight: 400,
-            color: 'rgba(0, 0, 0, 0.35)',
+            color: 'var(--color-text-secondary)',
             whiteSpace: 'nowrap',
           }}
           animate={{ x: ['0%', '-50%'] }}

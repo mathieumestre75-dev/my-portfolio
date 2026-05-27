@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sun, Moon, LayoutGrid, Mail, Home, Bookmark, User } from 'lucide-react'
+import { Sun, Moon, LayoutGrid, Copy, Mail, Home, Ghost, Notebook } from 'lucide-react'
 import { springs } from '@/lib/springs'
 import { useView } from '@/app/providers'
 import { useTheme } from 'next-themes'
@@ -31,8 +31,8 @@ export default function DockNavigation() {
 
   const navItems: Item[] = [
     { kind: 'link', href: '/', label: 'Home', icon: Home, active: pathname === '/' },
-    { kind: 'link', href: '/work', label: 'Work', icon: Bookmark, active: pathname.startsWith('/work') },
-    { kind: 'link', href: '/about', label: 'About', icon: User, active: pathname === '/about' },
+    { kind: 'link', href: '/work', label: 'Work', icon: Ghost, active: pathname.startsWith('/work') },
+    { kind: 'link', href: '/about', label: 'About', icon: Notebook, active: pathname === '/about' },
   ]
 
   const handleCopy = () => {
@@ -87,9 +87,9 @@ export default function DockNavigation() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                width: 20, height: 20, color: 'var(--color-icon)',
                 opacity,
-                transition: 'opacity 0.2s ease',
+                transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
             >
               <item.icon size={16} strokeWidth={1.5} />
@@ -101,12 +101,13 @@ export default function DockNavigation() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                width: 20, height: 20,
+                color: isOrganized ? 'rgba(120, 120, 120, 0.85)' : 'var(--color-icon)',
                 opacity: isOrganized || hoveredIndex === idx ? 1 : 0.3,
-                transition: 'opacity 0.2s ease',
+                transition: 'opacity 0.2s ease, color 0.2s ease',
               }}
             >
-              <item.icon size={16} strokeWidth={1.5} />
+              {isOrganized ? <Copy size={16} strokeWidth={1.5} /> : <LayoutGrid size={16} strokeWidth={1.5} />}
             </button>
           )}
           {item.kind === 'copy' && (
@@ -115,9 +116,9 @@ export default function DockNavigation() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                width: 20, height: 20, color: 'var(--color-icon)',
                 opacity,
-                transition: 'opacity 0.2s ease',
+                transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
             >
               <item.icon size={16} strokeWidth={1.5} />
@@ -128,9 +129,9 @@ export default function DockNavigation() {
               href={item.href}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'rgba(0,0,0,0.75)',
+                width: 20, height: 20, color: 'var(--color-icon)',
                 opacity,
-                transition: 'opacity 0.2s ease',
+                transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
             >
               <item.icon size={16} strokeWidth={1.5} />
@@ -162,12 +163,13 @@ export default function DockNavigation() {
     >
       <div
         style={{
-          background: 'rgba(255, 255, 255, 0.1)',
+          background: 'var(--color-dock-bg)',
           borderRadius: 1100,
-          border: '1px solid rgba(0, 0, 0, 0.06)',
+          border: '1px solid var(--color-dock-border)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           boxShadow: '0px 5px 25px 3px rgba(79, 44, 9, 0.02)',
+          transition: 'background 0.4s ease, border-color 0.4s ease',
           padding: '10px 14px',
           display: 'flex',
           flexDirection: 'row',
@@ -180,7 +182,7 @@ export default function DockNavigation() {
       >
         {items.map((item, i) => renderIcon(item, i))}
 
-        <div style={{ width: 1, height: 12, background: 'rgba(0, 0, 0, 0.06)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 12, background: 'var(--color-dock-divider)', flexShrink: 0, transition: 'background 0.4s ease' }} />
 
         {navItems.map((item, i) => renderIcon(item, i, items.length + 1))}
       </div>

@@ -1,66 +1,88 @@
 export interface HomeProject {
   slug: string
   title: string
+  client: string
+  tagline: string
   description: string
   gradient: string
   video?: string
   titleOverlay?: string
   tags: string[]
-  top: number
-  left: number
-  rotate: number
+  highlights: string[]
+  initialX: number
+  initialY: number
+  initialRotate: number
+  animDelay: number
   zIndex: number
 }
 
+// Cards: 480×323px, stacked in a 499×450 container centered on the right half.
+// Initial transforms fan the cards out; all animate to (0, 0, 0°).
 export const homeProjects: HomeProject[] = [
-  {
-    slug: 'omro',
-    title: 'Omro',
-    description: 'Mobile and brand design',
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
-    tags: ['Mobile Design', 'Brand Design'],
-    top: -42,
-    left: 703,
-    rotate: 0,
-    zIndex: 4,
-  },
   {
     slug: 'noto',
     title: 'Noto',
+    client: 'Noto',
+    tagline: 'A handwriting-first note-taking app for creative thinkers.',
     description: 'Mobile design',
     gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     video: 'https://framerusercontent.com/assets/vJartkUm1cgJd6nwHHK6tzamQ0.mp4',
     titleOverlay: 'Noto',
     tags: ['Mobile Design'],
-    top: 37,
-    left: 467,
-    rotate: 0,
+    highlights: ['', '', ''],
+    initialX: -160,
+    initialY: -80,
+    initialRotate: -16,
+    animDelay: 0.2,
     zIndex: 3,
+  },
+  {
+    slug: 'omro',
+    title: 'Omro',
+    client: 'Omro',
+    tagline: 'Designing a modern digital banking experience from the ground up.',
+    description: 'Mobile and brand design',
+    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
+    tags: ['Mobile Design', 'Brand Design'],
+    highlights: ['', '', ''],
+    initialX: 160,
+    initialY: -110,
+    initialRotate: 20,
+    animDelay: 0,
+    zIndex: 4,
   },
   {
     slug: 'azure-iot',
     title: 'Azure IoT',
+    client: 'Microsoft',
+    tagline: 'Streamlining IoT device management with Copilot AI and mobile monitoring.',
     description: 'Mobile and desktop design',
     gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     video: 'https://framerusercontent.com/assets/oDc5CCQvvQoL6t8EpijysOmqemY.mp4',
     tags: ['Mobile Design', 'Desktop Design'],
-    top: 321,
-    left: 417,
-    rotate: 0,
-    zIndex: 2,
+    highlights: ['', '', ''],
+    initialX: -100,
+    initialY: 200,
+    initialRotate: -10,
+    animDelay: 0.3,
+    zIndex: 1,
   },
   {
-    slug: 'desa',
-    title: 'Desa',
+    slug: 'motra',
+    title: 'Motra',
+    client: 'Teague',
+    tagline: 'Empowering baby boomers to age in place with strength.',
     description: 'Mobile design',
     gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
     video: 'https://framerusercontent.com/assets/JqE2KiKbDDfKSaHI6MfBg8LJkwo.mp4',
     tags: ['Mobile Design'],
-    top: 241,
-    left: 759,
-    rotate: 0,
-    zIndex: 1,
+    highlights: ['', '', ''],
+    initialX: 130,
+    initialY: 100,
+    initialRotate: 10,
+    animDelay: 0.15,
+    zIndex: 2,
   },
 ]
 

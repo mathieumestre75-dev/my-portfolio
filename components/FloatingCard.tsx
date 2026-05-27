@@ -1,64 +1,83 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import TagChip from './TagChip'
-import { springs } from '@/lib/springs'
 import type { HomeProject } from '@/lib/projects'
 
 interface FloatingCardProps {
   project: HomeProject
-  index: number
+  positionStyle: React.CSSProperties
   onHover: (slug: string | null) => void
+  isGrid?: boolean
+  gridOffset?: { x: number; y: number }
+  hoverRotate?: number
+  gridHoverRotate?: number
 }
 
-export default function FloatingCard({ project, index, onHover }: FloatingCardProps) {
+export default function FloatingCard({ project, positionStyle, onHover, isGrid = false, gridOffset, hoverRotate = 0, gridHoverRotate }: FloatingCardProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const router = useRouter()
+
+  const { zIndex: rowZIndex, ...posRest } = positionStyle as React.CSSProperties & { zIndex?: number }
 
   return (
     <motion.div
       style={{
         position: 'absolute',
-        top: project.top,
-        left: project.left,
-        width: 388,
+        width: 386,
         height: 261,
         cursor: isDragging ? 'grabbing' : 'pointer',
-        zIndex: isHovered ? 20 : project.zIndex,
-        rotate: project.rotate,
+        zIndex: isGrid ? 1 : (isHovered ? 20 : (rowZIndex ?? project.zIndex)),
+        ...posRest,
       }}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ ...springs.card, delay: index * 0.12 }}
-      drag
-      dragConstraints={{ top: -40, bottom: 40, left: -40, right: 40 }}
+      initial={{
+        x: project.initialX,
+        y: project.initialY,
+        rotate: project.initialRotate,
+        opacity: 0,
+      }}
+      animate={{
+        x: isGrid ? (gridOffset?.x ?? 0) : 0,
+        y: isGrid ? (gridOffset?.y ?? 0) : 0,
+        rotate: 0,
+        opacity: 1,
+      }}
+      transition={{
+        type: 'spring',
+        stiffness: 160,
+        damping: 22,
+        mass: 1,
+        delay: project.animDelay * 0.6,
+      }}
+      drag={!isGrid}
+      dragConstraints={{ top: -30, bottom: 30, left: -30, right: 30 }}
       dragElastic={0.12}
       dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
-      whileHover={{
-        boxShadow: 'rgba(102, 46, 0, 0.10) 0px 8px 32px 4px',
-        scale: 1.02,
-        transition: springs.card,
-      }}
       whileDrag={{ scale: 1.04 }}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => setTimeout(() => setIsDragging(false), 50)}
-      onMouseEnter={() => { setIsHovered(true); onHover(project.slug) }}
-      onMouseLeave={() => { setIsHovered(false); onHover(null) }}
+      onMouseEnter={() => { setIsHovered(true); onHover(project.slug); videoRef.current?.play() }}
+      onMouseLeave={() => { setIsHovered(false); onHover(null); if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 } }}
       onClick={() => { if (!isDragging) router.push(`/work/${project.slug}`) }}
     >
       {/* Card shell */}
       <div
         style={{
-          background: 'rgba(0, 0, 0, 0.03)',
+          background: 'var(--color-card-bg)',
+          border: '1px solid var(--color-card-border)',
           borderRadius: 12,
           backdropFilter: 'blur(5px)',
           WebkitBackdropFilter: 'blur(5px)',
           padding: 8,
           width: '100%',
           height: '100%',
+          transform: isHovered ? `rotate(${isGrid && gridHoverRotate !== undefined ? gridHoverRotate : hoverRotate}deg)` : 'none',
+          boxShadow: isHovered ? '0 8px 30px rgba(0,0,0,0.12)' : 'none',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
         }}
       >
         {/* Media area */}
@@ -66,16 +85,16 @@ export default function FloatingCard({ project, index, onHover }: FloatingCardPr
           style={{
             borderRadius: 8,
             overflow: 'clip',
-            width: 372,
-            height: 245,
+            width: '100%',
+            height: '100%',
             background: project.gradient,
             position: 'relative',
           }}
         >
           {project.video && (
             <video
+              ref={videoRef}
               src={project.video}
-              autoPlay
               muted
               loop
               playsInline
@@ -88,10 +107,12 @@ export default function FloatingCard({ project, index, onHover }: FloatingCardPr
             <div
               style={{
                 position: 'absolute',
-                top: 12,
-                left: 16,
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: "'Caveat', var(--font-caveat), sans-serif",
-                fontSize: 22,
+                fontSize: 72,
                 fontWeight: 400,
                 color: 'rgba(255, 255, 255, 0.9)',
                 pointerEvents: 'none',

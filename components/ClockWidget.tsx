@@ -27,7 +27,7 @@ export default function ClockWidget() {
     fontSize: 11.2,
     fontWeight: 400,
     lineHeight: '13.44px',
-    color: 'rgba(0, 0, 0, 0.35)',
+    color: 'var(--color-text-secondary)',
     textAlign: 'right',
   }
 

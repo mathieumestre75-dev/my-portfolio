@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Elisha's Illustration — Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Spline+Sans+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'P22 Mackinac Medium';
+      src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
+      font-weight: 500;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background: rgb(252,252,252); position: relative;
+      display: flex; align-items: flex-start;
+    }
+    .grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 32px 32px; pointer-events: none;
+    }
+    .top-wash {
+      position: absolute; top: 0; left: 0; right: 0; height: 101px;
+      background: linear-gradient(180deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%);
+      pointer-events: none;
+    }
+    .left-panel { position: absolute; left: 20px; top: 20px; width: 300px; display: flex; flex-direction: column; gap: 50px; }
+    .text-block { display: flex; flex-direction: column; gap: 15px; height: 160px; }
+    .text-block h1 { font-family: 'Caveat', cursive; font-size: 32.64px; font-weight: 400; line-height: 39px; letter-spacing: -0.65px; color: rgba(0,0,0,0.75); }
+    .text-block p.sub { font-family: 'P22 Mackinac Medium', serif; font-size: 14.08px; font-weight: 500; line-height: 21px; letter-spacing: -0.28px; color: rgba(0,0,0,0.75); }
+    .text-block p.mono { font-family: 'Spline Sans Mono', monospace; font-size: 12.8px; line-height: 20px; color: rgba(0,0,0,0.35); }
+    .preview-card {
+      width: 300px; height: 395px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 8px; border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: rgba(79,44,9,0.06) 0px 5px 25px 3px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .hover-text { font-family: 'Caveat', cursive; font-size: 19.2px; font-weight: 400; color: rgba(0,0,0,0.23); letter-spacing: -0.38px; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="top-wash"></div>
+
+  <div class="left-panel">
+    <div class="text-block">
+      <h1>Hiya! I'm Mathieu.</h1>
+      <p class="sub">I'm a designer orbiting vision, craft, &amp; curiosity to create experiences that feel human.</p>
+      <p class="mono">Prev. designed for Flowdesk, Arcal &amp; Nucleus.</p>
+    </div>
+
+    <div class="preview-card">
+      <div style="position:relative; width:67px; height:63px; display:flex; align-items:center; justify-content:center;">
+        <img
+          src="https://framerusercontent.com/images/0dCPqqRu4fUorwKpVyneDoZZs.png?width=318&height=293"
+          width="67" height="63"
+          style="object-fit:contain; display:block;"
+          alt=""
+        />
+      </div>
+      <span class="hover-text">hover a project</span>
+    </div>
+  </div>
+</body>
+</html>
