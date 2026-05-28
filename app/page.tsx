@@ -11,8 +11,6 @@ import HomeTopBar from '@/components/HomeTopBar'
 import TextBlock from '@/components/TextBlock'
 import PreviewCard from '@/components/PreviewCard'
 import FloatingCard from '@/components/FloatingCard'
-import DockNavigation from '@/components/DockNavigation'
-import MusicBar from '@/components/MusicBar'
 export default function Home() {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
   const hoveredProject: HomeProject | null = hoveredSlug ? (homeProjects.find(p => p.slug === hoveredSlug) ?? null) : null
@@ -101,8 +99,6 @@ export default function Home() {
           <FloatingCard project={homeProjects[3]} positionStyle={{ top: 305, left: 320, width: 386, height: 261, zIndex: 6 }} onHover={setHoveredSlug} isGrid={isOrganized} gridOffset={{ x: 18, y: 63 }} hoverRotate={3} />
         </div>
 
-        <DockNavigation />
-        <MusicBar />
       </div>
     </main>
   )

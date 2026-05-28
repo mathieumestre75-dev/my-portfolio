@@ -58,7 +58,7 @@
   --color-right-fade-start:  rgb(252, 252, 252);
   --color-icon:              rgba(0, 0, 0, 0.75);
   --color-text-faint:        rgba(0, 0, 0, 0.23);
-  --color-dock-bg:           rgba(255, 255, 255, 0.1);
+  --color-dock-bg:           rgba(252, 252, 252, 0.95);
   --color-dock-border:       rgba(0, 0, 0, 0.06);
   --color-dock-divider:      rgba(0, 0, 0, 0.06);
   --color-preview-bg:        rgba(255, 255, 255, 0.3);
@@ -93,7 +93,7 @@
   /* right-fade-start unused in dark mode — RightFade is hidden */
   --color-icon:              rgba(255, 255, 255, 0.75);
   --color-text-faint:        rgba(255, 255, 255, 0.25);
-  --color-dock-bg:           rgba(255, 255, 255, 0.04);
+  --color-dock-bg:           rgba(25, 20, 19, 0.88);
   --color-dock-border:       rgba(255, 255, 255, 0.1);
   --color-dock-divider:      rgba(255, 255, 255, 0.1);
   --color-preview-bg:        rgba(255, 255, 255, 0.05);

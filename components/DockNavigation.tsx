@@ -16,14 +16,15 @@ type Item =
   | { kind: 'link'; href: string; label: string; icon: typeof Sun; active: boolean }
 
 export default function DockNavigation() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const pathname = usePathname()
   const { view, setView } = useView()
   const { theme, setTheme } = useTheme()
   const isOrganized = view === 'organized'
+  const isWorkPage = pathname.startsWith('/work')
 
-  const items: Item[] = [
+  const allItems: Item[] = [
     { kind: 'theme', label: theme === 'dark' ? 'Light Mode' : 'Dark Mode', icon: theme === 'dark' ? Sun : Moon },
     { kind: 'view', label: isOrganized ? 'Scattered' : 'Organized', icon: LayoutGrid },
     { kind: 'copy', label: copied ? 'Copied!' : 'Copy email', icon: Mail },
@@ -41,20 +42,22 @@ export default function DockNavigation() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const renderIcon = (item: Item, i: number, offset = 0) => {
-    const idx = offset + i
+  const itemKey = (item: Item) => item.kind === 'link' ? `link-${(item as { href: string }).href}` : item.kind
+
+  const renderIcon = (item: Item) => {
+    const key = itemKey(item)
     const isActive = item.kind === 'link' ? item.active : false
-    const opacity = isActive || hoveredIndex === idx ? 1 : 0.3
+    const isHovered = hoveredKey === key
+    const opacity = isActive || isHovered ? 1 : 0.3
 
     return (
       <div
-        key={idx}
         style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        onMouseEnter={() => setHoveredIndex(idx)}
-        onMouseLeave={() => setHoveredIndex(null)}
+        onMouseEnter={() => setHoveredKey(key)}
+        onMouseLeave={() => setHoveredKey(null)}
       >
         <AnimatePresence>
-          {hoveredIndex === idx && (
+          {isHovered && (
             <motion.div
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -80,7 +83,7 @@ export default function DockNavigation() {
             </motion.div>
           )}
         </AnimatePresence>
-        <motion.div whileHover={{ scale: 1.2 }} transition={{ duration: 0.15, ease: 'easeOut' }}>
+        <div style={{ display: 'flex', transform: isHovered ? 'scale(1.2)' : 'scale(1)', transition: 'transform 0.15s ease-out' }}>
           {item.kind === 'theme' && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -103,7 +106,7 @@ export default function DockNavigation() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: 20, height: 20,
                 color: isOrganized ? 'rgba(120, 120, 120, 0.85)' : 'var(--color-icon)',
-                opacity: isOrganized || hoveredIndex === idx ? 1 : 0.3,
+                opacity: isOrganized || isHovered ? 1 : 0.3,
                 transition: 'opacity 0.2s ease, color 0.2s ease',
               }}
             >
@@ -137,7 +140,7 @@ export default function DockNavigation() {
               <item.icon size={16} strokeWidth={1.5} />
             </Link>
           )}
-        </motion.div>
+        </div>
       </div>
     )
   }
@@ -161,7 +164,9 @@ export default function DockNavigation() {
         pointerEvents: 'none',
       }}
     >
-      <div
+      <motion.div
+        layout
+        transition={{ type: 'spring', stiffness: 280, damping: 30, mass: 1 }}
         style={{
           background: 'var(--color-dock-bg)',
           borderRadius: 1100,
@@ -169,7 +174,6 @@ export default function DockNavigation() {
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           boxShadow: '0px 5px 25px 3px rgba(79, 44, 9, 0.02)',
-          transition: 'background 0.4s ease, border-color 0.4s ease',
           padding: '10px 14px',
           display: 'flex',
           flexDirection: 'row',
@@ -180,12 +184,36 @@ export default function DockNavigation() {
           pointerEvents: 'auto',
         }}
       >
-        {items.map((item, i) => renderIcon(item, i))}
+        {/* Sub-flex — gaps managed manually so width animation moves copy cleanly */}
+        <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          {renderIcon(allItems[0])}
 
-        <div style={{ width: 1, height: 12, background: 'var(--color-dock-divider)', flexShrink: 0, transition: 'background 0.4s ease' }} />
+          {/* View icon: width animates 34→0 so copy slides as a natural flex item */}
+          <motion.div
+            initial={false}
+            animate={{ width: isWorkPage ? 0 : 34 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 30, mass: 1 }}
+            style={{ flexShrink: 0, display: 'flex', alignItems: 'center', pointerEvents: isWorkPage ? 'none' : 'auto' }}
+          >
+            <motion.div
+              initial={false}
+              animate={{ scale: isWorkPage ? 0 : 1, opacity: isWorkPage ? 0 : 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 24 }}
+              style={{ paddingLeft: 14, flexShrink: 0, display: 'flex' }}
+            >
+              {renderIcon(allItems[1])}
+            </motion.div>
+          </motion.div>
 
-        {navItems.map((item, i) => renderIcon(item, i, items.length + 1))}
-      </div>
+          <div style={{ marginLeft: 14, display: 'flex', flexShrink: 0 }}>
+            {renderIcon(allItems[2])}
+          </div>
+        </div>
+
+        <div style={{ width: 1, height: 12, background: 'var(--color-dock-divider)', flexShrink: 0 }} />
+
+        {navItems.map((item) => renderIcon(item))}
+      </motion.div>
     </motion.div>
   )
 }

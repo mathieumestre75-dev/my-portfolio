@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Transition Options</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f4f3f0;
+    color: #1a1a1a;
+    padding: 32px 24px 80px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-family: 'SF Mono', 'Courier New', monospace;
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.04em;
+    margin-bottom: 32px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    user-select: none;
+  }
+
+  .card:hover { border-color: #ddd; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .card.selected { border-color: #1a1a1a; box-shadow: 0 4px 20px rgba(0,0,0,0.10); }
+
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .card-name {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .card-badge {
+    font-family: 'SF Mono', 'Courier New', monospace;
+    font-size: 9.5px;
+    color: #aaa;
+    letter-spacing: 0.04em;
+  }
+
+  .card-desc {
+    font-family: 'SF Mono', 'Courier New', monospace;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 0.03em;
+    margin-bottom: 16px;
+  }
+
+  /* ── Mini viewport ── */
+  .preview-wrap {
+    position: relative;
+    width: 100%;
+    height: 156px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f9f8f6;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .page-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+  }
+
+  /* HOME mock */
+  .home-layer { background: #f9f8f6; }
+  .home-cards {
+    display: flex;
+    gap: 6px;
+  }
+  .home-card-mock {
+    width: 56px;
+    height: 38px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .home-card-mock:nth-child(2) { margin-top: -6px; }
+  .home-card-mock:nth-child(3) { margin-top: 4px; }
+  .home-label {
+    font-family: 'SF Mono', monospace;
+    font-size: 8px;
+    color: #bbb;
+    letter-spacing: 0.06em;
+  }
+
+  /* ABOUT mock */
+  .about-layer { background: #f9f8f6; }
+  .about-inner {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .about-photo-mock {
+    width: 44px;
+    height: 56px;
+    background: #e8e5e0;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.07);
+    flex-shrink: 0;
+  }
+  .about-text-mock {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .about-line {
+    height: 5px;
+    border-radius: 3px;
+    background: #ddd;
+  }
+
+  /* Replay button */
+  .replay-btn {
+    margin-top: 10px;
+    width: 100%;
+    background: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 100px;
+    padding: 6px 0;
+    font-family: 'SF Mono', monospace;
+    font-size: 9.5px;
+    color: #999;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .replay-btn:hover { background: #f4f3f0; color: #666; }
+
+  /* ═══════════════════════════════════════
+     TRANSITION ANIMATIONS
+  ═══════════════════════════════════════ */
+
+  /* 1. Fade — pure opacity */
+  @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+
+  /* 2. Slide — old sinks down, new rises from below */
+  @keyframes slide-exit  { from { opacity: 1; transform: translateY(0);     } to { opacity: 0; transform: translateY(10px);  } }
+  @keyframes slide-enter { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0);      } }
+
+  /* 3. Blur Dissolve */
+  @keyframes blur-exit  { from { opacity: 1; filter: blur(0px);  transform: scale(1);    } to { opacity: 0; filter: blur(5px);  transform: scale(0.97); } }
+  @keyframes blur-enter { from { opacity: 0; filter: blur(5px);  transform: scale(0.97); } to { opacity: 1; filter: blur(0px);  transform: scale(1);    } }
+
+  /* 4. Scale Fade — zoom out → zoom in */
+  @keyframes scale-exit  { from { opacity: 1; transform: scale(1);    } to { opacity: 0; transform: scale(0.94); } }
+  @keyframes scale-enter { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1);    } }
+
+  /* apply class → auto-remove after duration */
+  .anim-out, .anim-in { pointer-events: none; }
+
+  /* Selection indicator at the bottom */
+  .selection-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #e5e5e5;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'SF Mono', monospace;
+    font-size: 11px;
+    color: #888;
+  }
+  .selection-bar strong { color: #1a1a1a; }
+  .clear-btn {
+    background: none; border: none;
+    font-family: 'SF Mono', monospace;
+    font-size: 10px; color: #bbb;
+    cursor: pointer; padding: 0;
+  }
+  .clear-btn:hover { color: #666; }
+</style>
+</head>
+<body>
+
+<div style="max-width:860px;margin:0 auto">
+  <h1>Page Transition Options</h1>
+  <p class="subtitle">Click a card to select it · Press REPLAY to re-trigger the animation</p>
+
+  <div class="grid" id="grid">
+
+    <!-- ── A: Fade ── -->
+    <div class="card" data-choice="fade" onclick="selectCard(this)">
+      <div class="card-header">
+        <span class="card-name">A — Fade</span>
+        <span class="card-badge">Pure opacity · no movement</span>
+      </div>
+      <p class="card-desc">Dissolves cleanly between pages. The most minimal option.</p>
+      <div class="preview-wrap" id="preview-fade">
+        <div class="page-layer home-layer" id="home-fade">
+          <div class="home-cards">
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+          </div>
+          <span class="home-label">HOME</span>
+        </div>
+        <div class="page-layer about-layer" id="about-fade" style="opacity:0">
+          <div class="about-inner">
+            <div class="about-photo-mock"></div>
+            <div class="about-text-mock">
+              <div class="about-line" style="width:80px"></div>
+              <div class="about-line" style="width:64px"></div>
+              <div class="about-line" style="width:72px"></div>
+              <div class="about-line" style="width:50px"></div>
+            </div>
+          </div>
+          <span class="home-label" style="margin-top:4px">ABOUT</span>
+        </div>
+      </div>
+      <button class="replay-btn" onclick="event.stopPropagation();replay('fade')">REPLAY</button>
+    </div>
+
+    <!-- ── B: Slide ── -->
+    <div class="card" data-choice="slide" onclick="selectCard(this)">
+      <div class="card-header">
+        <span class="card-name">B — Slide</span>
+        <span class="card-badge">Rises from below · sinks on exit</span>
+      </div>
+      <p class="card-desc">Old page sinks down, new page rises up. Directional feel.</p>
+      <div class="preview-wrap" id="preview-slide">
+        <div class="page-layer home-layer" id="home-slide">
+          <div class="home-cards">
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+          </div>
+          <span class="home-label">HOME</span>
+        </div>
+        <div class="page-layer about-layer" id="about-slide" style="opacity:0">
+          <div class="about-inner">
+            <div class="about-photo-mock"></div>
+            <div class="about-text-mock">
+              <div class="about-line" style="width:80px"></div>
+              <div class="about-line" style="width:64px"></div>
+              <div class="about-line" style="width:72px"></div>
+              <div class="about-line" style="width:50px"></div>
+            </div>
+          </div>
+          <span class="home-label" style="margin-top:4px">ABOUT</span>
+        </div>
+      </div>
+      <button class="replay-btn" onclick="event.stopPropagation();replay('slide')">REPLAY</button>
+    </div>
+
+    <!-- ── C: Blur Dissolve ── -->
+    <div class="card" data-choice="blur" onclick="selectCard(this)">
+      <div class="card-header">
+        <span class="card-name">C — Blur Dissolve</span>
+        <span class="card-badge">Defocuses · clears on entry</span>
+      </div>
+      <p class="card-desc">Pages blur as they leave and snap into focus on arrival. Dream-like.</p>
+      <div class="preview-wrap" id="preview-blur">
+        <div class="page-layer home-layer" id="home-blur">
+          <div class="home-cards">
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+          </div>
+          <span class="home-label">HOME</span>
+        </div>
+        <div class="page-layer about-layer" id="about-blur" style="opacity:0">
+          <div class="about-inner">
+            <div class="about-photo-mock"></div>
+            <div class="about-text-mock">
+              <div class="about-line" style="width:80px"></div>
+              <div class="about-line" style="width:64px"></div>
+              <div class="about-line" style="width:72px"></div>
+              <div class="about-line" style="width:50px"></div>
+            </div>
+          </div>
+          <span class="home-label" style="margin-top:4px">ABOUT</span>
+        </div>
+      </div>
+      <button class="replay-btn" onclick="event.stopPropagation();replay('blur')">REPLAY</button>
+    </div>
+
+    <!-- ── D: Scale Fade ── -->
+    <div class="card" data-choice="scale" onclick="selectCard(this)">
+      <div class="card-header">
+        <span class="card-name">D — Scale Fade</span>
+        <span class="card-badge">Zoom out · zoom in</span>
+      </div>
+      <p class="card-desc">Old page shrinks away, new page expands into place. Spatial depth.</p>
+      <div class="preview-wrap" id="preview-scale">
+        <div class="page-layer home-layer" id="home-scale">
+          <div class="home-cards">
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+            <div class="home-card-mock"></div>
+          </div>
+          <span class="home-label">HOME</span>
+        </div>
+        <div class="page-layer about-layer" id="about-scale" style="opacity:0">
+          <div class="about-inner">
+            <div class="about-photo-mock"></div>
+            <div class="about-text-mock">
+              <div class="about-line" style="width:80px"></div>
+              <div class="about-line" style="width:64px"></div>
+              <div class="about-line" style="width:72px"></div>
+              <div class="about-line" style="width:50px"></div>
+            </div>
+          </div>
+          <span class="home-label" style="margin-top:4px">ABOUT</span>
+        </div>
+      </div>
+      <button class="replay-btn" onclick="event.stopPropagation();replay('scale')">REPLAY</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Selection bar -->
+<div class="selection-bar" id="sel-bar" style="display:none">
+  <span>Selected: <strong id="sel-label">—</strong></span>
+  <button class="clear-btn" onclick="clearSelection()">CLEAR</button>
+</div>
+
+<script>
+// ─── State per variant ────────────────────────────────────────────────────────
+const state = { fade: 'home', slide: 'home', blur: 'home', scale: 'home' }
+
+const DURATIONS = { fade: 280, slide: 320, blur: 320, scale: 300 }
+
+// CSS animation names: [exit-anim, enter-anim]
+const ANIMS = {
+  fade:  ['fade-out',   'fade-in'],
+  slide: ['slide-exit', 'slide-enter'],
+  blur:  ['blur-exit',  'blur-enter'],
+  scale: ['scale-exit', 'scale-enter'],
+}
+
+function replay(variant) {
+  const homeEl  = document.getElementById('home-' + variant)
+  const aboutEl = document.getElementById('about-' + variant)
+  const dur = DURATIONS[variant]
+  const [exitAnim, enterAnim] = ANIMS[variant]
+
+  // Always replay: home → about → home cycle
+  // First, reset to home state without animation
+  homeEl.style.animation  = 'none'
+  aboutEl.style.animation = 'none'
+  homeEl.style.opacity    = '1'
+  aboutEl.style.opacity   = '0'
+  homeEl.style.transform  = ''
+  aboutEl.style.transform = ''
+  homeEl.style.filter     = ''
+  aboutEl.style.filter    = ''
+
+  void homeEl.offsetHeight // force reflow
+
+  // Animate exit on home
+  homeEl.style.animation = `${exitAnim} ${dur}ms cubic-bezier(0.22,1,0.36,1) forwards`
+
+  // After half duration, start enter on about
+  setTimeout(() => {
+    homeEl.style.opacity = '0'
+    aboutEl.style.opacity = '1'
+    aboutEl.style.animation = `${enterAnim} ${dur}ms cubic-bezier(0.22,1,0.36,1) forwards`
+    state[variant] = 'about'
+  }, dur * 0.6)
+
+  // After 1.4s, reverse back to home
+  setTimeout(() => {
+    aboutEl.style.animation = `${exitAnim} ${dur}ms cubic-bezier(0.22,1,0.36,1) forwards`
+
+    setTimeout(() => {
+      aboutEl.style.opacity = '0'
+      homeEl.style.opacity = '1'
+      homeEl.style.animation = `${enterAnim} ${dur}ms cubic-bezier(0.22,1,0.36,1) forwards`
+      state[variant] = 'home'
+    }, dur * 0.6)
+  }, dur * 0.6 + 1200)
+}
+
+// Auto-play all on load
+window.addEventListener('load', () => {
+  setTimeout(() => replay('fade'),  0)
+  setTimeout(() => replay('slide'), 200)
+  setTimeout(() => replay('blur'),  400)
+  setTimeout(() => replay('scale'), 600)
+})
+
+// ─── Selection ────────────────────────────────────────────────────────────────
+const NAMES = { fade: 'A — Fade', slide: 'B — Slide', blur: 'C — Blur Dissolve', scale: 'D — Scale Fade' }
+
+function selectCard(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'))
+  el.classList.add('selected')
+  const choice = el.dataset.choice
+  document.getElementById('sel-bar').style.display = 'flex'
+  document.getElementById('sel-label').textContent = NAMES[choice]
+
+  // Record event for visual companion
+  if (window.__vc_record) window.__vc_record(choice, NAMES[choice])
+}
+
+function clearSelection() {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'))
+  document.getElementById('sel-bar').style.display = 'none'
+}
+</script>
+
+</body>
+</html>

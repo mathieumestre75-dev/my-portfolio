@@ -6,7 +6,7 @@ export default function TagChip({ label }: TagChipProps) {
   return (
     <span
       style={{
-        background: 'rgba(0, 0, 0, 0.35)',
+        background: 'rgba(0, 0, 0, 0.62)',
         borderRadius: 5,
         backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(5px)',

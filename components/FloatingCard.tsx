@@ -126,8 +126,8 @@ export default function FloatingCard({ project, positionStyle, onHover, isGrid =
           <motion.div
             style={{
               position: 'absolute',
-              bottom: 20,
-              left: 20,
+              bottom: 10,
+              left: 10,
               display: 'flex',
               flexDirection: 'row',
               gap: 6,
