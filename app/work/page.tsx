@@ -121,7 +121,7 @@ export default function Work() {
             alignItems: 'flex-start', justifyContent: 'space-between',
           }}
         >
-          <Link href="/" style={{ textDecoration: 'none' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'block' }}>
             <span style={{ ...monoStyle, cursor: 'pointer' }}>MATHIEU MESTRE</span>
           </Link>
           <ClockWidget />

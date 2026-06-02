@@ -27,9 +27,9 @@ const CURRENTS = [
 
 const mono: React.CSSProperties = {
   fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
-  fontSize: 11.04,
+  fontSize: 11.2,
   fontWeight: 400,
-  lineHeight: '1.4em',
+  lineHeight: '13.44px',
   letterSpacing: '-0.02em',
   color: 'rgba(0,0,0,0.45)',
 }
@@ -129,7 +129,10 @@ export default function About() {
       <DotParticles />
 
       {/* Top bar */}
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
         style={{
           position: 'absolute',
           top: 20,
@@ -142,11 +145,11 @@ export default function About() {
           pointerEvents: 'none',
         }}
       >
-        <Link href="/" style={{ textDecoration: 'none', pointerEvents: 'auto' }}>
-          <span style={mono}>MATHIEU MESTRE</span>
+        <Link href="/" style={{ textDecoration: 'none', pointerEvents: 'auto', display: 'block' }}>
+          <span style={{ ...mono, cursor: 'pointer', letterSpacing: 'normal', color: 'var(--color-text-secondary)' }}>MATHIEU MESTRE</span>
         </Link>
         <ClockWidget />
-      </div>
+      </motion.div>
 
       {/* Main content */}
       <div
@@ -156,7 +159,7 @@ export default function About() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 120,
+          gap: 200,
           padding: '60px 60px 80px',
           zIndex: 2,
         }}
@@ -171,7 +174,7 @@ export default function About() {
           style={{
             width: 300,
             flexShrink: 0,
-            background: '#fff',
+            background: 'rgba(255,255,255,0.1)',
             borderRadius: 16,
             border: '0.8px solid rgba(0,0,0,0.08)',
             backdropFilter: 'blur(5px)',
