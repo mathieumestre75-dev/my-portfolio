@@ -172,11 +172,11 @@ export default function NotoPage() {
           ))}
         </aside>
 
-        {/* ── Main content column — centered in the viewport ───────────────── */}
         <main
           style={{
             width: 641,
-            margin: '0 auto',
+            marginLeft: 'calc(50% - 290px)',
+            marginRight: 'auto',
             padding: '150px 20px 250px',
           }}
         >
