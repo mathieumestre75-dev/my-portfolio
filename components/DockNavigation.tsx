@@ -22,7 +22,7 @@ export default function DockNavigation() {
   const { view, setView } = useView()
   const { theme, setTheme } = useTheme()
   const isOrganized = view === 'organized'
-  const isWorkPage = pathname.startsWith('/work')
+  const isWorkPage = pathname.startsWith('/work') || pathname === '/about'
 
   const allItems: Item[] = [
     { kind: 'theme', label: theme === 'dark' ? 'Light Mode' : 'Dark Mode', icon: theme === 'dark' ? Sun : Moon },

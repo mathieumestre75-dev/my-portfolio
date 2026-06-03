@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noto background preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: rgb(241, 245, 251);
+    }
+
+    /* ── Top gradient (fixed to viewport top) ── */
+    .grad-top {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(
+        180deg,
+        rgba(217, 235, 252, 0.55)  0%,
+        rgba(255, 235, 242, 0.30) 30%,
+        rgba(255, 249, 242, 0.45) 65%,
+        rgba(241, 245, 251, 0)   100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Bottom gradient (at end of page, reveals on scroll) ── */
+    .grad-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 300px;
+      background: linear-gradient(
+        0deg,
+        rgba(217, 235, 252, 0.55)  0%,
+        rgba(255, 235, 242, 0.30) 30%,
+        rgba(255, 249, 242, 0.45) 65%,
+        rgba(241, 245, 251, 0)   100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .page {
+      position: relative;
+      min-height: 300vh; /* simulate a long page */
+    }
+
+    .label {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: rgba(0,0,0,0.3);
+      z-index: 2;
+      text-align: center;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="grad-top"></div>
+    <div class="grad-bottom"></div>
+  </div>
+  <div class="label">
+    BACKGROUND PREVIEW<br>
+    Compare to elishajeon.com &mdash; scroll to see bottom gradient<br>
+    Adjust values in /public/noto-bg-preview.html
+  </div>
+</body>
+</html>

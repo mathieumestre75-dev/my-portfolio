@@ -6,8 +6,6 @@ import Link from 'next/link'
 import GridBackground from '@/components/GridBackground'
 import DotParticles from '@/components/DotParticles'
 import ClockWidget from '@/components/ClockWidget'
-import DockNavigation from '@/components/DockNavigation'
-import MusicBar from '@/components/MusicBar'
 
 const CDN = 'https://framerusercontent.com/images'
 
@@ -360,27 +358,30 @@ export default function About() {
             </p>
 
             <div style={{ display: 'flex', gap: 24 }}>
-              {['Email', 'Resume', 'LinkedIn', 'Twitter'].map((label) => (
-                <span
-                  key={label}
-                  style={{
-                    fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
-                    fontSize: 'calc(1rem * 0.8)',
-                    letterSpacing: '-0.02em',
-                    color: 'rgba(0,0,0,0.35)',
-                    cursor: 'default',
-                  }}
-                >
-                  {label}
-                </span>
-              ))}
+              {[
+                { label: 'Email', href: 'mailto:mathieu.mestre@usercentrics.com' },
+                { label: 'Resume', href: null },
+                { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mathieu-mestre-bba038102/' },
+              ].map(({ label, href }) => {
+                const style: React.CSSProperties = {
+                  fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
+                  fontSize: 'calc(1rem * 0.8)',
+                  letterSpacing: '-0.02em',
+                  color: 'rgba(0,0,0,0.35)',
+                  cursor: href ? 'pointer' : 'default',
+                  textDecoration: 'none',
+                }
+                return href ? (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={style}>{label}</a>
+                ) : (
+                  <span key={label} style={style}>{label}</span>
+                )
+              })}
             </div>
           </div>
         </motion.div>
       </div>
 
-      <MusicBar />
-      <DockNavigation />
     </div>
   )
 }

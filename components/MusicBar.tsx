@@ -30,7 +30,7 @@ function buildQueue(current: number): number[] {
 
 const INITIAL = Math.floor(Math.random() * PLAYLIST.length)
 
-export default function MusicBar() {
+export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
   const [playing, setPlaying] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [index,   setIndex]   = useState(INITIAL)
@@ -95,7 +95,7 @@ export default function MusicBar() {
         variants={{
           initial: { opacity: 0, y: 8 },
           animate: { opacity: 1, y: 0, transition: { ...springs.drag, delay: 0.6 } },
-          hover:   { scale: 1.04,       transition: { duration: 0.16, ease: 'easeOut' } },
+          hover:   { scale: 1.02,       transition: { duration: 0.16, ease: 'easeOut' } },
         }}
         initial="initial"
         animate="animate"
@@ -112,10 +112,12 @@ export default function MusicBar() {
             alignItems: 'center',
             gap: 0,
             height: 30,
-            background: '#eceff4',
+            background: 'rgba(0, 0, 0, 0.06)',
             borderRadius: 100,
             padding: '0 10px 0 7px',
-            border: 'none',
+            border: '0.8px solid rgba(0, 0, 0, 0.07)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
           }}
         >
           {/* Status dot */}
@@ -160,7 +162,7 @@ export default function MusicBar() {
               .marquee { animation: marquee 9s linear infinite; }
             `}</style>
           )}
-          <div style={{ maxWidth: 148, overflow: 'hidden' }}>
+          <div style={{ maxWidth: 148, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={index}
@@ -219,6 +221,38 @@ export default function MusicBar() {
           </motion.div>
         </div>
       </motion.div>
+
+      {showHint && (
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              key="music-hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              style={{
+                position: 'fixed',
+                bottom: 67,
+                left: 170,
+                width: 140,
+                height: 92,
+                zIndex: 49,
+                pointerEvents: 'none',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/listen-note.svg"
+                alt=""
+                width={140}
+                height={92}
+                style={{ display: 'block', width: 140, height: 92 }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
 
       <audio ref={audioRef} onEnded={handleEnded} />
     </>
