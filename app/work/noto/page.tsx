@@ -236,16 +236,17 @@ export default function NotoPage() {
           {/* ════ HERO ════════════════════════════════════════════════════════ */}
           <section id="overview" style={{ display: 'flex', flexDirection: 'column', gap: 52 }}>
 
-            {/* Breadcrumb + H1 + subtitle */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{
-                fontFamily: MONO, fontSize: 13.28, fontWeight: 400,
-                color: 'rgba(0,0,0,0.45)', lineHeight: '18.592px',
-                letterSpacing: '-0.5312px', margin: 0,
-              }}>
-                Noto / App
-              </p>
+            {/* Breadcrumb — direct child of section, gets the full 52px section gap below */}
+            <p style={{
+              fontFamily: MONO, fontSize: 13.28, fontWeight: 400,
+              color: 'rgba(0,0,0,0.45)', lineHeight: '18.592px',
+              letterSpacing: '-0.5312px', margin: 0,
+            }}>
+              Noto / App
+            </p>
 
+            {/* H1 + subtitle — framer-jt1scv, gap:30 between title and subtitle */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
               <motion.h1
                 variants={titleContainer}
                 initial="hidden"
@@ -305,7 +306,7 @@ export default function NotoPage() {
                 </div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <p style={metaLabel}>Skills</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                     {['UX/UI', 'Product Strategy', 'User Research', 'Visual Design'].map(s => (
                       <span key={s} style={skillTag}>{s}</span>
                     ))}
@@ -333,41 +334,45 @@ export default function NotoPage() {
 
           </section>
 
-          {/* ── First horizontal divider ─────────────────────────────────── */}
+          {/* framer-1ikk3wh — hairline divider between hero and overview */}
           {DIVIDER}
 
-          {/* ════ OVERVIEW CONTENT ══════════════════════════════════════════ */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 52 }}>
-            <h2 style={sectionH2}>
-              What if your notes could help you understand yourself?
-            </h2>
-            {/* gap:6 matches framer-128cftz */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <h4 style={sectionH4}>A curiosity-driven passion project</h4>
-              <div>
-                <p style={bodyText}>
-                  For 8 weeks, I partnered with another designer and led the product concept, interaction design, and visual direction for Noto — a conceptual note-taking app.
-                </p>
-                <p style={{ ...bodyText, marginTop: '1.65em' }}>
-                  As my capstone and farewell to four years of design school, I wanted to create something deeply personal, bringing together my favorite things: Spotify Wrapped-style self-discovery, experimental design, and pretty gradients :&apos;&#41;
-                </p>
+          {/* ════ OVERVIEW CONTENT — framer-1tmbiea gap:30 ══════════════════ */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+            <p style={sectionLabel}>Overview</p>
+            {/* framer-1dwyu3 gap:20 — h2 + content block */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <h2 style={sectionH2}>
+                What if your notes could help you understand yourself?
+              </h2>
+              {/* framer-128cftz gap:6 — h4 + body */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>A curiosity-driven passion project</h4>
+                <div>
+                  <p style={bodyText}>
+                    For 8 weeks, I partnered with another designer and led the product concept, interaction design, and visual direction for Noto — a conceptual note-taking app.
+                  </p>
+                  <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                    As my capstone and farewell to four years of design school, I wanted to create something deeply personal, bringing together my favorite things: Spotify Wrapped-style self-discovery, experimental design, and pretty gradients :&apos;&#41;
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {DIVIDER}
-
           {/* ════ PROBLEM ═══════════════════════════════════════════════════ */}
-          <section id="problem" style={{ display: 'flex', flexDirection: 'column', gap: 52 }}>
+          {/* marginTop:100 = framer-zjwxzf gap:100px — no visual divider between sections */}
+          <section id="problem" style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
 
             {/* Heading + label — gap:30 matches framer-1h9oh6v */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
               <p style={sectionLabel}>The Problem</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              {/* framer-sodk4t gap:20 — h2 + content block */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <h2 style={sectionH2}>
                   No one is building for self-insight, only self-documentation.
                 </h2>
-                {/* gap:6 matches framer-tywa0x */}
+                {/* framer-tywa0x gap:6 — h4 + body */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <h4 style={sectionH4}>The notes app: a convenient but chaotic space</h4>
                   <p style={bodyText}>
