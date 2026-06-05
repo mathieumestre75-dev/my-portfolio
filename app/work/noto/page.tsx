@@ -11,6 +11,7 @@ const SUN_ICON   = 'https://framerusercontent.com/images/WPQ9VOXXZnAWbWSooANYVFh
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 const MONO   = "'Spline Sans Mono', var(--font-spline-sans-mono), monospace"
 const SERIFR = "'P22 Mackinac Regular', serif"
+const SERIFM = "'P22 Mackinac Medium', serif"
 const SANS   = "'PP Neue Montreal Medium', sans-serif"
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
@@ -52,6 +53,49 @@ const skillTag: React.CSSProperties = {
   background: 'rgba(65,70,77,0.03)', borderRadius: 5,
   padding: '5px 11px', display: 'inline-flex', alignItems: 'center',
 }
+const sectionH2: React.CSSProperties = {
+  fontFamily: SERIFM, fontSize: 22.4, fontWeight: 500,
+  letterSpacing: '-0.04em', lineHeight: '1.4em',
+  color: 'rgba(0,0,0,0.75)', margin: 0,
+}
+const sectionH4: React.CSSProperties = {
+  fontFamily: SANS, fontSize: 16.8, fontWeight: 500,
+  lineHeight: '1.68em', color: 'rgba(0,0,0,0.75)', margin: 0,
+}
+const bodyText: React.CSSProperties = {
+  fontFamily: SANS, fontSize: 15.52, fontWeight: 500,
+  letterSpacing: '0.008em', lineHeight: '1.65em',
+  color: 'rgba(0,0,0,0.45)', margin: 0,
+}
+const sectionLabel: React.CSSProperties = {
+  fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
+  letterSpacing: '0.008em', lineHeight: '1.6em',
+  color: 'rgba(0,0,0,0.35)', margin: 0,
+}
+const bulletText: React.CSSProperties = {
+  fontFamily: SANS, fontSize: 14.88, fontWeight: 500,
+  letterSpacing: '0.008em', lineHeight: '1.6em',
+  color: 'rgba(0,0,0,0.75)', margin: 0,
+}
+
+// ─── Arrow bullet SVG ────────────────────────────────────────────────────────
+function ArrowBullet() {
+  return (
+    <svg
+      viewBox="0 0 6 10" width={6} height={10}
+      overflow="visible" fill="transparent"
+      style={{ transform: 'rotate(-90deg)', flexShrink: 0, marginTop: 3 }}
+    >
+      <path
+        d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552"
+        strokeWidth="1.26" stroke="rgba(255, 0, 0, 0.588)"
+      />
+    </svg>
+  )
+}
+
+// ─── Section divider ─────────────────────────────────────────────────────────
+const DIVIDER = <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '100px 0' }} />
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function NotoPage() {
@@ -78,14 +122,17 @@ export default function NotoPage() {
   return (
     <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative' }}>
 
-      {/* ── Font ─────────────────────────────────────────────────────────── */}
+      {/* ── Fonts ────────────────────────────────────────────────────────── */}
       <style>{`
         @font-face {
           font-family: 'P22 Mackinac Regular';
           src: url('https://framerusercontent.com/assets/noqSsOKWJ22atmEGnKWK1hZHPk.woff2') format('woff2');
-          font-weight: 400;
-          font-style: normal;
-          font-display: swap;
+          font-weight: 400; font-style: normal; font-display: swap;
+        }
+        @font-face {
+          font-family: 'P22 Mackinac Medium';
+          src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');
+          font-weight: 500; font-style: normal; font-display: swap;
         }
       `}</style>
 
@@ -148,28 +195,33 @@ export default function NotoPage() {
         <aside
           style={{
             position: 'fixed', left: 20, top: 0,
-            width: 120, height: '100vh',
+            width: 160, height: '100vh',
             padding: '140px 0 20px 0',
-            display: 'flex', flexDirection: 'column', gap: 10,
+            display: 'flex', flexDirection: 'column', gap: 14,
             zIndex: 10,
           }}
         >
-          {NAV.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              style={{
-                background: 'none', border: 'none', padding: 0,
-                cursor: 'pointer', textAlign: 'left',
-                fontFamily: SANS, fontSize: 12.48, fontWeight: 500,
-                lineHeight: '14.976px',
-                color: activeSection === id ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.35)',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          {NAV.map(({ id, label }) => {
+            const isActive = activeSection === id
+            return (
+              <motion.button
+                key={id}
+                onClick={() => scrollTo(id)}
+                animate={{ x: isActive ? 10 : 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 32, mass: 0.8 }}
+                style={{
+                  background: 'none', border: 'none', padding: 0,
+                  cursor: 'pointer', textAlign: 'left',
+                  fontFamily: SANS, fontSize: 12.48, fontWeight: 500,
+                  lineHeight: '15px',
+                  color: isActive ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.35)',
+                  transition: 'color 0.25s ease',
+                }}
+              >
+                {label}
+              </motion.button>
+            )
+          })}
         </aside>
 
         <main
@@ -282,7 +334,138 @@ export default function NotoPage() {
           </section>
 
           {/* ── First horizontal divider ─────────────────────────────────── */}
-          <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin: '100px 0' }} />
+          {DIVIDER}
+
+          {/* ════ OVERVIEW CONTENT ══════════════════════════════════════════ */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52 }}>
+            <h2 style={sectionH2}>
+              What if your notes could help you understand yourself?
+            </h2>
+            {/* gap:6 matches framer-128cftz */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h4 style={sectionH4}>A curiosity-driven passion project</h4>
+              <div>
+                <p style={bodyText}>
+                  For 8 weeks, I partnered with another designer and led the product concept, interaction design, and visual direction for Noto — a conceptual note-taking app.
+                </p>
+                <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                  As my capstone and farewell to four years of design school, I wanted to create something deeply personal, bringing together my favorite things: Spotify Wrapped-style self-discovery, experimental design, and pretty gradients :&apos;&#41;
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {DIVIDER}
+
+          {/* ════ PROBLEM ═══════════════════════════════════════════════════ */}
+          <section id="problem" style={{ display: 'flex', flexDirection: 'column', gap: 52 }}>
+
+            {/* Heading + label — gap:30 matches framer-1h9oh6v */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>The Problem</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+                <h2 style={sectionH2}>
+                  No one is building for self-insight, only self-documentation.
+                </h2>
+                {/* gap:6 matches framer-tywa0x */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <h4 style={sectionH4}>The notes app: a convenient but chaotic space</h4>
+                  <p style={bodyText}>
+                    I&apos;ve used my notes app for years, and it&apos;s become a trusty but unstructured archive of my life, from 2am thoughts, to-dos, and mind dumps. When I tried to make sense of it, I realized most journaling tools share the same flaw: they organize what you write, not what it means.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* What's missing — gap:24 matches framer-y1vbdo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+              {/* Label + thin divider — gap:20 matches framer-odgv03 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h5 style={{
+                  fontFamily: MONO, fontSize: 11.68, fontWeight: 500,
+                  lineHeight: '1.4em', color: 'rgba(0,0,0,0.35)', margin: 0,
+                }}>
+                  WHAT&apos;S MISSING
+                </h5>
+                <div style={{ height: 1, background: 'rgba(0,0,0,0.08)' }} />
+              </div>
+
+              {/* 2 columns — gap:46 between cols, gap:10 within each col */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 46, width: '100%' }}>
+
+                {/* Left column: 3 items — flex:1, gap:10 matches framer-1dwufup */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  {[
+                    'Unstructured notes are hard to sort through',
+                    'Requires manual tagging/organization',
+                    'Search is shallow; only finds keywords, not meaning',
+                  ].map((text, i) => (
+                    <div key={i} style={{ width: '100%', display: 'flex', gap: 14, alignItems: 'flex-start', borderRadius: 8 }}>
+                      <ArrowBullet />
+                      <p style={bulletText}>{text}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Right column: 2 items — flex:1, gap:10 matches framer-27grm7 */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  {[
+                    'No tools for insights or pattern-finding',
+                    "Doesn't support real reflection or understanding",
+                  ].map((text, i) => (
+                    <div key={i} style={{ width: '100%', display: 'flex', gap: 14, alignItems: 'flex-start', borderRadius: 8 }}>
+                      <ArrowBullet />
+                      <p style={bulletText}>{text}</p>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* Visual */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {/* Container — same background + stroke as hero video, image inset with padding */}
+              <div style={{
+                width: '100%',
+                background: 'rgba(0,0,0,0.03)',
+                border: '1px solid rgba(0,0,0,0.05)',
+                borderRadius: 8,
+                padding: '0 120px 120px',
+              }}>
+                {/* Phone image — flush at top, rounded bottom corners, fills padded width */}
+                <div style={{
+                  width: '100%',
+                  aspectRatio: '1.24667',
+                  borderBottomLeftRadius: 20,
+                  borderBottomRightRadius: 20,
+                  overflow: 'hidden',
+                }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://framerusercontent.com/images/7z4sboMYSxGAycSIv77WWnzCo.png"
+                    alt=""
+                    style={{
+                      width: '100%', height: '100%',
+                      objectFit: 'cover', objectPosition: 'center bottom',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              </div>
+              <p style={{
+                fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
+                letterSpacing: '0.008em', lineHeight: '1.6em',
+                color: 'rgba(0,0,0,0.35)', textAlign: 'center',
+                margin: 0,
+              }}>
+                Years of chaotic notes. Easy to write, hard to make sense of.
+              </p>
+            </div>
+
+          </section>
 
         </main>
       </div>
