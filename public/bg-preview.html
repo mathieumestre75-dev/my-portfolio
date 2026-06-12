@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background Preview — elishajeon style</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Layer 1: base page color */
+    html, body {
+      min-height: 100%;
+      background-color: rgb(241, 245, 251);
+      font-family: 'Spline Sans Mono', monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layer 2: main wrapper with blue tint overlay */
+    .page-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: rgba(98, 141, 227, 0.12);
+    }
+
+    /* Grid background */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-color: rgb(241, 245, 251);
+      background-image:
+        linear-gradient(rgba(98, 141, 227, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98, 141, 227, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Grid edge fades — updated to new base color */
+    .grid-fade-top    { position:absolute; inset:0; bottom:auto; height:160px; background: linear-gradient(to bottom, rgb(241,245,251) 30%, transparent); }
+    .grid-fade-bottom { position:absolute; inset:0; top:auto;    height:160px; background: linear-gradient(to top,   rgb(241,245,251) 30%, transparent); }
+    .grid-fade-left   { position:absolute; inset:0; right:auto;  width:200px;  background: linear-gradient(to right,  rgb(241,245,251) 40%, transparent); }
+    .grid-fade-right  { position:absolute; inset:0; left:auto;   width:160px;  background: linear-gradient(to left,   rgb(241,245,251) 30%, transparent); }
+
+    /* Layer 3: pastel gradient overlay — bottom to top, 75vh tall */
+    .gradient-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 75vh;
+      background-image: linear-gradient(
+        0deg,
+        rgba(217, 235, 252, 0.46) 0%,
+        rgba(255, 235, 242, 0.32) 27.9051%,
+        rgba(255, 249, 242, 0.53) 62.2501%,
+        rgba(252, 252, 252, 0) 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ── UI mockup ── */
+    .content {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* top bar */
+    .topbar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+    .topbar-pill {
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(98,141,227,0.12);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(8px);
+    }
+
+    /* left panel */
+    .left-panel {
+      position: absolute;
+      left: 20px;
+      top: 60px;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .name-block h1 {
+      font-family: 'Caveat', cursive;
+      font-size: 28px;
+      color: rgba(0,0,0,0.75);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .name-block p {
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      line-height: 1.6;
+      max-width: 220px;
+    }
+    .tag-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .tag {
+      background: rgba(0,0,0,0.05);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 10px;
+      color: rgba(0,0,0,0.45);
+      letter-spacing: 0.03em;
+    }
+
+    /* project list */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .project-item {
+      font-size: 11px;
+      color: rgba(0,0,0,0.35);
+      padding: 4px 0;
+      cursor: default;
+      letter-spacing: 0.02em;
+    }
+    .project-item.active { color: rgba(0,0,0,0.75); }
+
+    /* floating cards cluster */
+    .cards-cluster {
+      position: absolute;
+      top: 38%;
+      left: 47%;
+      transform: translateY(-50%);
+      width: 820px;
+      height: 560px;
+    }
+
+    .card {
+      position: absolute;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(98,141,227,0.10);
+      backdrop-filter: blur(12px);
+      box-shadow:
+        0 4px 24px rgba(79,44,9,0.06),
+        0 1px 4px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .card-img {
+      width: 100%;
+      height: 70%;
+      background: rgba(98,141,227,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-img-inner {
+      width: 60%;
+      height: 60%;
+      border-radius: 8px;
+      background: rgba(98,141,227,0.12);
+    }
+    .card-footer {
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(0,0,0,0.7);
+      letter-spacing: 0.02em;
+    }
+    .card-sub {
+      font-size: 10px;
+      color: rgba(0,0,0,0.35);
+    }
+
+    /* dock */
+    .dock {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(241,245,251,0.92);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: rgba(79,44,9,0.04) 0px 4px 20px;
+      backdrop-filter: blur(12px);
+    }
+    .dock-item {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.06);
+    }
+    .dock-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(0,0,0,0.07);
+    }
+
+    /* label */
+    .preview-label {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.75);
+      color: rgba(255,255,255,0.9);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      z-index: 100;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- Layer 1 + 2 is handled by html/body + .page-wrapper background -->
+
+    <!-- Grid -->
+    <div class="grid-bg">
+      <div class="grid-fade-top"></div>
+      <div class="grid-fade-bottom"></div>
+      <div class="grid-fade-left"></div>
+      <div class="grid-fade-right"></div>
+    </div>
+
+    <!-- Layer 3: pastel gradient -->
+    <div class="gradient-overlay"></div>
+
+    <!-- Mockup content -->
+    <div class="content">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div class="topbar-pill">about</div>
+        <div class="topbar-pill">work</div>
+        <div class="topbar-pill">09:41 AM</div>
+      </div>
+
+      <!-- Left panel -->
+      <div class="left-panel">
+        <div class="name-block">
+          <h1>Mathieu Mestre</h1>
+          <p>Product designer focused on systems, UX clarity, and things that feel considered.</p>
+          <div class="tag-row">
+            <span class="tag">Design systems</span>
+            <span class="tag">Figma</span>
+            <span class="tag">UX</span>
+          </div>
+        </div>
+        <div class="project-list">
+          <div class="project-item active">→ Noto</div>
+          <div class="project-item">Omro</div>
+          <div class="project-item">Azure IoT</div>
+          <div class="project-item">Motra</div>
+        </div>
+      </div>
+
+      <!-- Cards cluster -->
+      <div class="cards-cluster">
+        <div class="card" style="top:80px;left:56px;width:386px;height:261px;transform:rotate(-1deg);">
+          <div class="card-img"><div class="card-img-inner"></div></div>
+          <div class="card-footer">
+            <span class="card-title">Noto</span>
+            <span class="card-sub">Product design · 2024</span>
+          </div>
+        </div>
+        <div class="card" style="top:27px;left:255px;width:386px;height:261px;z-index:2;">
+          <div class="card-img"><div class="card-img-inner" style="background:rgba(255,150,100,0.12)"></div></div>
+          <div class="card-footer">
+            <span class="card-title">Omro</span>
+            <span class="card-sub">Product design · 2023</span>
+          </div>
+        </div>
+        <div class="card" style="top:365px;left:6px;width:386px;height:261px;transform:rotate(1deg);">
+          <div class="card-img"><div class="card-img-inner" style="background:rgba(100,180,255,0.12)"></div></div>
+          <div class="card-footer">
+            <span class="card-title">Azure IoT</span>
+            <span class="card-sub">Product design · 2022</span>
+          </div>
+        </div>
+        <div class="card" style="top:305px;left:320px;width:386px;height:261px;z-index:3;transform:rotate(-0.5deg);">
+          <div class="card-img"><div class="card-img-inner" style="background:rgba(180,100,255,0.10)"></div></div>
+          <div class="card-footer">
+            <span class="card-title">Motra</span>
+            <span class="card-sub">Product design · 2022</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dock -->
+      <div class="dock">
+        <div class="dock-item"></div>
+        <div class="dock-item"></div>
+        <div class="dock-divider"></div>
+        <div class="dock-item"></div>
+        <div class="dock-item"></div>
+        <div class="dock-item"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="preview-label">BACKGROUND PREVIEW — not live</div>
+
+</body>
+</html>

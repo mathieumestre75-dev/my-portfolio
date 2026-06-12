@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mathieu Mestre — Vinyl Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'P22 Mackinac Medium';src:url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');font-weight:500;font-display:swap}
+
+/* ── reset + tokens ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+::-webkit-scrollbar{display:none}
+html{scrollbar-width:none;scroll-behavior:smooth}
+body{background:rgb(252,252,252);color:rgba(0,0,0,0.75);-webkit-font-smoothing:antialiased;font-family:'Spline Sans Mono',monospace}
+
+/* ── keyframes ── */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes scrollDrop{0%{height:0;opacity:0}15%{opacity:1}70%{height:28px;opacity:1}100%{height:28px;opacity:0}}
+@keyframes revealUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ── grid bg ── */
+.grid-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.grid-layer{position:absolute;inset:0;background-color:rgb(252,252,252);background-image:linear-gradient(rgba(98,141,227,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(98,141,227,.08) 1px,transparent 1px);background-size:24px 24px}
+.gf{position:absolute;pointer-events:none}
+.gf-t{inset:0;bottom:auto;height:160px;background:linear-gradient(to bottom,rgb(252,252,252) 30%,transparent)}
+.gf-b{inset:0;top:auto;height:160px;background:linear-gradient(to top,rgb(252,252,252) 30%,transparent)}
+.gf-l{inset:0;right:auto;width:200px;background:linear-gradient(to right,rgb(252,252,252) 40%,transparent)}
+.gf-r{inset:0;left:auto;width:160px;background:linear-gradient(to left,rgb(252,252,252) 30%,transparent)}
+
+/* ══ ABOUT SECTION ══ */
+.about-section{position:relative;height:100vh;overflow:hidden;background:rgb(252,252,252)}
+.topbar{position:absolute;top:20px;left:20px;right:20px;display:flex;align-items:flex-start;justify-content:space-between;z-index:10;pointer-events:none;animation:fadeIn .7s ease-out both}
+.topbar-name{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:normal;color:rgba(0,0,0,.35);text-decoration:none;pointer-events:auto}
+.clock{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.clock p{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;color:rgba(0,0,0,.35);text-align:right}
+.about-layout{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:200px;padding:60px 60px 80px}
+
+/* left card */
+.left-card{width:300px;flex-shrink:0;z-index:2;background:rgba(255,255,255,.1);border-radius:16px;border:.8px solid rgba(0,0,0,.08);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:rgba(64,39,14,.08) 0 .6px 1.57px -.83px,rgba(64,39,14,.08) 0 2.29px 5.95px -1.67px,rgba(64,39,14,.08) 0 10px 26px -2.5px;padding:16px;display:flex;flex-direction:column;gap:19.2px;position:relative;overflow:hidden;animation:fadeSlideUp .5s ease-out .05s both}
+.photo-frame{padding:6px;border-radius:10px;background:rgba(255,255,255,.1);border:.8px solid rgba(0,0,0,.08);box-shadow:rgba(0,0,0,.18) 0 .6px .6px -1.25px,rgba(0,0,0,.16) 0 2.29px 2.29px -2.5px,rgba(0,0,0,.06) 0 10px 10px -3.75px}
+.photo-container{position:relative;width:100%;aspect-ratio:1.4725/1;border-radius:8px;overflow:hidden;border:.8px solid rgba(168,168,168,.4)}
+.photo-slide{position:absolute;inset:0}
+.photo-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.caption-section{display:flex;flex-direction:column;gap:14px}
+.caption-row{display:flex;align-items:center;justify-content:space-between;gap:12.8px;overflow:hidden}
+.marquee-wrap{flex:1;overflow:hidden}
+.about-marquee{animation:marquee 12s linear infinite;display:inline-block;white-space:nowrap}
+.mono{font-family:'Spline Sans Mono',monospace;font-size:11.2px;font-weight:400;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.45)}
+.caption-date{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.45);flex-shrink:0}
+.divider{height:1px;background:rgba(0,0,0,.08);width:100%}
+.tagline-section{display:flex;flex-direction:column;gap:19.2px;transition:opacity .25s ease-in-out}
+.tagline{font-family:'Spline Sans Mono',monospace;font-size:16px;line-height:1.6em;letter-spacing:-.02em;color:rgba(0,0,0,.75)}
+.signature{width:102px;height:65px;object-fit:contain;display:block}
+.currently-box{border:1px solid rgba(0,0,0,.06);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(255,255,255,.1);border-radius:8px;padding:12px;cursor:default}
+.currently-label{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.75)}
+.currents-panel{position:absolute;bottom:0;left:0;right:0;height:166px;padding:14px;border-radius:8px;background:rgba(0,0,0,.03);display:flex;align-items:center;pointer-events:none;z-index:2;opacity:0;transition:opacity .25s ease-in-out}
+.currents-list{display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%}
+.current-item{display:flex;flex-direction:column;gap:6px}
+.current-item .c-lbl{font-family:system-ui,sans-serif;font-size:10.4px;font-weight:500;color:rgba(0,0,0,.45)}
+.current-item .c-val{font-family:system-ui,sans-serif;font-size:12.8px;font-weight:500;line-height:1.4em;color:rgba(0,0,0,.75)}
+
+/* right content */
+.right-content{width:490px;flex-shrink:0;position:relative;z-index:2;animation:fadeSlideUp .5s ease-out .12s both}
+.section-label{font-family:'P22 Mackinac Medium',serif;font-size:12.8px;font-weight:500;letter-spacing:-.02em;line-height:1.75em;color:rgba(0,0,0,.35);display:block}
+.bio-section{display:flex;flex-direction:column;gap:30px;margin-top:30px}
+.bio-text{font-family:'P22 Mackinac Medium',serif;font-size:13.6px;font-weight:500;letter-spacing:-.02em;line-height:1.75em;color:rgba(0,0,0,.75)}
+.links-row{display:flex;gap:24px}
+.lnk{font-family:'Spline Sans Mono',monospace;font-size:12.8px;letter-spacing:-.02em;color:rgba(0,0,0,.35);text-decoration:none;cursor:pointer;transition:color .15s ease}
+.lnk:hover{color:rgba(0,0,0,.6)}
+.lnk-muted{cursor:default}.lnk-muted:hover{color:rgba(0,0,0,.35)}
+
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:10}
+.scroll-hint-line{width:1px;background:rgba(0,0,0,.2);animation:scrollDrop 1.8s ease-in-out infinite}
+
+/* ══ DOCK ══ */
+.dock{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:center;z-index:200;pointer-events:none}
+.dock-inner{background:rgba(252,252,252,.95);border-radius:1100px;border:1px solid rgba(0,0,0,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 5px 25px 3px rgba(79,44,9,.02);padding:10px 14px;display:flex;align-items:center;gap:14px;height:40px;pointer-events:auto;animation:fadeSlideUp .6s ease-out .4s both}
+.dock-divider{width:1px;height:12px;background:rgba(0,0,0,.06);flex-shrink:0}
+.dock-btn{position:relative;display:flex;align-items:center;justify-content:center;width:20px;height:20px;background:none;border:none;cursor:pointer;padding:0;color:rgba(0,0,0,.75);opacity:.3;transition:opacity .2s ease,transform .15s ease-out}
+.dock-btn:hover,.dock-btn.active{opacity:1}
+.dock-btn:hover{transform:scale(1.2)}
+.dock-btn svg{display:block}
+.dock-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:rgb(255,95,51);border-radius:100px;padding:6px 12px;font-family:'Spline Sans Mono',monospace;font-size:11.68px;color:#fff;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s ease,transform .15s ease;z-index:10}
+.dock-btn:hover .dock-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.dock-link{display:flex;align-items:center;justify-content:center;width:20px;height:20px;color:rgba(0,0,0,.75);opacity:.3;transition:opacity .2s ease,transform .15s ease-out;position:relative;text-decoration:none}
+.dock-link:hover,.dock-link.active{opacity:1}
+.dock-link:hover{transform:scale(1.2)}
+.dock-link svg{display:block}
+.dock-link .dock-tip{bottom:calc(100% + 8px)}
+.dock-link:hover .dock-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══ TRANSITION BRIDGE ══ */
+.room-bridge{
+  height:120px;
+  background:linear-gradient(to bottom,rgb(252,252,252) 0%,#2C1A0E 100%);
+  pointer-events:none;
+}
+
+/* ══ ROOM WRAP + CANVAS ══ */
+.room-wrap{
+  position:relative;
+  width:100%;
+  background:#2C1A0E;
+  line-height:0;
+}
+
+#room-canvas{
+  display:block;
+  width:100%;
+  height:580px;
+  cursor:default;
+  /* actual pixel dimensions set by JS on resize */
+}
+
+/* ══ TOOLTIP OVERLAY ══ */
+/* sits on top of canvas, pointer-events managed by JS */
+.tooltip-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+}
+
+/* shared tooltip base */
+.r-tip{
+  position:absolute;
+  background:rgba(255,255,255,.98);
+  border-radius:8px;
+  padding:12px 15px;
+  box-shadow:0 8px 32px rgba(44,16,8,.22),0 1px 4px rgba(44,16,8,.12);
+  opacity:0;
+  transform:translateY(4px);
+  transition:opacity 200ms ease,transform 200ms ease;
+  pointer-events:none;
+  white-space:normal;
+  width:210px;
+  /* clamp so it never overflows canvas */
+  max-width:min(210px,90vw);
+}
+.r-tip.visible{opacity:1;transform:translateY(0);}
+
+.r-tip-title{
+  font-family:'P22 Mackinac Medium',serif;
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  color:rgba(0,0,0,.75);
+  margin-bottom:1px;
+}
+.r-tip-year{
+  font-family:'Spline Sans Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:-.02em;
+  color:rgba(0,0,0,.3);
+  margin-bottom:8px;
+}
+.r-tip-note{
+  font-family:'P22 Mackinac Medium',serif;
+  font-size:11px;
+  letter-spacing:-.02em;
+  line-height:1.6em;
+  color:rgba(0,0,0,.45);
+  font-style:italic;
+}
+
+/* camera / frame tooltips — smaller */
+.r-tip-sm{
+  width:auto;
+  white-space:nowrap;
+  padding:7px 11px;
+  font-family:Georgia,serif;
+  font-size:10.5px;
+  font-style:italic;
+  color:#8B7355;
+  background:rgba(255,255,255,.97);
+}
+
+/* now-playing label */
+.now-playing-wrap{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .4s ease;
+}
+.now-playing-wrap.visible{opacity:1;}
+.np-title{
+  font-family:'P22 Mackinac Medium',serif;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  color:rgba(200,160,100,.85);
+}
+.np-artist{
+  font-family:'Spline Sans Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:-.02em;
+  color:rgba(180,130,70,.55);
+  margin-top:2px;
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ ABOUT (100vh) ══════════ -->
+<div class="about-section">
+  <div class="grid-bg">
+    <div class="grid-layer"></div>
+    <div class="gf gf-t"></div><div class="gf gf-b"></div>
+    <div class="gf gf-l"></div><div class="gf gf-r"></div>
+  </div>
+
+  <div class="topbar">
+    <a href="/" class="topbar-name">MATHIEU MESTRE</a>
+    <div class="clock"><p id="clock-time"></p><p>PARIS, FR</p></div>
+  </div>
+
+  <div class="about-layout">
+    <!-- Left card -->
+    <div class="left-card" id="left-card">
+      <div class="photo-frame">
+        <div class="photo-container" id="photo-container"></div>
+      </div>
+      <div class="caption-section">
+        <div class="caption-row">
+          <div class="marquee-wrap">
+            <span class="about-marquee mono">Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+          </div>
+          <span class="caption-date">09.11.23</span>
+        </div>
+        <div class="divider"></div>
+      </div>
+      <div class="tagline-section" id="tagline-section">
+        <p class="tagline">Finding joy and purpose in creating the things I wish existed :-)</p>
+        <img class="signature" src="https://framerusercontent.com/images/K6G4OceU6E7MAZnRlAe9IGbRk.png" alt="">
+      </div>
+      <div class="currently-box" id="currently-box">
+        <span class="currently-label">Currently I'm…</span>
+      </div>
+      <div class="currents-panel" id="currents-panel">
+        <div class="currents-list">
+          <div class="current-item"><p class="c-lbl">Watching</p><p class="c-val">Culinary Class Wars 👩🏻‍🍳</p></div>
+          <div class="current-item"><p class="c-lbl">Reading</p><p class="c-val">Monte Cristo</p></div>
+          <div class="current-item"><p class="c-lbl">Learning</p><p class="c-val">after effects and blender ;-;</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right content -->
+    <div class="right-content">
+      <span class="section-label">About</span>
+      <div class="bio-section">
+        <p class="bio-text">I'm Mathieu, nice to meet you! I'm a product designer based in Munich, currently shaping design systems and consent experiences at Usercentrics. I'm drawn to the intersection of structure and craft — where rigorous systems thinking meets obsessive attention to detail.<br><br>I believe great design is invisible. I'm drawn to work where curiosity drives intention — digging into messy problems and refining until the complexity disappears, then obsessing over every detail until it feels right. I love collaborative environments and people who bring the same care to their work.<br><br>Outside work, you'll find me at a coffee shop, listening to bossa nova, or deep in a side project I probably didn't need to start.</p>
+        <div class="links-row">
+          <a href="mailto:mathieu.mestre@usercentrics.com" class="lnk">Email</a>
+          <span class="lnk lnk-muted">Resume</span>
+          <a href="https://www.linkedin.com/in/mathieu-mestre-bba038102/" class="lnk" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint"><div class="scroll-hint-line"></div></div>
+</div>
+
+<!-- ══════════ TRANSITION BRIDGE ══════════ -->
+<div class="room-bridge"></div>
+
+<!-- ══════════ ROOM CANVAS ══════════ -->
+<div class="room-wrap" id="room-wrap">
+
+  <canvas id="room-canvas"></canvas>
+
+  <!-- Tooltip overlay — pointer-events toggled by JS -->
+  <div class="tooltip-layer" id="tooltip-layer">
+
+    <!-- Film tooltips (5) -->
+    <div class="r-tip" id="tip-f0"><div class="r-tip-title">Apocalypse Now</div><div class="r-tip-year">1979</div><div class="r-tip-note">"The one that made me think cinema could be delirious and precise at the same time."</div></div>
+    <div class="r-tip" id="tip-f1"><div class="r-tip-title">Blade Runner</div><div class="r-tip-year">1982</div><div class="r-tip-note">"I've watched the Final Cut more times than I can count."</div></div>
+    <div class="r-tip" id="tip-f2"><div class="r-tip-title">La Haine</div><div class="r-tip-year">1995</div><div class="r-tip-note">"Shot in a day, feels like a lifetime."</div></div>
+    <div class="r-tip" id="tip-f3"><div class="r-tip-title">City of God</div><div class="r-tip-year">2002</div><div class="r-tip-note">"Editing as storytelling. Changed how I think about sequence."</div></div>
+    <div class="r-tip" id="tip-f4"><div class="r-tip-title">Mulholland Drive</div><div class="r-tip-year">2001</div><div class="r-tip-note">"Still not sure what it means. That's the point."</div></div>
+
+    <!-- Camera tooltips -->
+    <div class="r-tip r-tip-sm" id="tip-c0">My first film camera. Still use it.</div>
+    <div class="r-tip r-tip-sm" id="tip-c1">Pocket-sized. Goes everywhere with me.</div>
+
+    <!-- Frame labels -->
+    <div class="r-tip r-tip-sm" id="tip-fr0">surf trip, 2023</div>
+    <div class="r-tip r-tip-sm" id="tip-fr1">somewhere in Portugal</div>
+    <div class="r-tip r-tip-sm" id="tip-fr2">disposable</div>
+
+    <!-- Now playing -->
+    <div class="now-playing-wrap" id="now-playing-wrap">
+      <div class="np-title" id="np-title"></div>
+      <div class="np-artist" id="np-artist"></div>
+    </div>
+
+  </div>
+
+
+</div><!-- /room-wrap -->
+
+
+<!-- ══════════ DOCK ══════════ -->
+<nav class="dock">
+  <div class="dock-inner">
+    <!-- Sun (theme placeholder) -->
+    <button class="dock-btn" onclick="void 0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+      <span class="dock-tip">Light Mode</span>
+    </button>
+    <!-- Mail -->
+    <button class="dock-btn" onclick="navigator.clipboard.writeText('mathieu.mestre@usercentrics.com')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </svg>
+      <span class="dock-tip">Copy email</span>
+    </button>
+    <div class="dock-divider"></div>
+    <!-- Home -->
+    <a class="dock-link" href="/">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <span class="dock-tip">Home</span>
+    </a>
+    <!-- Work -->
+    <a class="dock-link" href="/work">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/>
+      </svg>
+      <span class="dock-tip">Work</span>
+    </a>
+    <!-- About (active) -->
+    <a class="dock-link active" href="/about">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 6h4M2 10h4M2 14h4M2 18h4"/><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M16 2v20"/>
+      </svg>
+      <span class="dock-tip">About</span>
+    </a>
+  </div>
+</nav>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+// ── Clock ──
+function tick(){document.getElementById('clock-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true,timeZone:'Europe/Paris'})}
+tick();setInterval(tick,1000);
+
+// ── Photo slideshow ──
+const CDN='https://framerusercontent.com/images';
+const PHOTOS=[CDN+'/xj2ByBC3nJVc6F6HtI6nqcbnTw.jpg',CDN+'/60U0IdoPtBAMAmLmMKGolwQI.jpg',CDN+'/5zyj2mIYoYnGcqeSfIVOXwLoXt0.jpg'];
+const pc=document.getElementById('photo-container');
+PHOTOS.forEach((src,i)=>{const d=document.createElement('div');d.className='photo-slide';d.style.cssText='position:absolute;inset:0;transition:transform .8s cubic-bezier(.34,1.4,.64,1);z-index:'+(i===0?1:0);const img=document.createElement('img');img.src=src;d.appendChild(img);pc.appendChild(d);});
+let pi=0;const slides=pc.querySelectorAll('.photo-slide');
+setInterval(()=>{const p=pi;pi=(pi+1)%PHOTOS.length;slides[p].style.zIndex=2;slides[p].style.transform='translateY(-100%)';slides[pi].style.zIndex=1;slides[pi].style.transform='translateY(0)';setTimeout(()=>{slides[p].style.transition='none';slides[p].style.transform='translateY(0)';slides[p].style.zIndex=0;requestAnimationFrame(()=>requestAnimationFrame(()=>{slides[p].style.transition='transform .8s cubic-bezier(.34,1.4,.64,1)'}))},950)},3500);
+
+// ── Currently hover ──
+const lc=document.getElementById('left-card'),cb=document.getElementById('currently-box'),ts=document.getElementById('tagline-section'),cp=document.getElementById('currents-panel');
+cb.addEventListener('mouseenter',()=>{ts.style.opacity='0';cp.style.opacity='1'});
+lc.addEventListener('mouseleave',()=>{ts.style.opacity='1';cp.style.opacity='0'});
+
+// ══════════════════════════════════════════════════════
+// CANVAS ROOM ENGINE
+// ══════════════════════════════════════════════════════
+
+const canvas = document.getElementById('room-canvas');
+const ctx    = canvas.getContext('2d');
+let W = 0, H = 580, dpr = 1;
+
+// ── Albums & cover images ──
+const ALBUMS = [
+  {title:"What's Going On", artist:'Marvin Gaye',      url:'https://coverartarchive.org/release/3f974989-9b81-4a76-9869-0b9843d3fa29/front-250', fb:'#2a4a2a', src:'/music/whats-going-on.mp3' /* TODO: replace with real audio path */},
+  {title:'Still Bill',       artist:'Bill Withers',    url:'https://coverartarchive.org/release/de3fc9ac-4f6b-42a4-bbe6-f06b9ba7411c/front-250', fb:'#4a3a1a', src:'/music/still-bill.mp3'       /* TODO */},
+  {title:'Bebeto',           artist:'Bebeto',          url:null,                                                                                    fb:'#4a2a1a', src:'/music/bebeto.mp3'           /* TODO */},
+  {title:'Superfly',         artist:'Curtis Mayfield', url:'https://coverartarchive.org/release/2f951e55-a573-474d-af84-a4c8c4c13988/front-250', fb:'#c85a20', src:'/music/superfly.mp3'         /* TODO */},
+  {title:'Histoire de Melody Nelson', artist:'Serge Gainsbourg', url:'https://coverartarchive.org/release/c8eec09d-2097-4694-8985-76d05c44f95d/front-250', fb:'#6a4a7a', src:'/music/melody-nelson.mp3' /* TODO */},
+];
+const coverImgs = [null,null,null,null,null];
+
+ALBUMS.forEach((a,i)=>{
+  if(!a.url)return;
+  const img=new Image();img.crossOrigin='anonymous';
+  img.onload=()=>{coverImgs[i]=img;redraw();};
+  img.src=a.url;
+});
+
+// Bebeto fetch
+(async()=>{
+  try{
+    const r=await fetch('https://musicbrainz.org/ws/2/release/?query=artist:bebeto&fmt=json&limit=5');
+    const d=await r.json();
+    const mbid=d.releases?.[0]?.id;if(!mbid)return;
+    const img=new Image();img.crossOrigin='anonymous';
+    img.onload=()=>{coverImgs[2]=img;redraw();};
+    img.src=`https://coverartarchive.org/release/${mbid}/front-250`;
+  }catch(e){}
+})();
+
+// ── Grain canvas (pre-generated, static) ──
+let grainCanvas=null;
+function makeGrain(){
+  const gc=document.createElement('canvas');
+  gc.width=Math.ceil(W);gc.height=H;
+  const gx=gc.getContext('2d');
+  const id=gx.createImageData(gc.width,gc.height);
+  for(let i=0;i<id.data.length;i+=4){
+    id.data[i]=id.data[i+1]=id.data[i+2]=0;
+    id.data[i+3]=Math.floor(Math.random()*20);
+  }
+  gx.putImageData(id,0,0);grainCanvas=gc;
+}
+
+// ── Resize / init ──
+function resize(){
+  dpr=window.devicePixelRatio||1;
+  W=canvas.offsetWidth;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  makeGrain();redraw();
+}
+window.addEventListener('resize',resize);
+
+// ── Scene state (extended by Pass 3) ──
+const ST={
+  hover:null,       // 'vinyl-N'|'film-N'|'cam-0'|'cam-1'|'frame-N'|'tonearm'
+  playIdx:-1,
+  discAngle:0,
+  tonearmT:0,       // 0=parked, 1=playing
+  pxFg:0,pxFgT:0,  // parallax fg
+  pxMid:0,pxMidT:0,// parallax mid
+};
+
+// ── Layout (all coords designed at W=1440, scale with r=W/1440) ──
+function L(){
+  const r=W/1440, FY=390;
+  const SX=58*r, SW=188*r, SY=24;
+
+  // Film slots (top shelf zone: SY to SY+120)
+  const filmSlots=(()=>{
+    const zx=SX+12*r,zw=SW-24*r,gap=4*r;
+    const sw=(zw-4*gap)/5;
+    const heights=[90,96,84,92,88];
+    return heights.map((h,i)=>({x:zx+i*(sw+gap),w:sw,h,yBot:SY+120}));
+  })();
+
+  // Vinyl slots (middle shelf zone: SY+130 to SY+245)
+  const vinylSlots=(()=>{
+    const zx=SX+10*r,zw=SW-20*r,gap=3*r;
+    const sw=(zw-4*gap)/5;
+    return Array.from({length:5},(_,i)=>({x:zx+i*(sw+gap),y:SY+142,w:sw,h:sw}));
+  })();
+
+  const platCX=548*r, platCY=306;
+  const taPivX=635*r, taPivY=264;
+
+  return {
+    r,FY,
+    SX,SW,SY,SH:FY-SY,
+    shelfBoards:[SY+120,SY+245],
+    filmSlots,vinylSlots,
+    camAE1:{x:SX+14*r,y:FY-44,w:56*r,h:40},
+    camMju: {x:SX+80*r,y:FY-34,w:40*r,h:26},
+    chairX:295*r,chairY:264,chairW:152*r,chairH:126,
+    credX:445*r,credY:344,credW:316*r,credH:46,
+    platCX,platCY,platR:44*r,
+    taPivX,taPivY,
+    sofaX:790*r,sofaY:268,sofaW:362*r,sofaH:122,
+    frames:[
+      {x:1162*r,y:52,w:90*r,h:68,rot:-0.018,label:'surf trip, 2023'},
+      {x:1065*r,y:92,w:76*r,h:58,rot:0.013, label:'somewhere in Portugal'},
+      {x:1155*r,y:148,w:82*r,h:52,rot:-0.009,label:'disposable'},
+    ],
+  };
+}
+
+// ── Helpers ──
+function rr(c,x,y,w,h,rad){
+  rad=Math.min(rad,w/2,h/2);
+  c.beginPath();
+  c.moveTo(x+rad,y);c.arcTo(x+w,y,x+w,y+h,rad);
+  c.arcTo(x+w,y+h,x,y+h,rad);c.arcTo(x,y+h,x,y,rad);
+  c.arcTo(x,y,x+w,y,rad);c.closePath();
+}
+
+function shadow(c,color,blur,ox,oy){c.shadowColor=color;c.shadowBlur=blur;c.shadowOffsetX=ox||0;c.shadowOffsetY=oy||0;}
+function noShadow(c){c.shadowColor='transparent';c.shadowBlur=0;c.shadowOffsetX=0;c.shadowOffsetY=0;}
+
+// ── DRAW: Background (wall + floor) ──
+function drawBg(c,l){
+  const {FY,r}=l;
+  // Wall base
+  c.fillStyle='#3D2310';c.fillRect(0,0,W,FY);
+  // Vertical wood grain lines (deterministic, no Math.random in draw loop)
+  for(let i=0;i<72;i++){
+    const lx=((i+0.5)/72)*W+(((i*7)%11)-5)*r;
+    const lw=1+((i*3)%3);
+    const a=(0.028+((i*5)%9)*0.006).toFixed(3);
+    c.fillStyle=`rgba(255,175,75,${a})`;
+    c.fillRect(lx,0,lw,FY);
+  }
+  // Warm center pool on wall
+  const wlg=c.createLinearGradient(W*0.25,0,W*0.75,0);
+  wlg.addColorStop(0,'rgba(255,190,80,0)');
+  wlg.addColorStop(0.5,'rgba(255,190,80,0.045)');
+  wlg.addColorStop(1,'rgba(255,190,80,0)');
+  c.fillStyle=wlg;c.fillRect(0,40,W,FY-40);
+
+  // Floor
+  c.fillStyle='#6B3E1E';c.fillRect(0,FY,W,H-FY);
+  // Horizontal floor grain
+  for(let gy=FY;gy<H;gy+=13){c.fillStyle='rgba(0,0,0,0.04)';c.fillRect(0,gy,W,1);}
+  // Floor perspective shadow (recedes upward)
+  const fpg=c.createLinearGradient(0,FY,0,FY+60);
+  fpg.addColorStop(0,'rgba(0,0,0,0.38)');fpg.addColorStop(1,'rgba(0,0,0,0)');
+  c.fillStyle=fpg;c.fillRect(0,FY,W,60);
+  // Floor specular center
+  const fsg=c.createRadialGradient(W*0.5,FY,0,W*0.5,FY,W*0.4);
+  fsg.addColorStop(0,'rgba(255,190,80,0.1)');fsg.addColorStop(1,'rgba(255,190,80,0)');
+  c.fillStyle=fsg;c.fillRect(0,FY,W,H-FY);
+  // Baseboard
+  c.fillStyle='#5a3518';c.fillRect(0,FY-6,W,9);
+  c.fillStyle='rgba(0,0,0,0.35)';c.fillRect(0,FY+3,W,5);
+}
+
+// ── DRAW: Atmosphere (ceiling shadow + warm light pool) ──
+function drawAtmos(c){
+  const csg=c.createLinearGradient(0,0,0,170);
+  csg.addColorStop(0,'rgba(12,5,1,0.58)');csg.addColorStop(1,'rgba(12,5,1,0)');
+  c.fillStyle=csg;c.fillRect(0,0,W,170);
+
+  const lg=c.createRadialGradient(W*0.5,0,0,W*0.5,0,W*0.52);
+  lg.addColorStop(0,'rgba(255,210,100,0.22)');
+  lg.addColorStop(0.5,'rgba(255,180,70,0.08)');
+  lg.addColorStop(1,'rgba(255,180,70,0)');
+  c.fillStyle=lg;c.fillRect(0,0,W,400);
+}
+
+// ── DRAW: Framed photos (on back wall — drawn early so furniture is in front) ──
+function drawFrames(c,l){
+  l.frames.forEach((f,i)=>{
+    c.save();
+    c.translate(f.x+f.w/2,f.y+f.h/2);c.rotate(f.rot);
+    c.translate(-(f.x+f.w/2),-(f.y+f.h/2));
+    // Wall shadow behind frame
+    shadow(c,'rgba(0,0,0,0.4)',14,3,4);
+    if(ST.hover===`frame-${i}`){c.shadowColor='rgba(200,150,60,0.5)';c.shadowBlur=28;}
+    // Frame border
+    rr(c,f.x-4,f.y-4,f.w+8,f.h+8,3);
+    c.fillStyle='#6B4423';c.fill();
+    noShadow(c);
+    // Mat fill  // TODO: replace placeholder with real image src
+    rr(c,f.x,f.y,f.w,f.h,1);
+    const mg=c.createLinearGradient(f.x,f.y,f.x+f.w,f.y+f.h);
+    mg.addColorStop(0,'#C4B49C');mg.addColorStop(1,'#B0A088');
+    c.fillStyle=mg;c.fill();
+    // Subtle photo texture
+    c.fillStyle='rgba(255,255,255,0.06)';
+    c.fillRect(f.x,f.y,f.w*0.5,f.h*0.5);
+    c.restore();
+  });
+}
+
+// ── DRAW: Shelf unit ──
+const FILM_TOP=['#5a3e22','#1a2a40','#2e2e2e','#5c3018','#3a1a32'];
+const FILM_BOT=['#3a2810','#0e1a28','#181818','#38180a','#220e20'];
+const FILM_TITLES=['APOCALYPSE NOW','BLADE RUNNER','LA HAINE','CITY OF GOD','MULHOLLAND DR'];
+
+function drawShelf(c,l){
+  const {SX,SY,SW,SH,r,shelfBoards,filmSlots,vinylSlots,camAE1,camMju}=l;
+
+  // ── Shelf body ──
+  shadow(c,'rgba(0,0,0,0.55)',22,10,0);
+  const sg=c.createLinearGradient(SX,0,SX+SW,0);
+  sg.addColorStop(0,'#1a0a03');sg.addColorStop(0.12,'#3D2310');
+  sg.addColorStop(0.88,'#2e1a09');sg.addColorStop(1,'#120704');
+  rr(c,SX,SY,SW,SH,2);c.fillStyle=sg;c.fill();
+  noShadow(c);
+  // Wood grain on shelf face
+  for(let i=0;i<14;i++){
+    const lx=SX+(SW*((i+0.5)/14));
+    c.strokeStyle=`rgba(255,160,60,${0.018+(i%4)*0.012})`;
+    c.lineWidth=1;c.beginPath();c.moveTo(lx,SY);c.lineTo(lx,SY+SH);c.stroke();
+  }
+  // Side panels
+  c.fillStyle='#100602';c.fillRect(SX,SY,10*r,SH);c.fillRect(SX+SW-10*r,SY,10*r,SH);
+
+  // ── Shelf boards ──
+  shelfBoards.forEach(by=>{
+    const bg=c.createLinearGradient(0,by,0,by+10);
+    bg.addColorStop(0,'#5c3818');bg.addColorStop(1,'#2a1408');
+    c.fillStyle=bg;c.fillRect(SX,by,SW,10);
+    c.fillStyle='rgba(0,0,0,0.45)';c.fillRect(SX,by+10,SW,7);
+  });
+
+  // ── Film sleeves ──
+  filmSlots.forEach((fs,i)=>{
+    const yT=fs.yBot-fs.h;
+    c.save();
+    if(ST.hover===`film-${i}`){
+      c.translate(fs.x+fs.w/2,fs.yBot);c.rotate(-0.14);
+      c.translate(-(fs.x+fs.w/2),-fs.yBot);
+    }
+    const fg2=c.createLinearGradient(fs.x,yT,fs.x,fs.yBot);
+    fg2.addColorStop(0,FILM_TOP[i]);fg2.addColorStop(1,FILM_BOT[i]);
+    rr(c,fs.x,yT,fs.w,fs.h,2);c.fillStyle=fg2;c.fill();
+    // Spine shadow
+    c.fillStyle='rgba(0,0,0,0.28)';c.fillRect(fs.x,yT,3,fs.h);
+    // Title
+    c.save();c.translate(fs.x+fs.w/2,fs.yBot-6);c.rotate(-Math.PI/2);
+    c.fillStyle='rgba(255,225,170,0.58)';
+    c.font=`${Math.max(5,5.5*r)}px "Spline Sans Mono",monospace`;
+    c.textAlign='left';c.fillText(FILM_TITLES[i],0,0);
+    c.restore();c.restore();
+  });
+
+  // ── Vinyl records ──
+  vinylSlots.forEach((vs,i)=>{
+    const hov=ST.hover===`vinyl-${i}`;
+    const playing=ST.playIdx===i;
+    const yOff=hov&&!playing?-8:0;
+    c.save();c.globalAlpha=playing?0.32:1;
+    if(hov&&!playing){shadow(c,'rgba(255,180,80,0.4)',20,0,0);}
+    rr(c,vs.x,vs.y+yOff,vs.w,vs.h,3);
+    if(coverImgs[i]){
+      c.save();c.clip();c.drawImage(coverImgs[i],vs.x,vs.y+yOff,vs.w,vs.h);c.restore();
+    } else {
+      c.fillStyle=ALBUMS[i].fb;c.fill();
+    }
+    noShadow(c);
+    c.strokeStyle='rgba(0,0,0,0.3)';c.lineWidth=1;
+    rr(c,vs.x,vs.y+yOff,vs.w,vs.h,3);c.stroke();
+    c.globalAlpha=1;c.restore();
+  });
+
+  // ── Cameras ──
+  drawAE1(c,camAE1,r);
+  drawMju(c,camMju,r);
+}
+
+function drawAE1(c,cam,r){
+  const {x,y,w,h}=cam;
+  if(ST.hover==='cam-0'){shadow(c,'rgba(255,180,80,0.38)',16,0,0);}
+  // Body
+  const bg=c.createLinearGradient(x,y,x,y+h);
+  bg.addColorStop(0,'#2e2824');bg.addColorStop(1,'#1c1814');
+  rr(c,x+4*r,y+h*0.28,w-8*r,h*0.72,3);c.fillStyle=bg;c.fill();
+  // Pentaprism
+  c.beginPath();c.moveTo(x+10*r,y+h*0.28);c.lineTo(x+14*r,y);
+  c.lineTo(x+w-14*r,y);c.lineTo(x+w-10*r,y+h*0.28);c.closePath();
+  c.fillStyle='#181410';c.fill();
+  // Lens barrel
+  const lx=x+w*0.37,ly=y+h*0.55,lr=w*0.21;
+  const lg=c.createRadialGradient(lx-lr*0.3,ly-lr*0.3,0,lx,ly,lr);
+  lg.addColorStop(0,'#3a3530');lg.addColorStop(0.5,'#1c1814');lg.addColorStop(1,'#060604');
+  c.beginPath();c.arc(lx,ly,lr,0,Math.PI*2);c.fillStyle=lg;c.fill();
+  c.strokeStyle='#3a3530';c.lineWidth=1.5;c.stroke();
+  // Highlight fleck
+  c.beginPath();c.arc(lx-lr*0.32,ly-lr*0.32,lr*0.18,0,Math.PI*2);
+  c.fillStyle='rgba(255,255,255,0.1)';c.fill();
+  // Shutter
+  const sbg=c.createRadialGradient(x+w-9*r,y+h*0.09,0,x+w-8*r,y+h*0.11,4*r);
+  sbg.addColorStop(0,'#c0b8b0');sbg.addColorStop(1,'#8a8278');
+  c.beginPath();c.arc(x+w-8*r,y+h*0.11,4*r,0,Math.PI*2);c.fillStyle=sbg;c.fill();
+  noShadow(c);
+}
+
+function drawMju(c,cam,r){
+  const {x,y,w,h}=cam;
+  if(ST.hover==='cam-1'){shadow(c,'rgba(255,180,80,0.38)',16,0,0);}
+  const bg=c.createLinearGradient(x,y,x,y+h);
+  bg.addColorStop(0,'#d0c8c0');bg.addColorStop(1,'#a8a098');
+  rr(c,x,y,w,h,6);c.fillStyle=bg;c.fill();
+  c.strokeStyle='rgba(0,0,0,0.18)';c.lineWidth=0.5;c.stroke();
+  const lx=x+w*0.27,ly=y+h*0.5,lr=h*0.38;
+  const lg=c.createRadialGradient(lx,ly,0,lx,ly,lr);
+  lg.addColorStop(0,'#2a2825');lg.addColorStop(0.7,'#0c0c0a');
+  c.beginPath();c.arc(lx,ly,lr,0,Math.PI*2);c.fillStyle=lg;c.fill();
+  c.strokeStyle='#999';c.lineWidth=1.5;c.stroke();
+  rr(c,x+w*0.6,y+h*0.14,w*0.28,h*0.46,2);
+  c.fillStyle='rgba(210,200,190,0.55)';c.fill();
+  noShadow(c);
+}
+
+// ── DRAW: Eames lounge chair ──
+function drawChair(c,l){
+  const {r,chairX:cx,chairY:cy,chairW:cw,chairH:ch,FY}=l;
+  shadow(c,'rgba(0,0,0,0.45)',20,0,6);
+  // Ottoman
+  const ox=cx+cw*0.08,oy=FY-26,ow=cw*0.65,oh=20;
+  const og=c.createLinearGradient(ox,oy,ox,oy+oh);
+  og.addColorStop(0,'#4a3020');og.addColorStop(1,'#2e1c0e');
+  rr(c,ox,oy,ow,oh,4);c.fillStyle=og;c.fill();
+  rr(c,ox+5*r,oy+3,ow-10*r,oh-6,3);c.fillStyle='#5c3825';c.fill();
+
+  // Shell (plywood, molded)
+  const shg=c.createLinearGradient(cx,cy,cx,cy+ch*0.65);
+  shg.addColorStop(0,'#6a4428');shg.addColorStop(1,'#3e2410');
+  rr(c,cx+cw*0.06,cy,cw*0.88,ch*0.64,10);c.fillStyle=shg;c.fill();
+
+  // Leather back cushion
+  const lcg=c.createLinearGradient(cx+cw*0.12,cy+5,cx+cw*0.12,cy+ch*0.58);
+  lcg.addColorStop(0,'#2c1a0e');lcg.addColorStop(0.5,'#1c1008');lcg.addColorStop(1,'#160e06');
+  rr(c,cx+cw*0.12,cy+5,cw*0.76,ch*0.56,8);c.fillStyle=lcg;c.fill();
+  // Leather sheen
+  const lsh=c.createLinearGradient(cx+cw*0.18,cy+8,cx+cw*0.55,cy+ch*0.3);
+  lsh.addColorStop(0,'rgba(255,180,80,0.14)');lsh.addColorStop(1,'rgba(255,180,80,0)');
+  c.fillStyle=lsh;rr(c,cx+cw*0.18,cy+8,cw*0.48,ch*0.3,5);c.fill();
+
+  // Seat cushion
+  rr(c,cx+cw*0.04,cy+ch*0.64,cw*0.92,ch*0.2,5);c.fillStyle='#1e1208';c.fill();
+
+  // Cast aluminum base (two X crosses)
+  c.strokeStyle='#b8b0a8';c.lineWidth=3.5*r;c.lineCap='round';
+  [[0.18,0.86,0.32,1],[0.18,1,0.32,0.86],[0.62,0.86,0.78,1],[0.62,1,0.78,0.86]].forEach(([x1,y1,x2,y2])=>{
+    c.beginPath();c.moveTo(cx+cw*x1,cy+ch*y1);c.lineTo(cx+cw*x2,cy+ch*y2);c.stroke();
+  });
+  noShadow(c);
+}
+
+// ── DRAW: Credenza ──
+function drawCredenza(c,l){
+  const {r,credX:cx,credY:cy,credW:cw,credH:ch,FY}=l;
+  shadow(c,'rgba(0,0,0,0.5)',18,0,6);
+  const cg=c.createLinearGradient(cx,cy,cx,cy+ch);
+  cg.addColorStop(0,'#725038');cg.addColorStop(0.35,'#5C3319');cg.addColorStop(1,'#3a1f0a');
+  rr(c,cx,cy,cw,ch,4);c.fillStyle=cg;c.fill();
+  noShadow(c);
+  // Panel lines
+  c.strokeStyle='rgba(0,0,0,0.28)';c.lineWidth=1;
+  for(let px=cx+62*r;px<cx+cw-20*r;px+=62*r){
+    c.beginPath();c.moveTo(px,cy+5);c.lineTo(px,cy+ch-5);c.stroke();
+  }
+  // Top surface highlight
+  const th=c.createLinearGradient(cx,cy,cx,cy+7);
+  th.addColorStop(0,'rgba(255,200,100,0.18)');th.addColorStop(1,'rgba(255,200,100,0)');
+  c.fillStyle=th;c.fillRect(cx,cy,cw,7);
+  // Legs
+  c.fillStyle='#3a1f0a';
+  [[cx+22*r,9],[cx+cw-30*r,9]].forEach(([lx,lw])=>c.fillRect(lx,cy+ch,lw*r,14));
+
+  // Small plant on credenza (right side of turntable)
+  const px2=l.platCX+70*r, py2=cy-38;
+  // Pot
+  rr(c,px2-10*r,py2+24,22*r,20,3);
+  const potg=c.createLinearGradient(px2-10*r,py2+24,px2-10*r,py2+44);
+  potg.addColorStop(0,'#C4622D');potg.addColorStop(1,'#8a3e1a');
+  c.fillStyle=potg;c.fill();
+  // Leaves
+  [[0,-14,7,16,'#3a6a2a',0.2],[-8,-10,6,14,'#4a7a3a',−0.4],[8,-8,5,13,'#2d5a1b',0.5]].forEach(([dx,dy,rx,ry,col,ang])=>{
+    c.save();c.translate(px2+dx*r,py2+dy);c.rotate(ang);
+    c.beginPath();c.ellipse(0,0,rx*r,ry,0,0,Math.PI*2);
+    c.fillStyle=col;c.fill();c.restore();
+  });
+}
+
+// ── DRAW: Turntable ──
+function drawTurntable(c,l){
+  const {r,credX:cx,credY:cy,credW:cw,platCX,platCY,platR,taPivX,taPivY}=l;
+
+  // Plinth body
+  shadow(c,'rgba(0,0,0,0.4)',12,0,3);
+  const pg=c.createLinearGradient(platCX-80*r,cy-80,platCX-80*r,cy);
+  pg.addColorStop(0,'#9a7050');pg.addColorStop(1,'#7a5535');
+  rr(c,platCX-82*r,cy-82,164*r,82,8);c.fillStyle=pg;c.fill();
+  // Plinth sheen
+  const psh=c.createLinearGradient(platCX-82*r,cy-82,platCX,cy-50);
+  psh.addColorStop(0,'rgba(255,200,100,0.14)');psh.addColorStop(1,'rgba(255,200,100,0)');
+  c.fillStyle=psh;rr(c,platCX-82*r,cy-82,164*r,82,8);c.fill();
+  noShadow(c);
+
+  // Platter base
+  const platg=c.createRadialGradient(platCX,platCY,0,platCX,platCY,platR);
+  platg.addColorStop(0,'#2f2a24');platg.addColorStop(0.6,'#252018');platg.addColorStop(1,'#1a1610');
+  shadow(c,'rgba(0,0,0,0.6)',16,0,4);
+  c.beginPath();c.arc(platCX,platCY,platR,0,Math.PI*2);
+  c.fillStyle=platg;c.fill();noShadow(c);
+  // Platter mat
+  const matg=c.createRadialGradient(platCX,platCY,0,platCX,platCY,platR-5*r);
+  matg.addColorStop(0,'#3a3530');matg.addColorStop(0.5,'#2f2a24');matg.addColorStop(1,'#252018');
+  c.beginPath();c.arc(platCX,platCY,platR-5*r,0,Math.PI*2);c.fillStyle=matg;c.fill();
+
+  // Record on platter (if playing)
+  if(ST.playIdx>=0){
+    const idx=ST.playIdx;
+    c.save();c.translate(platCX,platCY);c.rotate(ST.discAngle);
+    // vinyl disc
+    c.beginPath();c.arc(0,0,platR-6*r,0,Math.PI*2);
+    if(coverImgs[idx]){
+      const pat=c.createPattern(coverImgs[idx],'no-repeat');
+      const sz=(platR-6*r)*2;
+      c.save();c.translate(-(platR-6*r),-(platR-6*r));
+      const tmpC=document.createElement('canvas');tmpC.width=sz;tmpC.height=sz;
+      const tmpX=tmpC.getContext('2d');
+      tmpX.beginPath();tmpX.arc(sz/2,sz/2,sz/2,0,Math.PI*2);tmpX.clip();
+      tmpX.drawImage(coverImgs[idx],0,0,sz,sz);
+      c.drawImage(tmpC,0,0);c.restore();
+    } else {
+      c.fillStyle=ALBUMS[idx].fb;c.fill();
+    }
+    // label
+    const labg=c.createRadialGradient(0,0,0,0,0,14*r);
+    labg.addColorStop(0,'#f5f1ec');labg.addColorStop(1,'#e0d8ce');
+    c.beginPath();c.arc(0,0,14*r,0,Math.PI*2);c.fillStyle=labg;c.fill();
+    c.beginPath();c.arc(0,0,3*r,0,Math.PI*2);c.fillStyle='#1c1812';c.fill();
+    c.restore();
+  }
+
+  // Spindle
+  const spg=c.createRadialGradient(platCX-1*r,platCY-1*r,0,platCX,platCY,4*r);
+  spg.addColorStop(0,'#ddd');spg.addColorStop(1,'#888');
+  c.beginPath();c.arc(platCX,platCY,4*r,0,Math.PI*2);c.fillStyle=spg;c.fill();
+
+  // Tonearm
+  const taAngle = -0.42 + ST.tonearmT * 0.28; // resting ~-24deg, playing ~-8deg from pivot
+  c.save();c.translate(taPivX,taPivY);c.rotate(taAngle);
+  // Pivot ball
+  const pvg=c.createRadialGradient(-1*r,-1*r,0,0,0,6*r);
+  pvg.addColorStop(0,'#ddd');pvg.addColorStop(1,'#999');
+  c.beginPath();c.arc(0,0,6*r,0,Math.PI*2);c.fillStyle=pvg;c.fill();
+  // Counterweight
+  rr(c,-76*r,-4*r,18*r,8*r,2);
+  const cwg=c.createLinearGradient(-76*r,0,-58*r,0);cwg.addColorStop(0,'#aaa');cwg.addColorStop(1,'#888');
+  c.fillStyle=cwg;c.fill();
+  // Arm tube
+  c.beginPath();c.moveTo(-58*r,0);c.lineTo(70*r,0);
+  c.strokeStyle='#b0a898';c.lineWidth=2*r;c.stroke();
+  // Headshell
+  c.save();c.translate(70*r,0);c.rotate(-0.32);
+  c.beginPath();c.moveTo(0,0);c.lineTo(16*r,0);
+  c.strokeStyle='#998f84';c.lineWidth=2*r;c.stroke();
+  // Stylus
+  c.beginPath();c.moveTo(16*r,-1);c.lineTo(16*r,6);
+  c.strokeStyle='#ccc';c.lineWidth=1.5;c.stroke();
+  c.restore();c.restore();
+}
+
+// ── DRAW: Sofa ──
+function drawSofa(c,l){
+  const {r,sofaX:sx,sofaY:sy,sofaW:sw,sofaH:sh,FY}=l;
+  shadow(c,'rgba(0,0,0,0.45)',20,0,6);
+  // Shadow on floor
+  const flsg=c.createLinearGradient(sx,FY,sx,FY+30);
+  flsg.addColorStop(0,'rgba(0,0,0,0.3)');flsg.addColorStop(1,'rgba(0,0,0,0)');
+  c.fillStyle=flsg;c.fillRect(sx+10*r,FY,sw-20*r,30);
+
+  // Back cushions
+  const bcg=c.createLinearGradient(sx,sy,sx,sy+sh*0.6);
+  bcg.addColorStop(0,'#ddd0ae');bcg.addColorStop(0.7,'#D4BF96');bcg.addColorStop(1,'#c0ab80');
+  rr(c,sx,sy,sw,sh*0.6,6);c.fillStyle=bcg;c.fill();
+  // Wood back rail
+  const brg=c.createLinearGradient(sx,sy,sx,sy+10);
+  brg.addColorStop(0,'#6e4a22');brg.addColorStop(1,'#4a2e10');
+  rr(c,sx,sy,sw,10,5);c.fillStyle=brg;c.fill();
+  // Cushion seam lines on back
+  c.strokeStyle='rgba(80,40,10,0.12)';c.lineWidth=1.5;
+  [1/3,2/3].forEach(t=>{
+    c.beginPath();c.moveTo(sx+sw*t,sy+12);c.lineTo(sx+sw*t,sy+sh*0.58);c.stroke();
+  });
+  // Seat
+  const scg=c.createLinearGradient(sx,sy+sh*0.6,sx,sy+sh*0.82);
+  scg.addColorStop(0,'#c8b892');scg.addColorStop(1,'#b4a47e');
+  rr(c,sx,sy+sh*0.6,sw,sh*0.22,2);c.fillStyle=scg;c.fill();
+  // Seat seam lines
+  [1/3,2/3].forEach(t=>{
+    c.beginPath();c.moveTo(sx+sw*t,sy+sh*0.62);c.lineTo(sx+sw*t,sy+sh*0.8);c.stroke();
+  });
+  // Armrests
+  const ag=c.createLinearGradient(0,sy,0,sy+sh*0.82);
+  ag.addColorStop(0,'#6a4825');ag.addColorStop(1,'#4a2e10');
+  [[sx,sh*0.82],[sx+sw-16*r,sh*0.82]].forEach(([ax,ah])=>{
+    rr(c,ax,sy,16*r,ah,4);c.fillStyle=ag;c.fill();
+  });
+  // Throw pillow
+  c.save();c.translate(sx+sw-50*r,sy+14);c.rotate(0.08);
+  const tpg=c.createLinearGradient(0,0,34*r,30);
+  tpg.addColorStop(0,'#c0705a');tpg.addColorStop(1,'#8a4030');
+  rr(c,0,0,34*r,30,4);c.fillStyle=tpg;c.fill();c.restore();
+  // Legs
+  c.fillStyle='#4A2A10';
+  [[sx+20*r,FY-sh*0.2,10*r],[sx+sw-30*r,FY-sh*0.2,10*r]].forEach(([lx,ly,lw])=>{
+    rr(c,lx,ly,lw,sh*0.2,2);c.fill();
+  });
+  noShadow(c);
+}
+
+// ── DRAW: Plants ──
+function drawPlants(c,l){
+  const {r,FY}=l;
+  const px=ST.pxFg;  // parallax offset
+
+  // Left fiddle-leaf fig
+  const lpx=px;
+  const lpot=l.SX+22*r;
+  // Pot
+  shadow(c,'rgba(0,0,0,0.4)',10,4,4);
+  rr(c,lpot-20*r+lpx,FY-38,42*r,38,4);
+  const potg=c.createLinearGradient(lpot+lpx,FY-38,lpot+lpx,FY);
+  potg.addColorStop(0,'#C4622D');potg.addColorStop(1,'#7a3618');
+  c.fillStyle=potg;c.fill();
+  rr(c,lpot-22*r+lpx,FY-40,46*r,8,2);
+  c.fillStyle='#d0703a';c.fill();
+  noShadow(c);
+  // Leaves (fiddle-leaf fig — large lobed leaves)
+  const lLeaves=[
+    [lpot+lpx,-8,28*r,44,'#3D7A25',-0.15],
+    [lpot-24*r+lpx,-24,22*r,38,'#2D5A1B',-0.5],
+    [lpot+18*r+lpx,-18,24*r,40,'#4A8F2E',0.3],
+    [lpot-10*r+lpx,-62,20*r,36,'#3D7A25',-0.2],
+    [lpot+8*r+lpx,-78,22*r,38,'#2D5A1B',0.18],
+    [lpot-20*r+lpx,-110,18*r,32,'#4A8F2E',-0.38],
+    [lpot+4*r+lpx,-130,20*r,34,'#3D7A25',0.1],
+    [lpot-14*r+lpx,-168,16*r,30,'#2D5A1B',-0.25],
+    [lpot+10*r+lpx,-192,18*r,32,'#4A8F2E',0.35],
+    [lpot-4*r+lpx,-230,14*r,26,'#3D7A25',-0.1],
+  ];
+  lLeaves.forEach(([cx,dy,rx,ry,col,ang])=>{
+    c.save();c.translate(cx,FY+dy);c.rotate(ang);
+    c.beginPath();c.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+    c.fillStyle=col;c.fill();
+    // Leaf midrib
+    c.strokeStyle='rgba(0,0,0,0.15)';c.lineWidth=1;
+    c.beginPath();c.moveTo(0,-ry*0.9);c.lineTo(0,ry*0.5);c.stroke();
+    c.restore();
+  });
+
+  // Right corner plant (pothos/monstera, wider)
+  const rpx=W-60*r+ST.pxFg*0.8;
+  const rpot=W-55*r;
+  shadow(c,'rgba(0,0,0,0.4)',10,4,4);
+  rr(c,rpot-18*r,FY-34,38*r,34,4);
+  const rpotg=c.createLinearGradient(rpot,FY-34,rpot,FY);
+  rpotg.addColorStop(0,'#C4622D');rpotg.addColorStop(1,'#7a3618');
+  c.fillStyle=rpotg;c.fill();
+  rr(c,rpot-20*r,FY-36,42*r,8,2);c.fillStyle='#d0703a';c.fill();
+  noShadow(c);
+  const rLeaves=[
+    [rpot,   -12,32*r,48,'#4A8F2E', 0.1],
+    [rpot-30*r,-20,26*r,42,'#3D7A25',-0.45],
+    [rpot+24*r,-16,28*r,44,'#2D5A1B', 0.4],
+    [rpot-10*r,-58,24*r,38,'#4A8F2E',-0.18],
+    [rpot+14*r,-72,22*r,36,'#3D7A25', 0.32],
+    [rpot-22*r,-100,20*r,32,'#2D5A1B',-0.55],
+    [rpot+6*r,-118,20*r,34,'#4A8F2E', 0.15],
+    [rpot-14*r,-158,16*r,28,'#3D7A25',-0.3],
+    [rpot+10*r,-178,18*r,30,'#2D5A1B', 0.42],
+  ];
+  rLeaves.forEach(([cx,dy,rx,ry,col,ang])=>{
+    c.save();c.translate(cx,FY+dy);c.rotate(ang);
+    c.beginPath();c.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+    c.fillStyle=col;c.fill();
+    c.strokeStyle='rgba(0,0,0,0.12)';c.lineWidth=1;
+    c.beginPath();c.moveTo(0,-ry*0.9);c.lineTo(0,ry*0.5);c.stroke();
+    c.restore();
+  });
+}
+
+// ── DRAW: Vignette ──
+function drawVignette(c){
+  const vg=c.createRadialGradient(W*0.5,H*0.45,H*0.15,W*0.5,H*0.45,Math.max(W,H)*0.75);
+  vg.addColorStop(0,'rgba(0,0,0,0)');
+  vg.addColorStop(0.6,'rgba(10,4,1,0.15)');
+  vg.addColorStop(1,'rgba(15,6,2,0.68)');
+  c.fillStyle=vg;c.fillRect(0,0,W,H);
+  // Edge boost: left/right
+  const le=c.createLinearGradient(0,0,130,0);
+  le.addColorStop(0,'rgba(10,4,1,0.55)');le.addColorStop(1,'rgba(10,4,1,0)');
+  c.fillStyle=le;c.fillRect(0,0,130,H);
+  const re=c.createLinearGradient(W,0,W-130,0);
+  re.addColorStop(0,'rgba(10,4,1,0.55)');re.addColorStop(1,'rgba(10,4,1,0)');
+  c.fillStyle=re;c.fillRect(W-130,0,130,H);
+}
+
+// ── Main redraw ──
+function redraw(){
+  if(!W)return;
+  ctx.clearRect(0,0,W,H);
+  const l=L();
+  drawBg(ctx,l);
+  drawAtmos(ctx);
+  drawFrames(ctx,l);
+  drawShelf(ctx,l);
+  drawChair(ctx,l);
+  drawCredenza(ctx,l);
+  drawTurntable(ctx,l);
+  drawSofa(ctx,l);
+  drawPlants(ctx,l);
+  drawVignette(ctx);
+  if(grainCanvas)ctx.drawImage(grainCanvas,0,0,W,H);
+}
+
+// ── Boot ──
+resize();
+
+// Stubs extended by Pass 3
+// -- hit zones, mouse handlers, vinyl animation, audio --
+</script>
+</body>
+</html>

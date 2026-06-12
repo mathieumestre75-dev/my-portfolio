@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview B — Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    @font-face{font-family:'P22 Mackinac Medium';src:url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');font-weight:500;font-display:swap}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    ::-webkit-scrollbar{display:none} html{scrollbar-width:none;scroll-behavior:smooth}
+    body{background:rgb(252,252,252);color:rgba(0,0,0,0.75);-webkit-font-smoothing:antialiased}
+
+    .grid-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+    .grid-layer{position:absolute;inset:0;background-color:rgb(252,252,252);background-image:linear-gradient(rgba(98,141,227,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(98,141,227,0.08) 1px,transparent 1px);background-size:24px 24px}
+    .gf{position:absolute;pointer-events:none}
+    .gf-t{inset:0;bottom:auto;height:160px;background:linear-gradient(to bottom,rgb(252,252,252) 30%,transparent)}
+    .gf-b{inset:0;top:auto;height:160px;background:linear-gradient(to top,rgb(252,252,252) 30%,transparent)}
+    .gf-l{inset:0;right:auto;width:200px;background:linear-gradient(to right,rgb(252,252,252) 40%,transparent)}
+    .gf-r{inset:0;left:auto;width:160px;background:linear-gradient(to left,rgb(252,252,252) 30%,transparent)}
+
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes spinVinyl{to{transform:rotate(360deg)}}
+    @keyframes scrollDrop{0%{height:0;opacity:0}15%{opacity:1}70%{height:28px;opacity:1}100%{height:28px;opacity:0}}
+    @keyframes eq1{0%,100%{height:4px}50%{height:11px}}
+    @keyframes eq2{0%,100%{height:9px}33%{height:3px}}
+    @keyframes eq3{0%,100%{height:6px}66%{height:12px}}
+
+    /* about — identical */
+    .about-section{position:relative;height:100vh;overflow:hidden;background:rgb(252,252,252)}
+    .topbar{position:absolute;top:20px;left:20px;right:20px;display:flex;align-items:flex-start;justify-content:space-between;z-index:10;pointer-events:none;animation:fadeIn 0.7s ease-out both}
+    .topbar-name{font-family:'Spline Sans Mono',monospace;font-size:11.2px;font-weight:400;line-height:13.44px;letter-spacing:normal;color:rgba(0,0,0,0.35);text-decoration:none;pointer-events:auto}
+    .clock{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+    .clock p{font-family:'Spline Sans Mono',monospace;font-size:11.2px;font-weight:400;line-height:13.44px;color:rgba(0,0,0,0.35);text-align:right}
+    .about-layout{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:200px;padding:60px 60px 80px}
+    .left-card{width:300px;flex-shrink:0;z-index:2;background:rgba(255,255,255,0.1);border-radius:16px;border:0.8px solid rgba(0,0,0,0.08);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:rgba(64,39,14,0.08) 0px 0.6px 1.57px -0.83px,rgba(64,39,14,0.08) 0px 2.29px 5.95px -1.67px,rgba(64,39,14,0.08) 0px 10px 26px -2.5px;padding:16px;display:flex;flex-direction:column;gap:19.2px;position:relative;overflow:hidden;animation:fadeSlideUp 0.5s ease-out 0.05s both}
+    .photo-frame{padding:6px;border-radius:10px;background:rgba(255,255,255,0.1);border:0.8px solid rgba(0,0,0,0.08);box-shadow:rgba(0,0,0,0.18) 0px 0.6px 0.6px -1.25px,rgba(0,0,0,0.16) 0px 2.29px 2.29px -2.5px,rgba(0,0,0,0.06) 0px 10px 10px -3.75px}
+    .photo-container{position:relative;width:100%;aspect-ratio:1.4725/1;border-radius:8px;overflow:hidden;border:0.8px solid rgba(168,168,168,0.4)}
+    .photo-slide{position:absolute;inset:0} .photo-slide img{width:100%;height:100%;object-fit:cover;display:block}
+    .caption-section{display:flex;flex-direction:column;gap:14px}
+    .caption-row{display:flex;align-items:center;justify-content:space-between;gap:12.8px;overflow:hidden}
+    .marquee-wrap{flex:1;overflow:hidden}
+    .about-marquee{animation:marquee 12s linear infinite;display:inline-block;white-space:nowrap}
+    .mono{font-family:'Spline Sans Mono',monospace;font-size:11.2px;font-weight:400;line-height:13.44px;letter-spacing:-0.02em;color:rgba(0,0,0,0.45)}
+    .caption-date{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-0.02em;color:rgba(0,0,0,0.45);flex-shrink:0}
+    .divider{height:1px;background:rgba(0,0,0,0.08);width:100%}
+    .tagline-section{display:flex;flex-direction:column;gap:19.2px;transition:opacity 0.25s ease-in-out}
+    .tagline{font-family:'Spline Sans Mono',monospace;font-size:16px;font-weight:400;line-height:1.6em;letter-spacing:-0.02em;color:rgba(0,0,0,0.75)}
+    .signature{width:102px;height:65px;object-fit:contain;display:block}
+    .currently-box{border:1px solid rgba(0,0,0,0.06);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;cursor:default}
+    .currently-label{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-0.02em;color:rgba(0,0,0,0.75)}
+    .currents-panel{position:absolute;bottom:0;left:0;right:0;height:166px;padding:14px;border-radius:8px;background:rgba(0,0,0,0.03);display:flex;align-items:center;pointer-events:none;z-index:2;opacity:0;transition:opacity 0.25s ease-in-out}
+    .currents-list{display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%}
+    .current-item{display:flex;flex-direction:column;gap:6px}
+    .current-item .c-label{font-family:system-ui,sans-serif;font-size:10.4px;font-weight:500;color:rgba(0,0,0,0.45)}
+    .current-item .c-value{font-family:system-ui,sans-serif;font-size:12.8px;font-weight:500;line-height:1.4em;color:rgba(0,0,0,0.75)}
+    .right-content{width:490px;flex-shrink:0;position:relative;z-index:2;animation:fadeSlideUp 0.5s ease-out 0.12s both}
+    .section-label{font-family:'P22 Mackinac Medium',serif;font-size:12.8px;font-weight:500;letter-spacing:-0.02em;line-height:1.75em;color:rgba(0,0,0,0.35);display:block}
+    .bio-section{display:flex;flex-direction:column;gap:30px}
+    .bio-text{font-family:'P22 Mackinac Medium',serif;font-size:13.6px;font-weight:500;letter-spacing:-0.02em;line-height:1.75em;color:rgba(0,0,0,0.75)}
+    .links-row{display:flex;gap:24px}
+    .lnk{font-family:'Spline Sans Mono',monospace;font-size:12.8px;letter-spacing:-0.02em;color:rgba(0,0,0,0.35);text-decoration:none;cursor:pointer;transition:color 0.15s ease}
+    .lnk:hover{color:rgba(0,0,0,0.6)} .lnk-muted{cursor:default} .lnk-muted:hover{color:rgba(0,0,0,0.35)}
+    .scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:10}
+    .scroll-hint-line{width:1px;background:rgba(0,0,0,0.2);animation:scrollDrop 1.8s ease-in-out infinite}
+
+    /* ── taste: Gallery ── */
+    .taste-section{background:rgb(252,252,252);padding:90px 0 130px}
+    .taste-layout{display:flex;align-items:flex-start;justify-content:center;gap:72px}
+
+    /* film poster grid — 2 cols × 3 rows (last row has 1 card + spacer) */
+    .films-col{width:448px;flex-shrink:0}
+    .col-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+    .poster-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .poster-card{border-radius:10px;overflow:hidden;position:relative;cursor:default;aspect-ratio:2/3;transition:transform 0.22s ease,box-shadow 0.22s ease}
+    .poster-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.18)}
+    .poster-bg{position:absolute;inset:0}
+    .poster-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,0.1) 0%,transparent 30%,rgba(0,0,0,0.0) 50%,rgba(0,0,0,0.65) 100%)}
+    .poster-info{position:absolute;bottom:0;left:0;right:0;padding:10px 10px 11px}
+    .poster-title{font-family:'P22 Mackinac Medium',serif;font-size:11px;font-weight:500;letter-spacing:-0.02em;color:rgba(255,255,255,0.92);line-height:1.35em;margin-bottom:2px}
+    .poster-meta{font-family:'Spline Sans Mono',monospace;font-size:9.5px;color:rgba(255,255,255,0.5)}
+
+    /* music */
+    .music-col{width:380px;flex-shrink:0}
+    .rand-btn{font-family:'Spline Sans Mono',monospace;font-size:10.4px;color:rgba(0,0,0,0.3);background:none;border:0.8px solid rgba(0,0,0,0.1);border-radius:6px;padding:5px 10px;cursor:pointer;transition:all 0.15s ease;letter-spacing:-0.02em;flex-shrink:0}
+    .rand-btn:hover{color:rgba(0,0,0,0.65);border-color:rgba(0,0,0,0.22)}
+
+    /* now playing — bigger vinyl */
+    .np-card{background:rgba(255,255,255,0.1);border-radius:16px;border:0.8px solid rgba(0,0,0,0.08);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:rgba(64,39,14,0.08) 0px 0.6px 1.57px -0.83px,rgba(64,39,14,0.08) 0px 2.29px 5.95px -1.67px,rgba(64,39,14,0.08) 0px 10px 26px -2.5px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:10px}
+    .vinyl-wrap{display:flex;align-items:center;justify-content:center}
+    #vinyl{animation:spinVinyl 3s linear infinite;animation-play-state:paused;width:96px;height:96px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.28))}
+    #vinyl.playing{animation-play-state:running}
+    .np-text{width:100%;text-align:center}
+    .t-title{font-family:'P22 Mackinac Medium',serif;font-size:14px;font-weight:500;letter-spacing:-0.02em;color:rgba(0,0,0,0.75);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .t-artist{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:-0.02em;color:rgba(0,0,0,0.35);margin-bottom:12px}
+    .progress-wrap{margin-bottom:10px}
+    .progress-track{height:2px;background:rgba(0,0,0,0.08);border-radius:1px;cursor:pointer;margin-bottom:4px;position:relative}
+    .progress-fill{height:100%;background:rgba(0,0,0,0.28);border-radius:1px;width:0%;transition:width 0.25s linear;pointer-events:none}
+    .time-row{display:flex;justify-content:space-between}
+    .time-txt{font-family:'Spline Sans Mono',monospace;font-size:10.4px;color:rgba(0,0,0,0.25)}
+    .controls{display:flex;align-items:center;gap:14px;justify-content:center}
+    .ctrl{background:none;border:none;cursor:pointer;color:rgba(0,0,0,0.35);padding:0;transition:color 0.15s ease;display:flex;align-items:center;justify-content:center}
+    .ctrl:hover{color:rgba(0,0,0,0.75)}
+    .ctrl-play{width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.65)}
+    .ctrl-play:hover{background:rgba(0,0,0,0.1);color:rgba(0,0,0,0.85)}
+
+    /* compact track list */
+    .track-list{border-top:1px solid rgba(0,0,0,0.06)}
+    .track-row{display:flex;align-items:center;gap:9px;padding:7px 4px;cursor:pointer;border-radius:5px;border-bottom:1px solid rgba(0,0,0,0.032);transition:background 0.15s ease}
+    .track-row:hover{background:rgba(0,0,0,0.02)}
+    .tr-art-wrap{position:relative;width:28px;height:28px;flex-shrink:0}
+    .tr-art{width:28px;height:28px;border-radius:4px}
+    .tr-art-eq{position:absolute;inset:0;border-radius:4px;background:rgba(0,0,0,0.52);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s ease}
+    .track-row.active .tr-art-eq{opacity:1}
+    .eq{display:flex;align-items:flex-end;gap:1.5px;height:11px}
+    .eq-bar{width:2px;height:4px;background:rgba(255,255,255,0.85);border-radius:1px}
+    .track-row.active.playing .eq-bar:nth-child(1){animation:eq1 0.7s ease-in-out infinite}
+    .track-row.active.playing .eq-bar:nth-child(2){animation:eq2 0.7s ease-in-out infinite 0.15s}
+    .track-row.active.playing .eq-bar:nth-child(3){animation:eq3 0.7s ease-in-out infinite 0.3s}
+    .tr-title{font-family:'P22 Mackinac Medium',serif;font-size:12px;font-weight:500;letter-spacing:-0.02em;color:rgba(0,0,0,0.6);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.15s ease}
+    .track-row.active .tr-title{color:rgba(0,0,0,0.85)}
+    .tr-dur{font-family:'Spline Sans Mono',monospace;font-size:10px;color:rgba(0,0,0,0.22);width:28px;text-align:right;flex-shrink:0}
+
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .reveal.visible{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+
+<!-- ABOUT (100vh — identical) -->
+<div class="about-section">
+  <div class="grid-bg"><div class="grid-layer"></div><div class="gf gf-t"></div><div class="gf gf-b"></div><div class="gf gf-l"></div><div class="gf gf-r"></div></div>
+  <div class="topbar">
+    <a href="/" class="topbar-name">MATHIEU MESTRE</a>
+    <div class="clock"><p id="clock-time"></p><p>PARIS, FR</p></div>
+  </div>
+  <div class="about-layout">
+    <div class="left-card" id="left-card">
+      <div class="photo-frame"><div class="photo-container" id="photo-container"></div></div>
+      <div class="caption-section">
+        <div class="caption-row">
+          <div class="marquee-wrap"><span class="about-marquee mono">Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;</span></div>
+          <span class="caption-date">09.11.23</span>
+        </div>
+        <div class="divider"></div>
+      </div>
+      <div class="tagline-section" id="tagline-section">
+        <p class="tagline">Finding joy and purpose in creating the things I wish existed :-)</p>
+        <img class="signature" src="https://framerusercontent.com/images/K6G4OceU6E7MAZnRlAe9IGbRk.png" alt="" />
+      </div>
+      <div class="currently-box" id="currently-box"><span class="currently-label">Currently I'm…</span></div>
+      <div class="currents-panel" id="currents-panel">
+        <div class="currents-list">
+          <div class="current-item"><p class="c-label">Watching</p><p class="c-value">Culinary Class Wars 👩🏻‍🍳</p></div>
+          <div class="current-item"><p class="c-label">Reading</p><p class="c-value">Monte Cristo</p></div>
+          <div class="current-item"><p class="c-label">Learning</p><p class="c-value">after effects and blender ;-;</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="right-content">
+      <span class="section-label" style="margin-bottom:30px">About</span>
+      <div class="bio-section">
+        <p class="bio-text">I'm Mathieu, nice to meet you! I'm a product designer based in Munich, currently shaping design systems and consent experiences at Usercentrics. I'm drawn to the intersection of structure and craft — where rigorous systems thinking meets obsessive attention to detail.<br><br>I believe great design is invisible. I'm drawn to work where curiosity drives intention — digging into messy problems and refining until the complexity disappears, then obsessing over every detail until it feels right. I love collaborative environments and people who bring the same care to their work.<br><br>Outside work, you'll find me at a coffee shop, listening to bossa nova, or deep in a side project I probably didn't need to start.</p>
+        <div class="links-row">
+          <a href="mailto:mathieu.mestre@usercentrics.com" class="lnk">Email</a>
+          <span class="lnk lnk-muted">Resume</span>
+          <a href="https://www.linkedin.com/in/mathieu-mestre-bba038102/" class="lnk" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-hint-line"></div></div>
+</div>
+
+<!-- TASTE — Version B: Gallery -->
+<div class="taste-section">
+  <div class="taste-layout">
+
+    <!-- Film poster grid -->
+    <div class="films-col">
+      <div class="col-header reveal">
+        <span class="section-label">Films I love</span>
+      </div>
+      <div class="poster-grid reveal" id="poster-grid" style="transition-delay:0.06s"></div>
+    </div>
+
+    <!-- Music: centered vinyl + compact list -->
+    <div class="music-col">
+      <div class="col-header reveal" style="transition-delay:0.04s">
+        <span class="section-label">Tunes I've been playing</span>
+        <button class="rand-btn" onclick="randomize()">↻ shuffle</button>
+      </div>
+
+      <div class="np-card reveal" style="transition-delay:0.09s">
+        <div class="vinyl-wrap">
+          <svg id="vinyl" width="96" height="96" viewBox="0 0 96 96" fill="none">
+            <circle cx="48" cy="48" r="48" fill="#1c1812"/>
+            <circle cx="48" cy="48" r="44.5" fill="none" stroke="#2c2621" stroke-width="1"/>
+            <circle cx="48" cy="48" r="41"   fill="none" stroke="#231e19" stroke-width="1"/>
+            <circle cx="48" cy="48" r="37.5" fill="none" stroke="#2c2621" stroke-width="1"/>
+            <circle cx="48" cy="48" r="34"   fill="none" stroke="#231e19" stroke-width="1"/>
+            <circle cx="48" cy="48" r="30.5" fill="none" stroke="#2c2621" stroke-width="1"/>
+            <circle cx="48" cy="48" r="27"   fill="none" stroke="#231e19" stroke-width="1"/>
+            <circle cx="48" cy="48" r="23.5" fill="none" stroke="#2c2621" stroke-width="1"/>
+            <circle cx="48" cy="48" r="20"   fill="none" stroke="#231e19" stroke-width="1"/>
+            <circle cx="48" cy="48" r="17"   fill="#f2ede7"/>
+            <circle cx="48" cy="48" r="15"   fill="#ede8e2"/>
+            <circle cx="48" cy="48" r="3.5"  fill="#1c1812"/>
+          </svg>
+        </div>
+        <div class="np-text">
+          <p class="t-title" id="t-title">—</p>
+          <p class="t-artist" id="t-artist">Pick a track to play</p>
+          <div class="progress-wrap">
+            <div class="progress-track" id="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="time-row"><span class="time-txt" id="time-cur">0:00</span><span class="time-txt" id="time-dur">—</span></div>
+          </div>
+          <div class="controls">
+            <button class="ctrl" onclick="playPrev()"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><rect x="1" y="1" width="2" height="10" rx="1"/><polygon points="11,1 4,6 11,11"/></svg></button>
+            <button class="ctrl ctrl-play" id="btn-play" onclick="togglePlay()">
+              <svg id="ico-play" width="12" height="12" viewBox="0 0 10 10" fill="currentColor"><polygon points="2.5,1.5 8.5,5 2.5,8.5"/></svg>
+              <svg id="ico-pause" width="12" height="12" viewBox="0 0 10 10" fill="currentColor" style="display:none"><rect x="1.5" y="1" width="2.5" height="8" rx="1"/><rect x="6" y="1" width="2.5" height="8" rx="1"/></svg>
+            </button>
+            <button class="ctrl" onclick="playNext()"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><polygon points="1,1 8,6 1,11"/><rect x="9" y="1" width="2" height="10" rx="1"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="track-list reveal" id="track-list" style="transition-delay:0.14s"></div>
+    </div>
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+<script>
+const CDN='https://framerusercontent.com/images';
+const PHOTOS=[CDN+'/xj2ByBC3nJVc6F6HtI6nqcbnTw.jpg',CDN+'/60U0IdoPtBAMAmLmMKGolwQI.jpg',CDN+'/5zyj2mIYoYnGcqeSfIVOXwLoXt0.jpg'];
+const FILMS=[
+  {title:'In the Mood for Love',     year:'2000',director:'Wong Kar-wai',      art:'linear-gradient(160deg,#7a1a1a,#3d0000,#1a0505)'},
+  {title:'The Grand Budapest Hotel', year:'2014',director:'Wes Anderson',      art:'linear-gradient(160deg,#f0c4c8,#d48090,#8a3b4f)'},
+  {title:'Amélie',                   year:'2001',director:'Jean-Pierre Jeunet',art:'linear-gradient(160deg,#c47810,#7a5c00,#1e3d1e)'},
+  {title:'Perfect Days',             year:'2023',director:'Wim Wenders',       art:'linear-gradient(160deg,#e8c030,#c07008,#4a2e00)'},
+  {title:'Portrait of a Lady on Fire',year:'2019',director:'Céline Sciamma',  art:'linear-gradient(160deg,#2c7a7a,#1a3d4d,#0d1a2d)'},
+];
+const TRACKS=[
+  {title:'Desafinado',        artist:'João Gilberto',     src:'/desafinado.mp3',       art:'linear-gradient(135deg,#d4956e,#8a4020)'},
+  {title:'Chega de Saudade',  artist:'João Gilberto',     src:'/chega-de-saudade.mp3', art:'linear-gradient(135deg,#6e9e8a,#2a5c4a)'},
+  {title:'Manhã de Carnaval', artist:'Luiz Bonfá',        src:'/manha-de-carnaval.mp3',art:'linear-gradient(135deg,#e8c060,#8a5a00)'},
+  {title:'Insensatez',        artist:'Tom Jobim',         src:'/insensatez.mp3',       art:'linear-gradient(135deg,#9e8ab0,#4a3060)'},
+  {title:'Samba da Bênção',   artist:'Vinicius de Moraes',src:'/samba-da-bencao.mp3',  art:'linear-gradient(135deg,#c87060,#6a2820)'},
+  {title:'Bossa Antiga',      artist:'Edu Lobo',          src:'/bossa-antigua.mp3',    art:'linear-gradient(135deg,#6e9e7e,#2a5c3a)'},
+  {title:'Aquarela do Brasil',artist:'Ary Barroso',       src:'/brazil.mp3',           art:'linear-gradient(135deg,#60a0c8,#205878)'},
+  {title:'Chambre avec vue',  artist:'Hoshi',             src:'/chambre-avec-vue.mp3', art:'linear-gradient(135deg,#c8a890,#7a5840)'},
+];
+
+function tick(){document.getElementById('clock-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true,timeZone:'Europe/Paris'})}
+tick();setInterval(tick,1000);
+const pc=document.getElementById('photo-container');
+PHOTOS.forEach((src,i)=>{const d=document.createElement('div');d.className='photo-slide';d.style.cssText='position:absolute;inset:0;transition:transform 0.8s cubic-bezier(0.34,1.4,0.64,1);z-index:'+(i===0?1:0);const img=document.createElement('img');img.src=src;d.appendChild(img);pc.appendChild(d)});
+let pi=0;const slides=pc.querySelectorAll('.photo-slide');
+setInterval(()=>{const prev=pi;pi=(pi+1)%PHOTOS.length;slides[prev].style.zIndex=2;slides[prev].style.transform='translateY(-100%)';slides[pi].style.zIndex=1;slides[pi].style.transform='translateY(0)';setTimeout(()=>{slides[prev].style.transition='none';slides[prev].style.transform='translateY(0)';slides[prev].style.zIndex=0;requestAnimationFrame(()=>requestAnimationFrame(()=>{slides[prev].style.transition='transform 0.8s cubic-bezier(0.34,1.4,0.64,1)'}))},950)},3500);
+const lc=document.getElementById('left-card'),cb=document.getElementById('currently-box'),ts=document.getElementById('tagline-section'),cp=document.getElementById('currents-panel');
+cb.addEventListener('mouseenter',()=>{ts.style.opacity='0';cp.style.opacity='1'});lc.addEventListener('mouseleave',()=>{ts.style.opacity='1';cp.style.opacity='0'});
+
+// poster grid
+const pg=document.getElementById('poster-grid');
+FILMS.forEach((f,i)=>{
+  const card=document.createElement('div');card.className='poster-card';
+  card.innerHTML='<div class="poster-bg" style="background:'+f.art+'"></div><div class="poster-info"><div class="poster-title">'+f.title+'</div><div class="poster-meta">'+f.director+' · '+f.year+'</div></div>';
+  pg.appendChild(card);
+});
+
+// audio
+let curIdx=-1,isPlaying=false;
+const audio=document.getElementById('audio'),vinyl=document.getElementById('vinyl'),tTitle=document.getElementById('t-title'),tArtist=document.getElementById('t-artist'),pFill=document.getElementById('progress-fill'),pTrack=document.getElementById('progress-track'),tCur=document.getElementById('time-cur'),tDur=document.getElementById('time-dur'),icoPlay=document.getElementById('ico-play'),icoPause=document.getElementById('ico-pause'),tList=document.getElementById('track-list');
+function fmt(s){if(!isFinite(s))return'—';return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}
+function setPlay(p){isPlaying=p;vinyl.classList.toggle('playing',p);icoPlay.style.display=p?'none':'block';icoPause.style.display=p?'block':'none';tList.querySelectorAll('.track-row').forEach((r,i)=>{if(i===curIdx)r.classList.toggle('playing',p)})}
+function selRow(i){tList.querySelectorAll('.track-row').forEach((r,j)=>{r.classList.toggle('active',j===i);r.classList.remove('playing')})}
+function loadTrack(i){curIdx=i;const t=TRACKS[i];tTitle.textContent=t.title;tArtist.textContent=t.artist;tDur.textContent='—';pFill.style.width='0%';tCur.textContent='0:00';audio.src=t.src;audio.load();selRow(i);audio.play().then(()=>setPlay(true)).catch(()=>setPlay(false))}
+function togglePlay(){if(curIdx===-1){loadTrack(0);return}audio.paused?audio.play().then(()=>setPlay(true)).catch(()=>{}):( audio.pause(),setPlay(false))}
+function playNext(){loadTrack((curIdx+1)%TRACKS.length)}
+function playPrev(){if(audio.currentTime>3){audio.currentTime=0;return}loadTrack((curIdx-1+TRACKS.length)%TRACKS.length)}
+function randomize(){loadTrack(Math.floor(Math.random()*TRACKS.length))}
+audio.addEventListener('timeupdate',()=>{if(audio.duration){pFill.style.width=(audio.currentTime/audio.duration*100)+'%';tCur.textContent=fmt(audio.currentTime);tDur.textContent=fmt(audio.duration)}});
+audio.addEventListener('ended',()=>{setPlay(false);playNext()});
+pTrack.addEventListener('click',e=>{if(!audio.duration)return;audio.currentTime=((e.clientX-pTrack.getBoundingClientRect().left)/pTrack.offsetWidth)*audio.duration});
+
+TRACKS.forEach((t,i)=>{
+  const row=document.createElement('div');row.className='track-row';
+  row.innerHTML='<div class="tr-art-wrap"><div class="tr-art" style="background:'+t.art+'"></div><div class="tr-art-eq"><div class="eq"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div></div><span class="tr-title">'+t.title+'</span><span class="tr-dur">—</span>';
+  row.addEventListener('click',()=>loadTrack(i));tList.appendChild(row);
+});
+TRACKS.forEach((t,i)=>{const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>{const d=tList.querySelectorAll('.tr-dur')[i];if(d)d.textContent=fmt(a.duration)};a.src=t.src});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

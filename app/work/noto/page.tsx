@@ -65,7 +65,7 @@ const sectionH4: React.CSSProperties = {
 const bodyText: React.CSSProperties = {
   fontFamily: SANS, fontSize: 15.52, fontWeight: 500,
   letterSpacing: '0.008em', lineHeight: '1.65em',
-  color: 'rgba(0,0,0,0.45)', margin: 0,
+  color: 'rgba(0,0,0,0.6)', margin: 0,
 }
 const sectionLabel: React.CSSProperties = {
   fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
@@ -108,6 +108,8 @@ const DIVIDER = <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin:
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function NotoPage() {
   const [activeSection, setActiveSection] = useState('overview')
+  const [hoveredC1, setHoveredC1] = useState<number | null>(null)
+  const [hoveredC2, setHoveredC2] = useState<number | null>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -253,8 +255,8 @@ export default function NotoPage() {
               Noto / App
             </p>
 
-            {/* H1 + subtitle — framer-jt1scv, gap:30 between title and subtitle */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+            {/* H1 + subtitle — framer-taecsi, gap:14 between title and subtitle */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <motion.h1
                 variants={titleContainer}
                 initial="hidden"
@@ -278,7 +280,7 @@ export default function NotoPage() {
 
               <p style={{
                 fontFamily: SANS, fontSize: 15.52, fontWeight: 500,
-                color: 'rgba(0,0,0,0.60)', lineHeight: '25.608px',
+                color: 'rgba(0,0,0,0.6)', lineHeight: '25.608px',
                 letterSpacing: '0.12416px', margin: 0,
               }}>
                 Building a note-taking experience that grows with you, so you can make sense of who you were and who you&apos;re becoming.
@@ -631,7 +633,7 @@ export default function NotoPage() {
                       {/* framer-1kqxrx9 — text block: padding:24, gap:6 */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: 24 }}>
                         <h6 style={flowHeading}>{flow.heading}</h6>
-                        <p style={bodyText}>{flow.body}</p>
+                        <p style={{ ...bodyText, color: 'rgba(0,0,0,0.45)' }}>{flow.body}</p>
                       </div>
 
                     </div>
@@ -665,111 +667,134 @@ export default function NotoPage() {
               </div>
             </div>
 
-            {/* framer-1rwgstg — blue card */}
-            {/* bg:#ebf3ff, border-radius:8, padding:40px 30px, flex-row, gap:30, position:relative */}
-            <div style={{ position: 'relative', overflow: 'visible' }}>
-              <div style={{
-                display: 'flex', flexDirection: 'row', gap: 30,
-                padding: '40px 30px',
-                background: '#ebf3ff',
-                borderRadius: 8,
-                alignItems: 'center', justifyContent: 'center',
-                overflow: 'hidden',
-              }}>
-                {/* framer-14p5w1d — app icons row, flex-row, gap:40, width:72% */}
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 40, width: '72%', alignItems: 'center', justifyContent: 'center' }}>
-                  {([
-                    'https://framerusercontent.com/images/yOsMzlTlHqK7xAUoDWlta4hg.png',
-                    'https://framerusercontent.com/images/4X2I3KeqMdfj7kA4NudLby40IbY.png',
-                    'https://framerusercontent.com/images/RJLpWEFlBg7CjXSR64S5p1IQOYY.png',
-                    'https://framerusercontent.com/images/G5SnSYDX0UpPr7CPBVQWZLAUcE.png',
-                  ] as const).map((src, i) => (
-                    // framer-1wbnqwh: aspect-ratio:1.01, height:49, flex:1 0 0
-                    <div key={i} style={{ flex: '1 0 0', aspectRatio: '1', maxWidth: 49, borderRadius: 10, overflow: 'hidden' }}>
+            {/* framer-1rwgstg — blue card; position:relative so annotation is contained */}
+            <div style={{
+              position: 'relative', overflow: 'visible',
+              display: 'flex', flexDirection: 'row', gap: 30,
+              padding: '40px 30px',
+              background: '#ebf3ff',
+              border: '1px solid rgba(0,0,0,0.05)',
+              borderRadius: 8,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              {([
+                { src: 'https://framerusercontent.com/images/yOsMzlTlHqK7xAUoDWlta4hg.png',     popup: 'https://framerusercontent.com/images/zGK0nXK7YjF9U1hzHzCB5iHug.png' },
+                { src: 'https://framerusercontent.com/images/4X2I3KeqMdfj7kA4NudLby40IbY.png',  popup: 'https://framerusercontent.com/images/EKCtJFCARyGT6t6no5avIDfwUWY.png' },
+                { src: 'https://framerusercontent.com/images/RJLpWEFlBg7CjXSR64S5p1IQOYY.png',  popup: 'https://framerusercontent.com/images/xcjQuxE3rSJo4HmiK67r7tphs.png' },
+                { src: 'https://framerusercontent.com/images/G5SnSYDX0UpPr7CPBVQWZLAUcE.png',  popup: 'https://framerusercontent.com/images/o2o8Ti2xrM8bxy24nbqWMsCDwA0.png' },
+              ] as const).map(({ src, popup }, i) => (
+                <div key={i} style={{ flexShrink: 0, position: 'relative', overflow: 'visible' }}>
+                  <div
+                    style={{ position: 'relative', width: 50, height: 50, overflow: 'visible', flexShrink: 0 }}
+                    onMouseEnter={() => setHoveredC1(i)}
+                    onMouseLeave={() => setHoveredC1(null)}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt="" style={{ width: 50, height: 50, borderRadius: 11, display: 'block', objectFit: 'cover' }} />
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: hoveredC1 === i ? 1 : 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      style={{ position: 'absolute', top: 65, left: -333, zIndex: 3, pointerEvents: 'none', width: 324 }}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    </div>
-                  ))}
+                      <img src={popup} alt="" style={{ width: '100%', display: 'block', borderRadius: 12 }} />
+                    </motion.div>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              {/* framer-75koya — hover note: position:absolute; top:50%; left:113% */}
+              {/* framer-75koya — annotation inside the card, top:50% left:113% translate(-50%,-50%) */}
               <div style={{
-                position: 'absolute', top: '50%', left: '113%',
+                position: 'absolute', top: '50%', left: 'calc(100% + 20px)',
                 transform: 'translateY(-50%)',
                 display: 'flex', flexDirection: 'row', gap: 10,
-                alignItems: 'center', width: 'max-content',
+                alignItems: 'center', width: 'min-content',
                 pointerEvents: 'none',
               }}>
-                {/* framer-ptwtng — cursor icon SVG */}
-                <svg viewBox="0 0 17.101 20.082" width={17} height={20} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
-                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)"/>
+                <svg viewBox="0 0 17.101 20.082" width={23} height={23} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
+                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)" />
                 </svg>
-                {/* framer-1tb2tea — width:73px */}
-                <p style={{ fontFamily: MONO, fontSize: 11.68, fontWeight: 500, lineHeight: '1.4em', letterSpacing: 0, color: 'rgba(0,0,0,0.35)', margin: 0, width: 73 }}>
+                <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'rgba(0,0,0,0.35)', margin: 0, width: 73, wordBreak: 'break-word' }}>
                   Hover to see breakdown
                 </p>
               </div>
             </div>
 
-            {/* framer-1rqkq0j — pink card */}
-            {/* bg:#fff7ff, border-radius:8, padding:40, flex-row, gap:30, position:relative */}
-            <div style={{ position: 'relative', overflow: 'visible' }}>
-              <div style={{
-                display: 'flex', flexDirection: 'row', gap: 30,
-                padding: 40,
-                background: '#fff7ff',
-                borderRadius: 8,
-                alignItems: 'center',
-                overflow: 'hidden',
+            {/* framer-k5i85n — "On the other hand…" content block, sits ABOVE the pink card */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <h3 style={{
+                fontFamily: SERIFM, fontSize: 18.4, fontWeight: 500,
+                letterSpacing: '-0.008em', lineHeight: '1.4em',
+                color: 'rgba(0,0,0,0.45)', margin: 0,
               }}>
-                {/* App icons — left side */}
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 40, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {([
-                    'https://framerusercontent.com/images/fTCbOk9HCmFiFis0lXL6MVbWro.png',
-                    'https://framerusercontent.com/images/EvG0rueg5cuZuwWqp0VtwyO7KI.png',
-                    'https://framerusercontent.com/images/Gm9kR8IT3TVehfbTrHw6Ypfj4.png',
-                  ] as const).map((src, i) => (
-                    <div key={i} style={{ width: 49, height: 49, borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    </div>
-                  ))}
-                </div>
+                On the other hand…
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>Tools that feel like yours</h4>
+                <p style={bodyText}>
+                  The apps people love taught us what to build: Spotify Wrapped, personality tests, curated spaces. They take passive data and turn it into something affirming, making users feel present, seen, and surprised. That&apos;s what was missing from journaling apps.
+                </p>
+              </div>
+            </div>
 
-                {/* framer-k5i85n gap:30 — "On the other hand" heading + content */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 30, flex: 1, minWidth: 0 }}>
-                  {/* P22 Mackinac Medium ×1.15 = 18.4px, rgba(0,0,0,0.45), -0.008em, 1.4em */}
-                  <p style={{
-                    fontFamily: SERIFM, fontSize: 18.4, fontWeight: 500,
-                    letterSpacing: '-0.008em', lineHeight: '1.4em',
-                    color: 'rgba(0,0,0,0.45)', margin: 0,
-                  }}>
-                    On the other hand…
-                  </p>
-
-                  {/* framer-8qavx gap:6 — h4 + body */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <h4 style={sectionH4}>Tools that feel like yours</h4>
-                    <p style={bodyText}>
-                      The apps people love taught us what to build: Spotify Wrapped, personality tests, curated spaces. They take passive data and turn it into something affirming, making users feel present, seen, and surprised. That&apos;s what was missing from journaling apps.
-                    </p>
+            {/* framer-1rqkq0j / framer-3l0ku3 — pink card; position:relative so annotation is contained */}
+            <div style={{
+              position: 'relative', overflow: 'visible',
+              display: 'flex', flexDirection: 'row', gap: 30,
+              padding: 40,
+              background: '#fff7ff',
+              border: '1px solid rgba(0,0,0,0.05)',
+              borderRadius: 8,
+              alignItems: 'center',
+            }}>
+              {([
+                { src: 'https://framerusercontent.com/images/fTCbOk9HCmFiFis0lXL6MVbWro.png',  popup: null },
+                { src: 'https://framerusercontent.com/images/EvG0rueg5cuZuwWqp0VtwyO7KI.png',  popup: 'https://framerusercontent.com/images/hBMqPMCGkdfP32gNBwrebRPmAY.png' },
+                { src: 'https://framerusercontent.com/images/Gm9kR8IT3TVehfbTrHw6Ypfj4.png',  popup: 'https://framerusercontent.com/images/o7lPpLwgliIbqTZviHUMTriaA4.png' },
+                { src: 'https://framerusercontent.com/images/cv0eA6lEl3dMEHDYMHsgiZUis.png',   popup: 'https://framerusercontent.com/images/UvqFdzRZPNJAk9DCv3VRWqfMPU.png' },
+                { src: 'https://framerusercontent.com/images/oKk0snbA80Gl62haHizWsPGTI.png',   popup: 'https://framerusercontent.com/images/HcnRdMhK1O2I5mvLGu1Kt66ZZLc.png' },
+                { src: 'https://framerusercontent.com/images/V3zaOEUWA8xHm6hkEPq28kS41nQ.png', popup: 'https://framerusercontent.com/images/0jDpNhr7BjtrrYRCNMHJcjCgcN8.png' },
+              ] as const).map(({ src, popup }, i) => (
+                <div
+                  key={i}
+                  style={{ flex: '1 0 0', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'visible' }}
+                >
+                  <div
+                    style={{ position: 'relative', width: 50, height: 50, overflow: 'visible', flexShrink: 0 }}
+                    onMouseEnter={() => setHoveredC2(i)}
+                    onMouseLeave={() => setHoveredC2(null)}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt="" style={{ width: 50, height: 50, borderRadius: 10, display: 'block', objectFit: 'cover' }} />
+                    {popup && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: hoveredC2 === i ? 1 : 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        style={{ position: 'absolute', top: 65, left: -333, zIndex: 3, pointerEvents: 'none', width: 324 }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={popup} alt="" style={{ width: '100%', display: 'block', borderRadius: 12 }} />
+                      </motion.div>
+                    )}
                   </div>
                 </div>
-              </div>
+              ))}
 
-              {/* Hover note — same position as blue card */}
+              {/* framer-1ysa99t — annotation inside the card, top:50% left:113% translate(-50%,-50%) */}
               <div style={{
-                position: 'absolute', top: '50%', left: '113%',
+                position: 'absolute', top: '50%', left: 'calc(100% + 20px)',
                 transform: 'translateY(-50%)',
                 display: 'flex', flexDirection: 'row', gap: 10,
-                alignItems: 'center', width: 'max-content',
+                alignItems: 'center', width: 'min-content',
                 pointerEvents: 'none',
               }}>
-                <svg viewBox="0 0 17.101 20.082" width={17} height={20} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
-                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)"/>
+                <svg viewBox="0 0 17.101 20.082" width={23} height={23} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
+                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)" />
                 </svg>
-                <p style={{ fontFamily: MONO, fontSize: 11.68, fontWeight: 500, lineHeight: '1.4em', letterSpacing: 0, color: 'rgba(0,0,0,0.35)', margin: 0, width: 73 }}>
+                <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'rgba(0,0,0,0.35)', margin: 0, width: 73, wordBreak: 'break-word' }}>
                   Hover to see breakdown
                 </p>
               </div>
