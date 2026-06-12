@@ -502,12 +502,12 @@ function noShadow(c){c.shadowColor='transparent';c.shadowBlur=0;c.shadowOffsetX=
 function drawBg(c,l){
   const {FY,r}=l;
   // Wall base
-  c.fillStyle='#3D2310';c.fillRect(0,0,W,FY);
+  c.fillStyle='#4E2E14';c.fillRect(0,0,W,FY);
   // Vertical wood grain lines (deterministic, no Math.random in draw loop)
   for(let i=0;i<72;i++){
     const lx=((i+0.5)/72)*W+(((i*7)%11)-5)*r;
     const lw=1+((i*3)%3);
-    const a=(0.028+((i*5)%9)*0.006).toFixed(3);
+    const a=(0.04+((i*5)%9)*0.01).toFixed(3);
     c.fillStyle=`rgba(255,175,75,${a})`;
     c.fillRect(lx,0,lw,FY);
   }
@@ -519,12 +519,12 @@ function drawBg(c,l){
   c.fillStyle=wlg;c.fillRect(0,40,W,FY-40);
 
   // Floor
-  c.fillStyle='#6B3E1E';c.fillRect(0,FY,W,H-FY);
+  c.fillStyle='#7A4822';c.fillRect(0,FY,W,H-FY);
   // Horizontal floor grain
   for(let gy=FY;gy<H;gy+=13){c.fillStyle='rgba(0,0,0,0.04)';c.fillRect(0,gy,W,1);}
   // Floor perspective shadow (recedes upward)
   const fpg=c.createLinearGradient(0,FY,0,FY+60);
-  fpg.addColorStop(0,'rgba(0,0,0,0.38)');fpg.addColorStop(1,'rgba(0,0,0,0)');
+  fpg.addColorStop(0,'rgba(0,0,0,0.22)');fpg.addColorStop(1,'rgba(0,0,0,0)');
   c.fillStyle=fpg;c.fillRect(0,FY,W,60);
   // Floor specular center
   const fsg=c.createRadialGradient(W*0.5,FY,0,W*0.5,FY,W*0.4);
@@ -538,12 +538,12 @@ function drawBg(c,l){
 // ── DRAW: Atmosphere (ceiling shadow + warm light pool) ──
 function drawAtmos(c){
   const csg=c.createLinearGradient(0,0,0,170);
-  csg.addColorStop(0,'rgba(12,5,1,0.58)');csg.addColorStop(1,'rgba(12,5,1,0)');
+  csg.addColorStop(0,'rgba(12,5,1,0.35)');csg.addColorStop(1,'rgba(12,5,1,0)');
   c.fillStyle=csg;c.fillRect(0,0,W,170);
 
   const lg=c.createRadialGradient(W*0.5,0,0,W*0.5,0,W*0.52);
-  lg.addColorStop(0,'rgba(255,210,100,0.22)');
-  lg.addColorStop(0.5,'rgba(255,180,70,0.08)');
+  lg.addColorStop(0,'rgba(255,210,100,0.38)');
+  lg.addColorStop(0.5,'rgba(255,180,70,0.16)');
   lg.addColorStop(1,'rgba(255,180,70,0)');
   c.fillStyle=lg;c.fillRect(0,0,W,400);
 }
@@ -759,7 +759,7 @@ function drawCredenza(c,l){
   potg.addColorStop(0,'#C4622D');potg.addColorStop(1,'#8a3e1a');
   c.fillStyle=potg;c.fill();
   // Leaves
-  [[0,-14,7,16,'#3a6a2a',0.2],[-8,-10,6,14,'#4a7a3a',−0.4],[8,-8,5,13,'#2d5a1b',0.5]].forEach(([dx,dy,rx,ry,col,ang])=>{
+  [[0,-14,7,16,'#3a6a2a',0.2],[-8,-10,6,14,'#4a7a3a',-0.4],[8,-8,5,13,'#2d5a1b',0.5]].forEach(([dx,dy,rx,ry,col,ang])=>{
     c.save();c.translate(px2+dx*r,py2+dy);c.rotate(ang);
     c.beginPath();c.ellipse(0,0,rx*r,ry,0,0,Math.PI*2);
     c.fillStyle=col;c.fill();c.restore();
@@ -795,22 +795,11 @@ function drawTurntable(c,l){
   // Record on platter (if playing)
   if(ST.playIdx>=0){
     const idx=ST.playIdx;
+    const discR=platR-6*r;
     c.save();c.translate(platCX,platCY);c.rotate(ST.discAngle);
-    // vinyl disc
-    c.beginPath();c.arc(0,0,platR-6*r,0,Math.PI*2);
-    if(coverImgs[idx]){
-      const pat=c.createPattern(coverImgs[idx],'no-repeat');
-      const sz=(platR-6*r)*2;
-      c.save();c.translate(-(platR-6*r),-(platR-6*r));
-      const tmpC=document.createElement('canvas');tmpC.width=sz;tmpC.height=sz;
-      const tmpX=tmpC.getContext('2d');
-      tmpX.beginPath();tmpX.arc(sz/2,sz/2,sz/2,0,Math.PI*2);tmpX.clip();
-      tmpX.drawImage(coverImgs[idx],0,0,sz,sz);
-      c.drawImage(tmpC,0,0);c.restore();
-    } else {
-      c.fillStyle=ALBUMS[idx].fb;c.fill();
-    }
-    // label
+    c.beginPath();c.arc(0,0,discR,0,Math.PI*2);c.clip();
+    if(coverImgs[idx]){c.drawImage(coverImgs[idx],-discR,-discR,discR*2,discR*2);}
+    else{c.fillStyle=ALBUMS[idx].fb;c.fill();}
     const labg=c.createRadialGradient(0,0,0,0,0,14*r);
     labg.addColorStop(0,'#f5f1ec');labg.addColorStop(1,'#e0d8ce');
     c.beginPath();c.arc(0,0,14*r,0,Math.PI*2);c.fillStyle=labg;c.fill();
@@ -972,14 +961,14 @@ function drawVignette(c){
   const vg=c.createRadialGradient(W*0.5,H*0.45,H*0.15,W*0.5,H*0.45,Math.max(W,H)*0.75);
   vg.addColorStop(0,'rgba(0,0,0,0)');
   vg.addColorStop(0.6,'rgba(10,4,1,0.15)');
-  vg.addColorStop(1,'rgba(15,6,2,0.68)');
+  vg.addColorStop(1,'rgba(15,6,2,0.42)');
   c.fillStyle=vg;c.fillRect(0,0,W,H);
   // Edge boost: left/right
   const le=c.createLinearGradient(0,0,130,0);
-  le.addColorStop(0,'rgba(10,4,1,0.55)');le.addColorStop(1,'rgba(10,4,1,0)');
+  le.addColorStop(0,'rgba(10,4,1,0.38)');le.addColorStop(1,'rgba(10,4,1,0)');
   c.fillStyle=le;c.fillRect(0,0,130,H);
   const re=c.createLinearGradient(W,0,W-130,0);
-  re.addColorStop(0,'rgba(10,4,1,0.55)');re.addColorStop(1,'rgba(10,4,1,0)');
+  re.addColorStop(0,'rgba(10,4,1,0.38)');re.addColorStop(1,'rgba(10,4,1,0)');
   c.fillStyle=re;c.fillRect(W-130,0,130,H);
 }
 
@@ -998,14 +987,268 @@ function redraw(){
   drawSofa(ctx,l);
   drawPlants(ctx,l);
   drawVignette(ctx);
+  if(typeof drawFlyRecord!=="undefined"&&ST.flyState)drawFlyRecord(ctx,ST.flyState);
   if(grainCanvas)ctx.drawImage(grainCanvas,0,0,W,H);
 }
 
 // ── Boot ──
 resize();
 
-// Stubs extended by Pass 3
-// -- hit zones, mouse handlers, vinyl animation, audio --
+// ═══════════════════════════════════════════════════════
+// PASS 3: INTERACTIVITY
+// ═══════════════════════════════════════════════════════
+
+// Extend state
+ST.spinSpeed      = 0;
+ST.spinTarget     = 0.022;
+ST.flyState       = null;   // {idx,fromX,fromY,fromW,toX,toY,toW,t,dur}
+ST.npOp           = 0;
+ST.tonearmTarget  = 0;
+ST.transitioning  = false;
+
+// ── Audio ──
+const audio = document.getElementById('audio');
+function fadeAudio(){
+  const s=setInterval(()=>{
+    if(audio.volume>0.06)audio.volume=Math.max(0,audio.volume-0.06);
+    else{clearInterval(s);audio.pause();audio.volume=1;}
+  },50);
+}
+
+// ── Easing ──
+function eio(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+
+// ── Animation loop ──
+let rafId=null;
+function startLoop(){if(!rafId)rafId=requestAnimationFrame(loop);}
+function loop(){
+  let live=false;
+
+  // Parallax fg lerp
+  const dfg=ST.pxFgT-ST.pxFg;
+  if(Math.abs(dfg)>0.05){ST.pxFg+=dfg*0.08;live=true;}
+
+  // Tonearm lerp
+  const dta=ST.tonearmTarget-ST.tonearmT;
+  if(Math.abs(dta)>0.004){ST.tonearmT+=dta*0.055;live=true;}
+  else ST.tonearmT=ST.tonearmTarget;
+
+  // Disc spin
+  if(ST.playIdx>=0){
+    if(ST.spinSpeed<ST.spinTarget)ST.spinSpeed=Math.min(ST.spinTarget,ST.spinSpeed+0.0009);
+    ST.discAngle=(ST.discAngle+ST.spinSpeed)%(Math.PI*2);
+    live=true;
+  } else if(ST.spinSpeed>0.0004){
+    ST.spinSpeed*=0.958;
+    ST.discAngle=(ST.discAngle+ST.spinSpeed)%(Math.PI*2);
+    live=true;
+  } else {
+    ST.spinSpeed=0;
+  }
+
+  // Fly animation tick
+  if(ST.flyState){
+    ST.flyState.t=Math.min(1,ST.flyState.t+16/ST.flyState.dur);
+    if(ST.flyState.t>=1){landRecord(ST.flyState.idx);ST.flyState=null;}
+    live=true;
+  }
+
+  // Now-playing opacity lerp
+  const npT=ST.playIdx>=0?1:0;
+  const dn=npT-ST.npOp;
+  if(Math.abs(dn)>0.01){ST.npOp+=dn*0.07;live=true;}
+  else ST.npOp=npT;
+  document.getElementById('now-playing-wrap').style.opacity=ST.npOp;
+
+  redraw();
+  if(live){rafId=requestAnimationFrame(loop);}else{rafId=null;}
+}
+
+// ── Hit zones (computed from current layout) ──
+function hitZones(){
+  const l=L(),z=[];
+  l.vinylSlots.forEach((vs,i)=>z.push({id:`vinyl-${i}`,x:vs.x-2,y:vs.y-12,w:vs.w+4,h:vs.h+14}));
+  l.filmSlots.forEach((fs,i) =>z.push({id:`film-${i}`, x:fs.x-3,y:fs.yBot-fs.h-4,w:fs.w+6,h:fs.h+8}));
+  const ae=l.camAE1,mj=l.camMju;
+  z.push({id:'cam-0',x:ae.x-4,y:ae.y-4,w:ae.w+8,h:ae.h+10});
+  z.push({id:'cam-1',x:mj.x-4,y:mj.y-4,w:mj.w+8,h:mj.h+10});
+  l.frames.forEach((f,i)=>z.push({id:`frame-${i}`,x:f.x-10,y:f.y-10,w:f.w+20,h:f.h+28}));
+  // Tonearm hit — sweep arc approximated as a rect across the arm
+  const {r,taPivX,taPivY}=l;
+  z.push({id:'tonearm',x:taPivX-90*r,y:taPivY-16,w:170*r,h:32});
+  return z;
+}
+
+// ── Tooltip placement ──
+const TIP_MAP={
+  'film-0':'tip-f0','film-1':'tip-f1','film-2':'tip-f2','film-3':'tip-f3','film-4':'tip-f4',
+  'cam-0':'tip-c0','cam-1':'tip-c1',
+  'frame-0':'tip-fr0','frame-1':'tip-fr1','frame-2':'tip-fr2',
+};
+function hideTips(){
+  Object.values(TIP_MAP).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('visible');});
+}
+function placeTip(zoneId,z){
+  const tipId=TIP_MAP[zoneId];if(!tipId)return;
+  const el=document.getElementById(tipId);if(!el)return;
+  const isFrame=zoneId.startsWith('frame');
+  // Position relative to canvas container
+  requestAnimationFrame(()=>{
+    const tw=el.offsetWidth||210, th=el.offsetHeight||80;
+    let lft=z.x+z.w/2-tw/2;
+    let top=isFrame?z.y+z.h+6:z.y-th-12;
+    lft=Math.max(6,Math.min(W-tw-6,lft));
+    top=Math.max(4,Math.min(H-th-4,top));
+    el.style.left=lft+'px';
+    el.style.top=top+'px';
+    el.classList.add('visible');
+  });
+}
+
+// ── Mouse move: hover + parallax ──
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  // Scale mouse coords to CSS canvas space (canvas may be CSS-scaled)
+  const scaleX=W/rect.width, scaleY=H/rect.height;
+  const mx=(e.clientX-rect.left)*scaleX;
+  const my=(e.clientY-rect.top)*scaleY;
+
+  // Parallax target: mouse left→right maps to subtle fg shift
+  ST.pxFgT=((mx/W)*2-1)*-5;
+  startLoop();
+
+  // Hit test
+  const zones=hitZones();
+  let nz=null,nzRect=null;
+  for(const z of zones){
+    if(mx>=z.x&&mx<=z.x+z.w&&my>=z.y&&my<=z.y+z.h){nz=z.id;nzRect=z;break;}
+  }
+
+  if(nz!==ST.hover){
+    ST.hover=nz;
+    if(nz&&nz.startsWith('vinyl'))canvas.style.cursor='grab';
+    else if(nz)canvas.style.cursor='pointer';
+    else canvas.style.cursor='default';
+    hideTips();
+    if(nz&&nzRect)placeTip(nz,nzRect);
+    if(!rafId)redraw();
+  }
+});
+
+canvas.addEventListener('mouseleave',()=>{
+  ST.hover=null;ST.pxFgT=0;
+  canvas.style.cursor='default';
+  hideTips();startLoop();
+});
+
+// ── Click ──
+canvas.addEventListener('click',e=>{
+  if(!ST.hover)return;
+  if(ST.hover.startsWith('vinyl')){
+    handleVinyl(parseInt(ST.hover.split('-')[1]));
+  } else if(ST.hover==='tonearm'&&ST.playIdx>=0){
+    ejectRecord(false);
+  }
+});
+
+// ── Vinyl selection state machine ──
+function handleVinyl(idx){
+  if(ST.transitioning||ST.flyState)return;
+  if(ST.playIdx===idx){ejectRecord(false);return;}
+  if(ST.playIdx>=0){
+    // Eject current silently, then fly new
+    ejectRecord(true);
+    setTimeout(()=>flyRecord(idx),780);
+    return;
+  }
+  flyRecord(idx);
+}
+
+function flyRecord(idx){
+  const l=L(),vs=l.vinylSlots[idx];
+  if(!vs)return;
+  ST.transitioning=true;
+  ST.flyState={
+    idx,
+    fromX:vs.x, fromY:vs.y, fromW:vs.w,
+    toX:l.platCX-l.platR*0.92, toY:l.platCY-l.platR*0.92, toW:l.platR*1.84,
+    t:0, dur:620
+  };
+  startLoop();
+}
+
+function landRecord(idx){
+  ST.playIdx=idx;
+  ST.discAngle=0;
+  ST.spinSpeed=0;
+  ST.tonearmTarget=1;
+  ST.transitioning=false;
+  // Audio — TODO: replace with real audio path
+  audio.src=ALBUMS[idx].src;
+  audio.volume=0.8;
+  audio.play().catch(()=>{});
+  // Now-playing label
+  document.getElementById('np-title').textContent=ALBUMS[idx].title;
+  document.getElementById('np-artist').textContent=ALBUMS[idx].artist;
+  // Position below credenza
+  const l=L(),npw=document.getElementById('now-playing-wrap');
+  npw.style.left=(l.platCX-100)+'px';
+  npw.style.top=(l.credY+l.credH+16)+'px';
+  npw.style.width='200px';
+  startLoop();
+}
+
+function ejectRecord(silent){
+  const prevIdx=ST.playIdx;
+  ST.tonearmTarget=0;
+  if(!silent){
+    fadeAudio();
+    setTimeout(()=>{ST.playIdx=-1;ST.spinSpeed=0;startLoop();},900);
+  } else {
+    audio.pause();
+    ST.playIdx=-1;
+    ST.spinSpeed=0;
+  }
+  ST.transitioning=!silent;
+  if(silent)setTimeout(()=>ST.transitioning=false,120);
+  startLoop();
+}
+
+// ── Draw: flying record (called from redraw hook above) ──
+function drawFlyRecord(c,fly){
+  const {fromX,fromY,fromW,toX,toY,toW,t,idx}=fly;
+  const et=eio(t);
+  const cx2=fromX+(toX-fromX)*et;
+  const cy2=fromY+(toY-fromY)*et;
+  const cw2=fromW+(toW-fromW)*et;
+  // Border-radius: square → circle
+  const br=3+(cw2*0.5-3)*et;
+  c.save();
+  rr(c,cx2,cy2,cw2,cw2,br);c.clip();
+  if(coverImgs[idx]){c.drawImage(coverImgs[idx],cx2,cy2,cw2,cw2);}
+  else{c.fillStyle=ALBUMS[idx].fb;c.fill();}
+  c.restore();
+  // Warm glow as it approaches the platter
+  if(et>0.35){
+    const glow=(et-0.35)/0.65;
+    c.save();
+    c.globalAlpha=glow*0.55;
+    c.shadowColor='rgba(255,180,60,0.8)';c.shadowBlur=28*glow;
+    rr(c,cx2,cy2,cw2,cw2,br);
+    c.strokeStyle='rgba(255,200,90,0.6)';c.lineWidth=1.5;c.stroke();
+    c.globalAlpha=1;c.restore();
+  }
+}
+
+// ── Position now-playing on load (hidden) ──
+(()=>{
+  const l=L();
+  const npw=document.getElementById('now-playing-wrap');
+  npw.style.left=(l.platCX-100)+'px';
+  npw.style.top=(l.credY+l.credH+16)+'px';
+  npw.style.width='200px';
+  npw.style.opacity='0';
+})();
 </script>
 </body>
 </html>

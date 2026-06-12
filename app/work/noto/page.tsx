@@ -802,6 +802,203 @@ export default function NotoPage() {
 
           </section>
 
+          {/* ════ USER RESEARCH ════════════════════════════════════════════════ */}
+          {/* framer-porx15 — col, gap:52, marginTop:100 from parent gap */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-1i2iuye — heading-and-label, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>User Research</p>
+              <h2 style={sectionH2}>I surveyed 19 people to understand what was missing in their journaling.</h2>
+            </div>
+
+            {/* framer-1p5r23d/framer-qo33zv — content-wrapper, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+
+              {/* framer-qo33zv — KEY INSIGHTS overline */}
+              <h5 style={flowLabel}>KEY INSIGHTS</h5>
+
+              {/* ── insight-one — framer-1m7en23, col, gap:30, pb:40 ── */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30, paddingBottom: 40 }}>
+
+                {/* framer-1y6rb38 — two insight rows, col, gap:24 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+                  {/* framer-1wlitmk — row, gap:19 */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    {/* framer-1801hzm — text col, gap:4 */}
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        Journaling feels like a chore.
+                      </h6>
+                      <p style={{ fontFamily: SANS, fontSize: 15.52, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.65em', color: 'rgba(0,0,0,0.6)', margin: 0 }}>
+                        Too structured, too time-consuming. Digital entries get buried and forgotten.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* framer-88xlrp — row, gap:19 */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    {/* framer-lbnr5j — text col, gap:4 */}
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        Forced engagement backfires
+                      </h6>
+                      <p style={{ fontFamily: SANS, fontSize: 15.52, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.65em', color: 'rgba(0,0,0,0.6)', margin: 0 }}>
+                        Streaks, mood check-ins, daily prompts lead to half-hearted entries people never revisit.
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* framer-1oatcuo — questionnaire card, bg rgba(0,0,0,0.03), border 1px rgba(0,0,0,0.05), radius:8, padding:24 24 40, col, gap:40 */}
+                <div style={{
+                  background: 'rgba(0,0,0,0.03)',
+                  border: '1px solid rgba(0,0,0,0.05)',
+                  borderRadius: 8,
+                  padding: '24px 24px 40px',
+                  display: 'flex', flexDirection: 'column', gap: 40,
+                }}>
+                  {/* framer-1bxl74z — Q label + hairline, col, gap:20 */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <h5 style={flowLabel}>Q: WHAT FRUSTRATES YOU ABOUT CURRENT JOURNALING OR NOTES APPS YOU&apos;VE USED?</h5>
+                    <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', width: '100%' }} />
+                  </div>
+                  {/* framer-2rk5xa — image row, gap:21, align-items:center */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 21, alignItems: 'center', width: '100%' }}>
+                    {([
+                      { src: 'https://framerusercontent.com/images/CxboID94pnqmBeJbVS45igCumSo.png', ratio: 1967 / 1722, label: 'Messy/cluttered' },
+                      { src: 'https://framerusercontent.com/images/oCaJEDt7QC731m08buY0Wn6CiHY.png', ratio: 1938 / 2294, label: 'Not insightful or optimized' },
+                      { src: 'https://framerusercontent.com/images/rPJLcLpLYeexwzPpUo6WWZ2K5E.png', ratio: 987 / 885,   label: 'Too much' },
+                    ] as const).map(({ src, ratio, label }) => (
+                      /* framer-96of3o / framer-ch08su — flex:1, col, gap:18, align-items:center */
+                      <div key={label} style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 18, alignItems: 'center' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt="" style={{ width: '100%', aspectRatio: ratio, objectFit: 'cover', display: 'block' }} />
+                        <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', textAlign: 'center', margin: 0 }}>
+                          {label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* ── insight-two — framer-5d4ru7, col, gap:30, pb:40 ── */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30, paddingBottom: 40 }}>
+
+                {/* framer-13jky28 — row, gap:19 */}
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                    <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                      <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                    </svg>
+                  </div>
+                  <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                      Stats ≠ understanding
+                    </h6>
+                    <p style={{ fontFamily: SANS, fontSize: 15.52, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.65em', color: 'rgba(0,0,0,0.6)', margin: 0 }}>
+                      Apps are great for tracking numbers. But they miss the why behind how you felt — not just the data point that you did.
+                    </p>
+                  </div>
+                </div>
+
+                {/* framer-1q3kegj — questionnaire card */}
+                <div style={{
+                  background: 'rgba(0,0,0,0.03)',
+                  border: '1px solid rgba(0,0,0,0.05)',
+                  borderRadius: 8,
+                  padding: '24px 24px 40px',
+                  display: 'flex', flexDirection: 'column', gap: 40,
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <h5 style={flowLabel}>Q: IF YOUR NOTES COULD REVEAL STUFF ABOUT YOU, WHAT WOULD YOU WANT IT TO REVEAL?</h5>
+                    <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', width: '100%' }} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 21, alignItems: 'center', width: '100%' }}>
+                    {([
+                      { src: 'https://framerusercontent.com/images/ZF46egK2w2MQ9BCv4BD9pX3eyo.png', ratio: 2544 / 2174, label: 'Habits and behaviors' },
+                      { src: 'https://framerusercontent.com/images/DALytHm2bbzLWXWZ31FoT0YJYA.png', ratio: 2806 / 2172, label: 'Growth' },
+                      { src: 'https://framerusercontent.com/images/5uiX3rg0os6JZQSXp5KkzI6me4.png', ratio: 1782 / 1374, label: 'Reoccurring ideas + tasks' },
+                    ] as const).map(({ src, ratio, label }) => (
+                      <div key={label} style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 18, alignItems: 'center' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt="" style={{ width: '100%', aspectRatio: ratio, objectFit: 'cover', display: 'block' }} />
+                        <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', textAlign: 'center', margin: 0 }}>
+                          {label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* ── insight-three — col, gap:30, pb:40 ── */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30, paddingBottom: 40 }}>
+
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                    <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                      <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                    </svg>
+                  </div>
+                  <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                      People want insights about themselves.
+                    </h6>
+                    <p style={{ fontFamily: SANS, fontSize: 15.52, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.65em', color: 'rgba(0,0,0,0.6)', margin: 0 }}>
+                      Nuanced things like recurring thoughts or how they&apos;ve shifted over time. Something that gives back, not just takes input.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{
+                  background: 'rgba(0,0,0,0.03)',
+                  border: '1px solid rgba(0,0,0,0.05)',
+                  borderRadius: 8,
+                  padding: '24px 24px 40px',
+                  display: 'flex', flexDirection: 'column', gap: 40,
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <h5 style={flowLabel}>Q: WHEN JOURNALING, WHAT KIND OF INSIGHTS ARE YOU HOPING TO UNCOVER ABOUT YOURSELF?</h5>
+                    <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', width: '100%' }} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 21, alignItems: 'center', width: '100%' }}>
+                    {([
+                      { src: 'https://framerusercontent.com/images/Y9epdXbth4CZhZZBP2T2PcQqHw.png', ratio: 1968 / 1682, label: 'Tracking' },
+                      { src: 'https://framerusercontent.com/images/nCwhVm4hgDaTBnFR0WnPejI8QKw.png', ratio: 3894 / 2340, label: 'Self-awareness' },
+                      { src: 'https://framerusercontent.com/images/GD5nphZIKjcTURNwR5PujGXMWBA.png', ratio: 1971 / 1841, label: 'Mental Health' },
+                    ] as const).map(({ src, ratio, label }) => (
+                      <div key={label} style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 18, alignItems: 'center' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt="" style={{ width: '100%', aspectRatio: ratio, objectFit: 'cover', display: 'block' }} />
+                        <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', textAlign: 'center', margin: 0 }}>
+                          {label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
         </main>
       </div>
     </div>
