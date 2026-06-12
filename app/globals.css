@@ -48,6 +48,8 @@
   --color-text-primary:      rgba(0, 0, 0, 0.75);
   --color-text-secondary:    rgba(0, 0, 0, 0.35);
   --color-border:            rgba(0, 0, 0, 0.08);
+  --color-music-pill-bg:     #00000008;
+  --color-music-pill-border: rgba(255, 255, 255, 0.05);
   --color-music-divider:     rgba(0, 0, 0, 0.15);
   --color-card-bg:           rgba(0, 0, 0, 0.03);
   --color-card-border:       rgba(0, 0, 0, 0.03);
@@ -85,6 +87,8 @@
   --color-text-primary:      rgba(255, 255, 255, 0.85);
   --color-text-secondary:    rgba(255, 255, 255, 0.45);
   --color-border:            rgba(255, 255, 255, 0.08);
+  --color-music-pill-bg:     #ffffff08;
+  --color-music-pill-border: rgba(255, 255, 255, 0.05);
   --color-music-divider:     rgba(255, 255, 255, 0.15);
   --color-card-bg:           rgba(255, 255, 255, 0.03);
   --color-card-border:       rgba(0, 0, 0, 0.03);

@@ -112,10 +112,10 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
             alignItems: 'center',
             gap: 0,
             height: 30,
-            background: 'rgba(0, 0, 0, 0.06)',
+            background: 'var(--color-music-pill-bg)',
             borderRadius: 100,
             padding: '0 10px 0 7px',
-            border: '0.8px solid rgba(0, 0, 0, 0.07)',
+            border: '1px solid var(--color-music-pill-border)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
           }}

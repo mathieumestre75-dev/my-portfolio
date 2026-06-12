@@ -117,7 +117,7 @@ export default function About() {
       style={{
         width: '100vw',
         height: '100vh',
-        overflow: 'clip',
+        overflow: 'hidden',
         position: 'relative',
         background: 'var(--color-page-bg)',
       }}
@@ -159,7 +159,6 @@ export default function About() {
           justifyContent: 'center',
           gap: 200,
           padding: '60px 60px 80px',
-          zIndex: 2,
         }}
       >
 
@@ -172,6 +171,7 @@ export default function About() {
           style={{
             width: 300,
             flexShrink: 0,
+            zIndex: 2,
             background: 'rgba(255,255,255,0.1)',
             borderRadius: 16,
             border: '0.8px solid rgba(0,0,0,0.08)',
@@ -314,7 +314,7 @@ export default function About() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.12 }}
-          style={{ width: 490, flexShrink: 0 }}
+          style={{ width: 490, flexShrink: 0, position: 'relative', zIndex: 2 }}
         >
           <p
             style={{

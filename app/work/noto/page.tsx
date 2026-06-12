@@ -643,6 +643,140 @@ export default function NotoPage() {
 
           </section>
 
+          {/* ════ COMPETITIVE ANALYSIS ══════════════════════════════════════ */}
+          {/* framer-1xa5sv5 gap:52 */}
+          <section id="research" style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-b0lvjl gap:30 — label + heading block */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>Competitive Analysis</p>
+
+              {/* framer-x1p9aa gap:20 — h2 + content */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h2 style={sectionH2}>Understand why journaling apps fail.</h2>
+
+                {/* framer-jm3mu0 gap:6 — h4 + body */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <h4 style={sectionH4}>Too much direction, too little you</h4>
+                  <p style={bodyText}>
+                    These apps take control, limiting space for self-led reflection. Predefined selections feels mindless, overwhelming features dilute user intention, and excessive nudging feels disingenuous.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* framer-1rwgstg — blue card */}
+            {/* bg:#ebf3ff, border-radius:8, padding:40px 30px, flex-row, gap:30, position:relative */}
+            <div style={{ position: 'relative', overflow: 'visible' }}>
+              <div style={{
+                display: 'flex', flexDirection: 'row', gap: 30,
+                padding: '40px 30px',
+                background: '#ebf3ff',
+                borderRadius: 8,
+                alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden',
+              }}>
+                {/* framer-14p5w1d — app icons row, flex-row, gap:40, width:72% */}
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 40, width: '72%', alignItems: 'center', justifyContent: 'center' }}>
+                  {([
+                    'https://framerusercontent.com/images/yOsMzlTlHqK7xAUoDWlta4hg.png',
+                    'https://framerusercontent.com/images/4X2I3KeqMdfj7kA4NudLby40IbY.png',
+                    'https://framerusercontent.com/images/RJLpWEFlBg7CjXSR64S5p1IQOYY.png',
+                    'https://framerusercontent.com/images/G5SnSYDX0UpPr7CPBVQWZLAUcE.png',
+                  ] as const).map((src, i) => (
+                    // framer-1wbnqwh: aspect-ratio:1.01, height:49, flex:1 0 0
+                    <div key={i} style={{ flex: '1 0 0', aspectRatio: '1', maxWidth: 49, borderRadius: 10, overflow: 'hidden' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* framer-75koya — hover note: position:absolute; top:50%; left:113% */}
+              <div style={{
+                position: 'absolute', top: '50%', left: '113%',
+                transform: 'translateY(-50%)',
+                display: 'flex', flexDirection: 'row', gap: 10,
+                alignItems: 'center', width: 'max-content',
+                pointerEvents: 'none',
+              }}>
+                {/* framer-ptwtng — cursor icon SVG */}
+                <svg viewBox="0 0 17.101 20.082" width={17} height={20} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
+                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)"/>
+                </svg>
+                {/* framer-1tb2tea — width:73px */}
+                <p style={{ fontFamily: MONO, fontSize: 11.68, fontWeight: 500, lineHeight: '1.4em', letterSpacing: 0, color: 'rgba(0,0,0,0.35)', margin: 0, width: 73 }}>
+                  Hover to see breakdown
+                </p>
+              </div>
+            </div>
+
+            {/* framer-1rqkq0j — pink card */}
+            {/* bg:#fff7ff, border-radius:8, padding:40, flex-row, gap:30, position:relative */}
+            <div style={{ position: 'relative', overflow: 'visible' }}>
+              <div style={{
+                display: 'flex', flexDirection: 'row', gap: 30,
+                padding: 40,
+                background: '#fff7ff',
+                borderRadius: 8,
+                alignItems: 'center',
+                overflow: 'hidden',
+              }}>
+                {/* App icons — left side */}
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 40, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {([
+                    'https://framerusercontent.com/images/fTCbOk9HCmFiFis0lXL6MVbWro.png',
+                    'https://framerusercontent.com/images/EvG0rueg5cuZuwWqp0VtwyO7KI.png',
+                    'https://framerusercontent.com/images/Gm9kR8IT3TVehfbTrHw6Ypfj4.png',
+                  ] as const).map((src, i) => (
+                    <div key={i} style={{ width: 49, height: 49, borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    </div>
+                  ))}
+                </div>
+
+                {/* framer-k5i85n gap:30 — "On the other hand" heading + content */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 30, flex: 1, minWidth: 0 }}>
+                  {/* P22 Mackinac Medium ×1.15 = 18.4px, rgba(0,0,0,0.45), -0.008em, 1.4em */}
+                  <p style={{
+                    fontFamily: SERIFM, fontSize: 18.4, fontWeight: 500,
+                    letterSpacing: '-0.008em', lineHeight: '1.4em',
+                    color: 'rgba(0,0,0,0.45)', margin: 0,
+                  }}>
+                    On the other hand…
+                  </p>
+
+                  {/* framer-8qavx gap:6 — h4 + body */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <h4 style={sectionH4}>Tools that feel like yours</h4>
+                    <p style={bodyText}>
+                      The apps people love taught us what to build: Spotify Wrapped, personality tests, curated spaces. They take passive data and turn it into something affirming, making users feel present, seen, and surprised. That&apos;s what was missing from journaling apps.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hover note — same position as blue card */}
+              <div style={{
+                position: 'absolute', top: '50%', left: '113%',
+                transform: 'translateY(-50%)',
+                display: 'flex', flexDirection: 'row', gap: 10,
+                alignItems: 'center', width: 'max-content',
+                pointerEvents: 'none',
+              }}>
+                <svg viewBox="0 0 17.101 20.082" width={17} height={20} overflow="visible" aria-hidden="true" style={{ flexShrink: 0 }}>
+                  <path d="M 6.75 0 C 7.164 0 7.5 0.336 7.5 0.75 L 7.5 3.25 C 7.5 3.664 7.164 4 6.75 4 C 6.336 4 6 3.664 6 3.25 L 6 0.75 C 6 0.336 6.336 0 6.75 0 Z M 1.97 1.97 C 2.263 1.678 2.737 1.678 3.03 1.97 L 4.78 3.72 C 4.981 3.907 5.063 4.189 4.995 4.454 C 4.928 4.72 4.72 4.928 4.454 4.995 C 4.189 5.063 3.907 4.981 3.72 4.78 L 1.97 3.03 C 1.678 2.737 1.678 2.263 1.97 1.97 Z M 11.53 1.97 C 11.822 2.263 11.822 2.737 11.53 3.03 L 9.78 4.78 C 9.593 4.981 9.311 5.063 9.046 4.995 C 8.78 4.928 8.572 4.72 8.505 4.454 C 8.437 4.189 8.519 3.907 8.72 3.72 L 10.47 1.97 C 10.763 1.678 11.237 1.678 11.53 1.97 Z M 0 6.75 C 0 6.336 0.336 6 0.75 6 L 3.25 6 C 3.664 6 4 6.336 4 6.75 C 4 7.164 3.664 7.5 3.25 7.5 L 0.75 7.5 C 0.336 7.5 0 7.164 0 6.75 Z M 6 7.487 C 6 6.36 7.322 5.752 8.177 6.486 L 16.638 13.738 C 17.548 14.518 17.03 16.009 15.833 16.058 L 11.993 16.211 C 11.58 16.227 11.192 16.411 10.916 16.718 L 8.302 19.64 C 7.495 20.543 6 19.971 6 18.76 Z" fill="rgba(0,0,0,0.35)"/>
+                </svg>
+                <p style={{ fontFamily: MONO, fontSize: 11.68, fontWeight: 500, lineHeight: '1.4em', letterSpacing: 0, color: 'rgba(0,0,0,0.35)', margin: 0, width: 73 }}>
+                  Hover to see breakdown
+                </p>
+              </div>
+            </div>
+
+          </section>
+
         </main>
       </div>
     </div>
