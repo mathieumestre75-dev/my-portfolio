@@ -999,6 +999,362 @@ export default function NotoPage() {
             </div>
           </div>
 
+          {/* ════ OPPORTUNITY ═══════════════════════════════════════════════ */}
+          {/* framer-1p5r23d — col, gap:52, marginTop:100 from parent gap */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-1s780on — heading-and-label, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>Opportunity</p>
+
+              {/* framer-1nc5jif — heading + content block 1, col, gap:20 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h2 style={sectionH2}>People don&apos;t need more prompts, they need meaning.</h2>
+
+                {/* framer-3f8daf — content block 1, col, gap:6 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <h4 style={sectionH4}>Shifting from documentation to understanding</h4>
+                  <p style={bodyText}>
+                    Most journaling apps approximate insight with mood sliders and surface-level stats. I wanted something more nuanced — using AI to read between the lines and pull meaning straight from the writing itself. The aim was to reveal patterns and reflections that feel genuinely tied to who the user is.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* framer-10aef4m — visual block 1, col, gap:20, align-items:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-uh8qd3 — bg:#f7f7f7, pad:60, radius:8, border 1px rgba(0,0,0,0.08) */}
+              <div style={{
+                background: '#f7f7f7',
+                borderRadius: 8,
+                padding: 60,
+                border: '1px solid rgba(0,0,0,0.08)',
+              }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/KDxnIb9F0u7IO8msRJNuxwFTSM.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 1.2358292512246327, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* framer-13fr7nq — caption label */}
+              <p style={sectionLabel}>Feature matrix with direct competitors</p>
+            </div>
+
+            {/* framer-p00v80 — content block 2, col, gap:6 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h4 style={sectionH4}>Write to feel, not to finish.</h4>
+              <p style={bodyText}>
+                In addition to lacking meaningful self-insight, most competitor apps push engagement over genuine reflection. I wanted to create a space where insights emerge naturally, not because users are trying to hit a quota.
+              </p>
+            </div>
+
+            {/* framer-w8kvpi — visual block 2, col, gap:20, align-items:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-tzbqyk — bg:#f7f7f7, pad:40, radius:8, border 1px rgba(0,0,0,0.08) */}
+              <div style={{
+                background: '#f7f7f7',
+                borderRadius: 8,
+                padding: 40,
+                border: '1px solid rgba(0,0,0,0.08)',
+              }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/wpaaFPhiL5yof49Q66gTPxBajXY.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 1.5603900975243812, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* caption label */}
+              <p style={sectionLabel}>Positioning matrix</p>
+            </div>
+
+          </div>
+
+          {/* ════ IDEATION ═══════════════════════════════════════════════════ */}
+          {/* framer-cs137s — col, gap:52, marginTop:100 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-kwlz11 — heading-and-label, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>Ideation</p>
+              {/* framer-hlrv39 — heading, col, gap:20 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h2 style={sectionH2}>How might we turn every unfiltered writing into meaningful self-understanding?</h2>
+              </div>
+            </div>
+
+            {/* framer-d0i1i5 — key-insights, col, gap:24 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <h5 style={flowLabel}>HIGH-LEVEL GOALS</h5>
+
+              {/* framer-1cc90it — col, gap:10 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+
+                {/* framer-1a5rery — insight block 1, col, gap:10 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {/* framer-1fnia68 — row, gap:19, align-items:flex-start */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        <span style={{ color: 'rgba(0,0,0,0.45)' }}>I want this app to feel </span>natural, intuitive, and second nature.
+                      </h6>
+                    </div>
+                  </div>
+                  {/* framer-1xekwnr — row, gap:19 */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        <span style={{ color: 'rgba(0,0,0,0.45)' }}>I want people to feel </span>fully present, without distractions or obstacles.
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+                {/* framer-uf5sra — insight block 2, col, gap:10 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {/* framer-1fup30 */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        <span style={{ color: 'rgba(0,0,0,0.45)' }}>I want people to write </span>freely and honestly, without needing to make it perfect.
+                      </h6>
+                    </div>
+                  </div>
+                  {/* framer-1eyt74 */}
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 19, width: '100%', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 13, height: 13, flexShrink: 0, paddingTop: 11, overflow: 'visible' }}>
+                      <svg viewBox="0 0 6 10" width={6} height={10} overflow="visible" fill="transparent" style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+                        <path d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552" strokeWidth="1.26" stroke="rgba(0,0,0,0.35)" />
+                      </svg>
+                    </div>
+                    <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <h6 style={{ fontFamily: SANS, fontSize: 16, fontWeight: 500, lineHeight: '1.4em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                        <span style={{ color: 'rgba(0,0,0,0.45)' }}>I want people to discover </span>what matters most to them — fluidly and flexibly.
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* framer-1tqvzlq — content, col, gap:6 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h4 style={sectionH4}>Exploring what our app should have</h4>
+              <p style={bodyText}>
+                My teammate and I whiteboarded different ways to surface insights — from abstract, build-up visuals (dots tracking progress or patterns) to prescriptive snippets and direct feedback. This helped us realize that each idea held a different tone and that we wanted to evoke one that felt insightful but not like it boxed you in.
+              </p>
+            </div>
+
+            {/* framer-1pylx54 — content-wrapper, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              {/* framer-18xbyw8 — visual, row, gap:10, pad:10, bg:#f7f7f7, radius:8, border */}
+              <div style={{
+                display: 'flex', flexDirection: 'row', gap: 10,
+                padding: 10,
+                background: '#f7f7f7',
+                borderRadius: 8,
+                border: '1px solid rgba(0,0,0,0.08)',
+              }}>
+                {/* framer-1am0gu — flex:1, radius:6px, overflow:hidden */}
+                <div style={{ flex: '1 0 0', borderRadius: 6, overflow: 'hidden' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://framerusercontent.com/images/4XdueX0HdTVsRUYgDu86qyeTiY4.png"
+                    alt=""
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+                {/* framer-1k73t79 — flex:1, radius:6px, overflow:hidden */}
+                <div style={{ flex: '1 0 0', borderRadius: 6, overflow: 'hidden' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://framerusercontent.com/images/YFyHIcZNMivgRq4Xgx6SVIqfCo.png"
+                    alt=""
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* framer-23mot0 — content, col, gap:6 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h4 style={sectionH4}>We landed on ideas that were essential to our goals.</h4>
+              <p style={bodyText}>
+                From our research, we knew users wanted to understand not just what they were thinking, but when and why. This guided our selection of signature experiences to develop further:
+              </p>
+            </div>
+
+            {/* framer-1amafnv — feature cards grid, col, gap:16 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+              {/* framer-1pxvhad — row 1, gap:16 */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+                {/* framer-eegxmx — card 1, flex:1, col, gap:10 */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  {/* framer-z31sfp — aspect-ratio:1.19048, radius:8, border */}
+                  <div style={{ width: '100%', aspectRatio: 1.19048, borderRadius: 8, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://framerusercontent.com/images/5xjBmzJKZKlLtFDswBBqT6d2Rjo.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                  <p style={sectionLabel}>Simple Entry Page</p>
+                </div>
+                {/* framer-tgt7nh — card 2, flex:1, col, gap:10 */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  <div style={{ width: '100%', aspectRatio: 1.19048, borderRadius: 8, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://framerusercontent.com/images/rJgA7ZHTcuzasxO6CH4xWUSK8.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                  <p style={sectionLabel}>Themes Timeline</p>
+                </div>
+              </div>
+
+              {/* framer-1m0t3lw — row 2, gap:16 */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+                {/* framer-1qcbh84 — card 3, flex:1, col, gap:10 */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  <div style={{ width: '100%', aspectRatio: 1.19048, borderRadius: 8, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://framerusercontent.com/images/pPgId4Rmqg0GJjC6dl53y97Ho4.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                  <p style={sectionLabel}>Themes &amp; Patterns</p>
+                </div>
+                {/* framer-1qltxkh — card 4, flex:1, col, gap:10 */}
+                <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                  <div style={{ width: '100%', aspectRatio: 1.19048, borderRadius: 8, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="https://framerusercontent.com/images/dWy6vprWOK3i8iO3FnNv7yVfB6Y.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </div>
+                  <p style={sectionLabel}>High-level Insights</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ════ UX STRATEGY ════════════════════════════════════════════════ */}
+          {/* framer-cw2gqo — col, gap:52, marginTop:100 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-b0g9k2 — heading-and-label, col, gap:30, ai:flex-start */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>UX Strategy</p>
+              {/* framer-ql3mz1 — heading, col, gap:20, ai:center */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h2 style={sectionH2}>Defining the Noto experience.</h2>
+                {/* framer-5jp3nd — content block 1, col, gap:6, ai:center */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <h4 style={sectionH4}>An unbiased but supportive space</h4>
+                  <p style={bodyText}>
+                    Too many AI tools act like yes-men, validating rather than offering honest reflection. We made a deliberate decision not to make a personal therapist, but instead a quiet observer that surfaces patterns as they are, leaving the mental-health realm untouched. Instead, we wanted Noto to simply reflect their true selves, whatever may show up.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* framer-1rjn2dd — visual-1, col, gap:20, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-jrco7v — #f7f7f7, pad:30px 20px 34px, radius:8, border */}
+              <div style={{ width: '100%', background: '#f7f7f7', borderRadius: 8, padding: '30px 20px 34px', border: '1px solid rgba(0,0,0,0.08)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/morTEExmS0An4qNK3U9Cd4CETk.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 6640 / 3396, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* framer-3ir36m — caption, w:auto, centers via parent ai:center */}
+              <p style={sectionLabel}>UX pyramid</p>
+            </div>
+
+            {/* framer-kj1ggh — content block 2, col, gap:6 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h4 style={sectionH4}>A purposefully stripped-down, minimal interface</h4>
+              <p style={bodyText}>
+                Personally, I found many existing journaling apps overwhelming, which is why I kept returning to my Notes app. To recreate that same quiet space you want to return to, we designed a dead simple entry interface.
+              </p>
+              {/* blank line between paragraphs — empty p matching 0.97rem line-height */}
+              <p style={{ ...bodyText, visibility: 'hidden' as const }}>&nbsp;</p>
+              <p style={bodyText}>
+                For the insights and themes, we knew we wanted to capture the feeling — so soft shapes, subtle blurs, and generous white space to keep the mind clear and calm.
+              </p>
+            </div>
+
+            {/* framer-1mbryby — visual-2, col, gap:20, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-8xbaz5 — #f7f7f7, pad:10px, radius:8, border */}
+              <div style={{ width: '100%', background: '#f7f7f7', borderRadius: 8, padding: 10, border: '1px solid rgba(0,0,0,0.08)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/JYA0UAv7uHxwoe3dOvjHvF7lmCc.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 3580 / 1710, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* framer-ghzpe2 — caption */}
+              <p style={sectionLabel}>Moodboard</p>
+            </div>
+
+            {/* framer-jfjk1h — visual-3 (text-only), col, gap:20 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {/* framer-bjyto7 — content, col, gap:6 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>Mirroring inner reflection with spatial navigation</h4>
+                <p style={bodyText}>
+                  To hide clutter and keep users fully immersed on each layer, we decided to have a spatial zoom interaction to change tabs. This way, each layer feels like a &ldquo;depth of self&rdquo;: from the surface-level personality to the raw inner monologue:
+                </p>
+              </div>
+            </div>
+
+            {/* framer-paglm4 — visual-4, col, gap:20, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-16cnwll — #fff, pad:30px, radius:8, border */}
+              <div style={{ width: '100%', background: '#fff', borderRadius: 8, padding: 30, border: '1px solid rgba(0,0,0,0.08)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/Zg5OKg79gRWqQ4mPir93BlOFfPk.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 1124 / 632, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* framer-765c36 — caption */}
+              <p style={sectionLabel}>Mental Model</p>
+            </div>
+
+            {/* framer-fpv9nm — visual-5, col, gap:20, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+              {/* framer-6lutwi — #fafafa, pad:30px 20px 34px, radius:8, border */}
+              <div style={{ width: '100%', background: '#fafafa', borderRadius: 8, padding: '30px 20px 34px', border: '1px solid rgba(0,0,0,0.08)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://framerusercontent.com/images/19oa8ysUL9f8xR2FVIZtK5cjoOQ.png"
+                  alt=""
+                  style={{ width: '100%', aspectRatio: 1265 / 385, objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {/* framer-agsepg — caption */}
+              <p style={sectionLabel}>Navigation Layers</p>
+            </div>
+
+          </div>
+
         </main>
       </div>
     </div>
