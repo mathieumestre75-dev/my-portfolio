@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTheme } from 'next-themes'
 import { homeProjects, type HomeProject } from '@/lib/projects'
 import { useView } from '@/app/providers'
 import GridBackground from '@/components/GridBackground'
@@ -11,11 +12,19 @@ import HomeTopBar from '@/components/HomeTopBar'
 import TextBlock from '@/components/TextBlock'
 import PreviewCard from '@/components/PreviewCard'
 import FloatingCard from '@/components/FloatingCard'
+import StarFieldDots from '@/components/StarFieldDots'
+import ShootingStars from '@/components/ShootingStars'
+import CursorTrail from '@/components/CursorTrail'
+
 export default function Home() {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
   const hoveredProject: HomeProject | null = hoveredSlug ? (homeProjects.find(p => p.slug === hoveredSlug) ?? null) : null
   const { view } = useView()
   const isOrganized = view === 'organized'
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const isDark = mounted && resolvedTheme === 'dark'
 
   return (
     <main
@@ -39,23 +48,27 @@ export default function Home() {
         }}
       >
         <GridBackground />
+        <StarFieldDots />
+        <ShootingStars />
 
-        {/* Top color wash — 101px */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 101,
-            background: 'linear-gradient(180deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
+        {/* Top color wash — light mode only */}
+        {!isDark && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 101,
+              background: 'linear-gradient(180deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%)',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}
+          />
+        )}
 
         <DotParticles />
-<RightFade />
+        <RightFade />
         <HomeTopBar />
 
         {/* Left panel */}
@@ -100,6 +113,7 @@ export default function Home() {
         </div>
 
       </div>
+      <CursorTrail />
     </main>
   )
 }
