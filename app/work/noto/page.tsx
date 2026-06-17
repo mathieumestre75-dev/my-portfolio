@@ -1355,6 +1355,127 @@ export default function NotoPage() {
 
           </div>
 
+          {/* ════ NEXT STEPS ═════════════════════════════════════════════════ */}
+          {/* framer-11xfupa — col, gap:30, marginTop:100 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 100 }}>
+
+            {/* framer-fo9447 — heading-and-label, col, gap:30, ai:flex-start */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>Next Steps</p>
+              <h2 style={sectionH2}>What I&apos;d do next</h2>
+            </div>
+
+            {/* framer-1a1sno5 — content-wrapper, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+
+              {/* framer-71g87e — content 1, col, gap:6 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>Improve interactions and feature design</h4>
+                <p style={bodyText}>
+                  Juggling three other projects limited the time I wish I had to refine the interactions and the UI. Areas like the searchability of entries + timeline events interaction still need more care. If I revisit this project I&apos;d definitely polish the experience by thinking on a larger scale (e.g. more notes, more themes, etc.) to improve usability — or even make transformative changes to cater to a more general audience.
+                </p>
+              </div>
+
+              {/* framer-1pvlqt7 — content 2, col, gap:6 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>Add an Import Notes Feature</h4>
+                <p style={bodyText}>
+                  Many people already have years of notes in other apps, giving them a wealth of material to generate insights from. To allow users to leverage their existing notes and adopt Noto more easily, I&apos;d build import tools that seamlessly integrate previous entries into the new system.
+                </p>
+              </div>
+
+              {/* framer-1niouhd — content 3, col, gap:6 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>Develop it (in the works)</h4>
+                <p style={bodyText}>
+                  This is a tool I&apos;d love to use myself. With vibe-coding lowering the barrier from design to build, David and I hope to make it a reality one day.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          {/* ════ LOOKING BACK ═══════════════════════════════════════════════ */}
+          {/* framer-j58py0 — col, gap:52, marginTop:100 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+
+            {/* framer-8yg9yo → framer-6f9dqj — heading-and-label, col, gap:30 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <p style={sectionLabel}>Looking back</p>
+              <h2 style={sectionH2}>What I learned from Noto.</h2>
+            </div>
+
+            {/* framer-othznv — comment/blockquote, row, gap:16, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              {/* framer-9bbg2m — accent bar, width:3, alignSelf:stretch, rgba(0,0,0,0.15) */}
+              <div style={{ width: 3, alignSelf: 'stretch', background: 'rgba(0,0,0,0.15)', flexShrink: 0 }} />
+              {/* pull-quote — P22 Mackinac Medium, ×1.2=19.2px, rgba(0,0,0,0.45) */}
+              <h2 style={{ fontFamily: SERIFM, fontSize: 19.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
+                I&apos;m grateful to have ended with a deeply personal project, &amp; it couldn&apos;t have been done without my amazing co-designer and the 2025 IxD cohort :-)
+              </h2>
+            </div>
+
+            {/* framer-lmxa3q — label-and-icon, row, gap:10, ai:center */}
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+              <h5 style={flowLabel}>WHAT I LEARNED</h5>
+            </div>
+
+            {/* framer-1qx5jqb — supporting-text, col, gap:40 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+
+              {/* framer-1ddybiy — item 1, row, gap:60, ai:flex-start */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
+                {/* framer-l1bw4q — h3 col, w:28%, flex:none */}
+                <div style={{ width: '28%', flexShrink: 0 }}>
+                  <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                    Bringing a product mindset
+                  </h3>
+                </div>
+                {/* framer-1xjxehs — p col, flex:1 */}
+                <div style={{ flex: '1 0 0' }}>
+                  <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
+                    While this was just a school project, I approached it like a product I&apos;d pitch. Understanding the market and defining the mission gave me a taste of designing with stakes, and how that framing sharpens clarity and impact.
+                  </p>
+                </div>
+              </div>
+
+              {/* framer-v7lf2p — divider, 1px rgba(0,0,0,0.08) */}
+              <div style={{ height: 1, width: '100%', background: 'rgba(0,0,0,0.08)' }} />
+
+              {/* framer-rq31m → framer-xgr962 — item 2, row, gap:60, ai:flex-start */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
+                <div style={{ width: '28%', flexShrink: 0 }}>
+                  <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                    Designing for people, not just function
+                  </h3>
+                </div>
+                <div style={{ flex: '1 0 0' }}>
+                  <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
+                    I believe at the core, people crave tools that feel made for them, not just function, but experiences that are intuitive and personal. This project reminded me that designing for humans starts with honoring that simple, human need.
+                  </p>
+                </div>
+              </div>
+
+              {/* framer-se6ect — divider */}
+              <div style={{ height: 1, width: '100%', background: 'rgba(0,0,0,0.08)' }} />
+
+              {/* framer-10up296 — item 3, row, gap:60, ai:flex-start */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
+                <div style={{ width: '28%', flexShrink: 0 }}>
+                  <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'rgba(0,0,0,0.75)', margin: 0 }}>
+                    Using the free will to just create stuff
+                  </h3>
+                </div>
+                <div style={{ flex: '1 0 0' }}>
+                  <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
+                    Much of this project felt like I was designing for myself, and in that freedom, I discovered how liberating it is to simply make. In many ways, this project became a reminder that the best work often comes when you give yourself permission to create without constraints — a fitting way to close out my time in school.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </main>
       </div>
     </div>
