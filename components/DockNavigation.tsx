@@ -173,7 +173,7 @@ export default function DockNavigation() {
           border: '1px solid var(--color-dock-border)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          boxShadow: '0px 5px 25px 3px rgba(79, 44, 9, 0.02)',
+          boxShadow: 'var(--dock-shadow)',
           padding: '10px 14px',
           display: 'flex',
           flexDirection: 'row',

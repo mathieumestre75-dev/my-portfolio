@@ -76,7 +76,7 @@ export default function FloatingCard({ project, positionStyle, onHover, isGrid =
           width: '100%',
           height: '100%',
           transform: isHovered ? `rotate(${isGrid && gridHoverRotate !== undefined ? gridHoverRotate : hoverRotate}deg)` : 'none',
-          boxShadow: isHovered ? '0 8px 30px rgba(0,0,0,0.12)' : 'none',
+          boxShadow: isHovered ? 'var(--card-shadow-hover)' : 'none',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
         }}
       >

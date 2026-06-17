@@ -76,31 +76,34 @@
   --accent-blue: #0059ff;
   --accent-orange: rgb(255, 95, 51);
   --card-shadow: rgba(79, 44, 9, 0.06) 0px 5px 25px 3px;
+  --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
   --dock-shadow: rgba(79, 44, 9, 0.02) 0px 5px 25px 3px;
   --tag-bg: rgba(0, 0, 0, 0.06);
 }
 
 .dark {
-  --color-page-bg:           #191413;
-  --color-white-page:        #191413;
-  --color-inner-bg:          #191413;
+  --color-page-bg:           transparent;
+  --color-white-page:        #0a0a0a;
+  --color-inner-bg:          transparent;
   --color-text-primary:      rgba(255, 255, 255, 0.85);
   --color-text-secondary:    rgba(255, 255, 255, 0.45);
   --color-border:            rgba(255, 255, 255, 0.08);
-  --color-music-pill-bg:     #ffffff08;
-  --color-music-pill-border: rgba(255, 255, 255, 0.05);
+  --color-music-pill-bg:     rgba(255, 255, 255, 0.06);
+  --color-music-pill-border: rgba(255, 255, 255, 0.08);
   --color-music-divider:     rgba(255, 255, 255, 0.15);
-  --color-card-bg:           rgba(255, 255, 255, 0.03);
-  --color-card-border:       rgba(0, 0, 0, 0.03);
+  --color-card-bg:           rgba(255, 255, 255, 0.04);
+  --color-card-border:       rgba(255, 255, 255, 0.08);
   --color-nav-link:          rgb(255, 255, 255);
   --color-status-text:       rgba(255, 255, 255, 0.45);
   /* right-fade-start unused in dark mode — RightFade is hidden */
   --color-icon:              rgba(255, 255, 255, 0.75);
   --color-text-faint:        rgba(255, 255, 255, 0.25);
-  --color-dock-bg:           rgba(25, 20, 19, 0.88);
+  --color-dock-bg:           rgba(255, 255, 255, 0.06);
   --color-dock-border:       rgba(255, 255, 255, 0.1);
   --color-dock-divider:      rgba(255, 255, 255, 0.1);
-  --color-preview-bg:        rgba(255, 255, 255, 0.05);
+  --color-preview-bg:        rgba(255, 255, 255, 0.04);
+  --color-star-stroke:       rgba(255, 255, 255, 0.45);
+  --color-shooting-star:     rgba(252, 221, 106, 0.85);
 
   /* Legacy tokens */
   --bg: rgb(8, 10, 24);
@@ -111,8 +114,36 @@
   --surface: rgba(255, 255, 255, 0.05);
   --surface-solid: rgb(20, 25, 35);
   --tag-bg: rgba(255, 255, 255, 0.08);
-  --card-shadow: rgba(0, 0, 0, 0.3) 0px 5px 25px 3px;
-  --dock-shadow: rgba(0, 0, 0, 0.2) 0px 5px 25px 3px;
+  --card-shadow: none;
+  --card-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.45);
+  --dock-shadow: none;
+}
+
+.dark body {
+  background-color: rgb(10, 10, 10);
+  background-image: linear-gradient(
+    rgb(10, 10, 10) 0%,
+    rgb(44, 49, 77) 60.348%,
+    rgb(81, 81, 112) 100%
+  );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+@keyframes shooting-star {
+  0%   { transform: translate3d(0, 0, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+  3%   { opacity: 1; }
+  16%  { opacity: 1; }
+  20%  { transform: translate3d(110vw, 100vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+  100% { transform: translate3d(110vw, 100vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+}
+
+@keyframes shooting-star-alt {
+  0%   { transform: translate3d(0, 0, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+  4%   { opacity: 1; }
+  15%  { opacity: 1; }
+  19%  { transform: translate3d(95vw, 110vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+  100% { transform: translate3d(95vw, 110vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
 }
 
 @theme inline {
