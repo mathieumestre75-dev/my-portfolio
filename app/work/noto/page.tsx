@@ -1357,7 +1357,7 @@ export default function NotoPage() {
 
           {/* ════ NEXT STEPS ═════════════════════════════════════════════════ */}
           {/* framer-11xfupa — col, gap:30, marginTop:100 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 100 }}>
+          <div id="next-steps" style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 100 }}>
 
             {/* framer-fo9447 — heading-and-label, col, gap:30, ai:flex-start */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
@@ -1397,7 +1397,7 @@ export default function NotoPage() {
 
           {/* ════ LOOKING BACK ═══════════════════════════════════════════════ */}
           {/* framer-j58py0 — col, gap:52, marginTop:100 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+          <div id="what-i-learned" style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
 
             {/* framer-8yg9yo → framer-6f9dqj — heading-and-label, col, gap:30 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
@@ -1410,9 +1410,9 @@ export default function NotoPage() {
               {/* framer-9bbg2m — accent bar, width:3, alignSelf:stretch, rgba(0,0,0,0.15) */}
               <div style={{ width: 3, alignSelf: 'stretch', background: 'rgba(0,0,0,0.15)', flexShrink: 0 }} />
               {/* pull-quote — P22 Mackinac Medium, ×1.2=19.2px, rgba(0,0,0,0.45) */}
-              <h2 style={{ fontFamily: SERIFM, fontSize: 19.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
+              <p style={{ fontFamily: SERIFM, fontSize: 19.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.04em', color: 'rgba(0,0,0,0.45)', margin: 0 }}>
                 I&apos;m grateful to have ended with a deeply personal project, &amp; it couldn&apos;t have been done without my amazing co-designer and the 2025 IxD cohort :-)
-              </h2>
+              </p>
             </div>
 
             {/* framer-lmxa3q — label-and-icon, row, gap:10, ai:center */}
