@@ -40,7 +40,7 @@ function buildStars(count: number): Star[] {
       width: 70 + Math.floor(Math.random() * 91),
       duration: 9 + Math.random() * 5,
       delay,
-      short: Math.random() < 0.5,
+      short: true,
     })
   }
   return stars

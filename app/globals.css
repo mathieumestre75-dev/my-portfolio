@@ -68,6 +68,20 @@
   --color-about-card-bg:     rgba(255, 255, 255, 0.1);
   --color-photo-border:      rgba(168, 168, 168, 0.4);
 
+  /* Noto case-study tokens (light values match existing hardcoded literals) */
+  --color-noto-body:         rgba(0, 0, 0, 0.6);
+  --color-noto-accent:       rgba(0, 0, 0, 0.15);
+  --color-noto-tag-bg:       rgba(65, 70, 77, 0.03);
+  --color-noto-card:         #f7f7f7;
+  --color-noto-card-strong:  #fff;
+  --color-noto-card-soft:    #fafafa;
+  --color-noto-card-image:   #f4f4f4;
+  --color-noto-card-blue:    #ebf3ff;
+  --color-noto-card-pink:    #fff7ff;
+  --noto-top-wash:           linear-gradient(180deg, rgba(217,235,252,0.23) 0%, rgba(255,235,242,0.16) 27.9%, rgba(255,249,242,0.26) 62.25%, rgba(252,252,252,0) 100%);
+  --noto-bottom-wash:        linear-gradient(0deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%);
+  --noto-bullet-arrow:       rgba(255, 0, 0, 0.588);
+
   /* Legacy tokens kept for inner pages */
   --bg: #f1f5fb;
   --fg: rgba(0, 0, 0, 0.75);
@@ -108,6 +122,20 @@
   --color-preview-bg:        rgba(255, 255, 255, 0.04);
   --color-about-card-bg:     rgba(255, 255, 255, 0.04);
   --color-photo-border:      rgba(255, 255, 255, 0.3);
+
+  /* Noto case-study tokens — dark variants */
+  --color-noto-body:         rgba(255, 255, 255, 0.8);
+  --color-noto-accent:       rgba(255, 255, 255, 0.15);
+  --color-noto-tag-bg:       rgba(255, 255, 255, 0.06);
+  --color-noto-card:         rgba(255, 255, 255, 0.04);
+  --color-noto-card-strong:  rgba(255, 255, 255, 0.04);
+  --color-noto-card-soft:    rgba(255, 255, 255, 0.04);
+  --color-noto-card-image:   rgba(255, 255, 255, 0.04);
+  --color-noto-card-blue:    rgba(135, 174, 240, 0.07);
+  --color-noto-card-pink:    rgba(240, 200, 240, 0.07);
+  --noto-top-wash:           none;
+  --noto-bottom-wash:        none;
+  --noto-bullet-arrow:       rgba(220, 100, 80, 0.7);
   --color-star-stroke:       rgba(255, 255, 255, 0.45);
   --color-shooting-star:     rgba(252, 221, 106, 0.85);
 
@@ -186,6 +214,18 @@
 .dark .about-signature {
   filter: invert(1);
 }
+
+/* Noto dark mode — white card override for 3 specific media containers */
+.dark .noto-white-card {
+  background: white !important;
+  border-radius: 12px !important;
+}
+
+/* Noto dark mode — hide the viewport-fixed gradient layer so the
+   page-scrollable gradient (rendered inside the noto outer div) is the
+   only dark background. Scoped to noto via body[data-noto] selector
+   that the noto page sets on mount. */
+body[data-noto="dark"] .dark-bg-fixed-layer { display: none; }
 
 @theme inline {
   --font-sans: var(--font-caveat);
