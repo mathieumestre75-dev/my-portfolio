@@ -105,6 +105,36 @@
   --color-star-stroke:       rgba(255, 255, 255, 0.45);
   --color-shooting-star:     rgba(252, 221, 106, 0.85);
 
+  /* === Coherent dark-mode design tokens ===
+     Drives every dark-mode surface across homepage, /work, /about, and shared
+     components. Component files should consume these names only — no hardcoded
+     dark colors. */
+
+  /* Backgrounds — three stops + a JS-driven "current" that the scroll listener
+     interpolates between mid and warm as the user scrolls down. */
+  --color-bg-top:            rgb(10, 10, 10);
+  --color-bg-mid:            rgb(44, 49, 77);
+  --color-bg-warm:           rgb(96, 70, 84);
+  --color-bg-current:        var(--color-bg-mid);
+
+  /* Text — three semantic tiers + an active state for navigation. */
+  --color-text-heading:      rgb(255, 255, 255);
+  --color-text-body:         rgba(255, 255, 255, 0.60);
+  --color-text-muted:        rgba(255, 255, 255, 0.35);
+  --color-text-nav-active:   rgba(255, 255, 255, 0.85);
+
+  /* Surfaces — cards, chips, dividers, dock. */
+  --color-surface-card:      rgba(255, 255, 255, 0.04);
+  --color-surface-card-border: rgba(255, 255, 255, 0.08);
+  --color-surface-chip:      rgba(255, 255, 255, 0.06);
+  --color-surface-chip-border: rgba(255, 255, 255, 0.10);
+  --color-surface-divider:   rgba(255, 255, 255, 0.08);
+  --color-surface-dock:      rgba(255, 255, 255, 0.06);
+  --color-surface-dock-border: rgba(255, 255, 255, 0.10);
+
+  /* Accent — warm yellow from the handwritten signatures in the screenshots. */
+  --color-accent-warm:       #E8D279;
+
   /* Legacy tokens */
   --bg: rgb(8, 10, 24);
   --fg: rgba(255, 255, 255, 0.85);
@@ -120,11 +150,14 @@
 }
 
 .dark body {
-  background-color: rgb(10, 10, 10);
+  background-color: rgb(8, 8, 16);
   background-image: linear-gradient(
-    rgb(10, 10, 10) 0%,
-    rgb(44, 49, 77) 60.348%,
-    rgb(81, 81, 112) 100%
+    to bottom,
+    rgb(8, 8, 16) 0%,
+    rgb(18, 20, 42) 40%,
+    rgb(32, 30, 55) 75%,
+    rgb(48, 44, 52) 92%,
+    rgb(52, 48, 44) 100%
   );
   background-attachment: fixed;
   background-repeat: no-repeat;

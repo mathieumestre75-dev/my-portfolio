@@ -1,62 +1,52 @@
 'use client'
 
-import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 
-type Streak = {
-  top: string
-  left: string
-  width: number
-  height: number
-  rotate: number
-  duration: number
-  delay: number
-  animation: 'shooting-star' | 'shooting-star-alt'
-}
+type Streak = { top: string; left: string; delay: number }
 
+// Scattered across the full upper half of the viewport; delays spread 0–12s.
 const STREAKS: Streak[] = [
-  { top: '5%',  left: '-5%',  width: 1.5, height: 100, rotate: -45, duration: 11, delay: 0,  animation: 'shooting-star' },
-  { top: '-8%', left: '15%',  width: 1,   height: 90,  rotate: -45, duration: 13, delay: 3,  animation: 'shooting-star-alt' },
-  { top: '12%', left: '-10%', width: 2,   height: 120, rotate: -45, duration: 10, delay: 6,  animation: 'shooting-star' },
-  { top: '-5%', left: '40%',  width: 1,   height: 80,  rotate: -45, duration: 14, delay: 9,  animation: 'shooting-star-alt' },
+  { top: '15%', left: '20%', delay: 0    },
+  { top: '5%',  left: '45%', delay: 2.4  },
+  { top: '25%', left: '70%', delay: 4.8  },
+  { top: '10%', left: '8%',  delay: 7.2  },
+  { top: '35%', left: '55%', delay: 9.6  },
+  { top: '18%', left: '80%', delay: 12   },
 ]
 
 export default function ShootingStars() {
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-
-  if (!mounted || resolvedTheme !== 'dark') return null
-
   return (
-    <div
-      aria-hidden
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1,
-        pointerEvents: 'none',
-        overflow: 'hidden',
-      }}
-    >
+    <>
       {STREAKS.map((s, i) => (
-        <div
+        <motion.div
           key={i}
+          aria-hidden
+          initial={{ x: 0, y: 0 }}
+          animate={{ x: 600, y: 600 }}
+          transition={{
+            duration: 1.8,
+            ease: 'easeIn',
+            delay: s.delay,
+            repeat: Infinity,
+            repeatType: 'loop',
+            repeatDelay: 2.4,
+          }}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: s.top,
             left: s.left,
-            width: s.width,
-            height: s.height,
+            width: 1.5,
+            height: 180,
             background:
-              'linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%)',
-            opacity: 0,
-            transformOrigin: 'center center',
-            animation: `${s.animation} ${s.duration}s ${s.delay}s linear infinite`,
-            ['--streak-rotate' as string]: `${s.rotate}deg`,
+              'linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.3) 40%, transparent)',
+            borderRadius: 999,
+            rotate: '-45deg',
+            opacity: 1,
+            zIndex: i % 2 === 0 ? 0 : 20,
+            pointerEvents: 'none',
           }}
         />
       ))}
-    </div>
+    </>
   )
 }

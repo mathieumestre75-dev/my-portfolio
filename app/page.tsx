@@ -99,7 +99,7 @@ export default function Home() {
           width: 820,
           height: 560,
           overflow: 'visible',
-          zIndex: 5,
+          zIndex: 10,
           pointerEvents: 'auto',
         }}>
           {/* Noto — front dominant card, top-left of cluster → grid bottom-left */}

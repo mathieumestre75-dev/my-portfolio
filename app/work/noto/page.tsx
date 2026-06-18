@@ -107,10 +107,26 @@ const DIVIDER = <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', margin:
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function NotoPage() {
-  const [activeSection, setActiveSection] = useState('overview')
+  const [activeSection, setActiveSection] = useState('')
   const [hoveredC1, setHoveredC1] = useState<number | null>(null)
   const [hoveredC2, setHoveredC2] = useState<number | null>(null)
   const [contactVisible, setContactVisible] = useState(false)
+
+  useEffect(() => {
+    function updateActive() {
+      let current = ''
+      for (const { id } of NAV) {
+        // For overview: wait until the hero video reaches the top (title has scrolled past)
+        const triggerEl = id === 'overview'
+          ? document.querySelector<HTMLElement>('#overview video') ?? document.getElementById(id)
+          : document.getElementById(id)
+        if (triggerEl && triggerEl.getBoundingClientRect().top <= 0) current = id
+      }
+      setActiveSection(current)
+    }
+    window.addEventListener('scroll', updateActive, { passive: true })
+    return () => window.removeEventListener('scroll', updateActive)
+  }, [])
 
   // Reveal contact footer only when user has scrolled to the bottom of the page
   useEffect(() => {
@@ -121,18 +137,6 @@ export default function NotoPage() {
     check()
     window.addEventListener('scroll', check, { passive: true })
     return () => window.removeEventListener('scroll', check)
-  }, [])
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id) }),
-      { rootMargin: '-20% 0px -75% 0px', threshold: 0 },
-    )
-    NAV.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
   }, [])
 
   function scrollTo(id: string) {
