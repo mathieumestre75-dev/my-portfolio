@@ -1,51 +1,98 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useTheme } from 'next-themes'
+import { useEffect, useMemo, useState } from 'react'
 
-type Streak = { top: string; left: string; delay: number }
+type Star = {
+  id: number
+  topPct: number
+  leftPct: number
+  width: number
+  duration: number
+  delay: number
+  short: boolean
+}
 
-// Scattered across the full upper half of the viewport; delays spread 0–12s.
-const STREAKS: Streak[] = [
-  { top: '15%', left: '20%', delay: 0    },
-  { top: '5%',  left: '45%', delay: 2.4  },
-  { top: '25%', left: '70%', delay: 4.8  },
-  { top: '10%', left: '8%',  delay: 7.2  },
-  { top: '35%', left: '55%', delay: 9.6  },
-  { top: '18%', left: '80%', delay: 12   },
-]
+const COUNT = 13
+const MIN_DIST = 7 // % units (Euclidean across mixed top/left axes)
+
+function buildStars(count: number): Star[] {
+  const stars: Star[] = []
+  for (let attempt = 0; attempt < 3000 && stars.length < count; attempt++) {
+    const topPct = -5 + Math.random() * 35
+    const leftPct = -15 + Math.random() * 30
+    const ok = stars.every((s) => {
+      const dt = s.topPct - topPct
+      const dl = s.leftPct - leftPct
+      return Math.hypot(dt, dl) >= MIN_DIST
+    })
+    if (!ok) continue
+    const idx = stars.length
+    // First two stars get a negative delay so the animation is already mid-flight
+    // when dark mode is toggled — visible immediately.
+    const delay = idx < 2
+      ? -(2 + Math.random() * 3)        // -2s to -5s
+      : Math.random() * 20              // rest: random 0–20s
+    stars.push({
+      id: idx,
+      topPct,
+      leftPct,
+      width: 70 + Math.floor(Math.random() * 91),
+      duration: 9 + Math.random() * 5,
+      delay,
+      short: Math.random() < 0.5,
+    })
+  }
+  return stars
+}
 
 export default function ShootingStars() {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  const stars = useMemo(() => buildStars(COUNT), [])
+
+  if (!mounted || resolvedTheme !== 'dark') return null
+
   return (
     <>
-      {STREAKS.map((s, i) => (
-        <motion.div
-          key={i}
+      {stars.map((s) => (
+        <div
+          key={s.id}
           aria-hidden
-          initial={{ x: 0, y: 0 }}
-          animate={{ x: 600, y: 600 }}
-          transition={{
-            duration: 1.8,
-            ease: 'easeIn',
-            delay: s.delay,
-            repeat: Infinity,
-            repeatType: 'loop',
-            repeatDelay: 2.4,
-          }}
+          className="shooting-star"
           style={{
             position: 'fixed',
-            top: s.top,
-            left: s.left,
-            width: 1.5,
-            height: 180,
+            top: `${s.topPct}%`,
+            left: `${s.leftPct}%`,
+            width: s.width,
+            height: 1,
+            borderRadius: 2,
             background:
-              'linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.3) 40%, transparent)',
-            borderRadius: 999,
-            rotate: '-45deg',
-            opacity: 1,
-            zIndex: i % 2 === 0 ? 0 : 20,
+              'linear-gradient(270deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%)',
+            opacity: 0,
+            transform: 'translate(0, 0) rotate(30deg)',
+            transformOrigin: 'center',
+            willChange: 'transform',
             pointerEvents: 'none',
+            zIndex: 0,
+            animation: `${s.short ? 'shooting-star-fly-short' : 'shooting-star-fly'} ${s.duration.toFixed(2)}s linear ${s.delay.toFixed(2)}s infinite`,
           }}
-        />
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              width: 2,
+              borderRadius: 1,
+              background: 'rgba(255, 255, 255, 0.2)',
+              boxShadow: 'rgba(255, 255, 255, 0.6) 0px 0px 6px 1px',
+            }}
+          />
+        </div>
       ))}
     </>
   )

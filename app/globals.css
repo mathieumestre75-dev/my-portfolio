@@ -42,6 +42,7 @@
 }
 
 :root {
+  --card-backdrop-blur:      5px;
   --color-page-bg:           rgb(252, 252, 252);
   --color-white-page:        rgb(255, 255, 255);
   --color-inner-bg:          rgb(252, 252, 252);
@@ -82,6 +83,7 @@
 }
 
 .dark {
+  --card-backdrop-blur:      3.5px;
   --color-page-bg:           transparent;
   --color-white-page:        #0a0a0a;
   --color-inner-bg:          transparent;
@@ -150,33 +152,31 @@
 }
 
 .dark body {
-  background-color: rgb(8, 8, 16);
-  background-image: linear-gradient(
-    to bottom,
-    rgb(8, 8, 16) 0%,
-    rgb(18, 20, 42) 40%,
-    rgb(32, 30, 55) 75%,
-    rgb(48, 44, 52) 92%,
-    rgb(52, 48, 44) 100%
-  );
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-color: rgb(25, 20, 19);
+  background-image: none;
 }
 
-@keyframes shooting-star {
-  0%   { transform: translate3d(0, 0, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
-  3%   { opacity: 1; }
-  16%  { opacity: 1; }
-  20%  { transform: translate3d(110vw, 100vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
-  100% { transform: translate3d(110vw, 100vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+@keyframes shooting-star-fly {
+  0%   { transform: translate(0, 0) rotate(30deg);         opacity: 0;    }
+  12%  {                                                    opacity: 0.6;  }
+  45%  {                                                    opacity: 0.45; }
+  75%  {                                                    opacity: 0.2;  }
+  100% { transform: translate(120vw, 70vw) rotate(30deg);  opacity: 0;    }
 }
 
-@keyframes shooting-star-alt {
-  0%   { transform: translate3d(0, 0, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
-  4%   { opacity: 1; }
-  15%  { opacity: 1; }
-  19%  { transform: translate3d(95vw, 110vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
-  100% { transform: translate3d(95vw, 110vh, 0) rotate(var(--streak-rotate, -45deg)); opacity: 0; }
+@keyframes shooting-star-fly-short {
+  0%   { transform: translate(0, 0) rotate(30deg);         opacity: 0;    }
+  12%  {                                                    opacity: 0.45; }
+  30%  {                                                    opacity: 0.3;  }
+  50%  {                                                    opacity: 0;    }
+  100% { transform: translate(120vw, 70vw) rotate(30deg);  opacity: 0;    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star {
+    animation: none !important;
+    opacity: 0 !important;
+  }
 }
 
 @theme inline {

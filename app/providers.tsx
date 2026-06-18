@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes'
 import { usePathname } from 'next/navigation'
 import MusicBar from '@/components/MusicBar'
 import DockNavigation from '@/components/DockNavigation'
+import DarkBackgroundLayer from '@/components/DarkBackgroundLayer'
 
 type View = 'scattered' | 'organized'
 
@@ -28,6 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <ViewContext.Provider value={{ view, setView }}>
+        <DarkBackgroundLayer />
         {children}
         <MusicBar showHint={pathname === '/work/noto'} />
         {!isCaseStudy && (

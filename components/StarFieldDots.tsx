@@ -1,28 +1,29 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-type Layer = {
-  src: string
-  aspectRatio: string
-  width: string
-  top: string
-  left: string
+const DOT_COUNT = 280
+const FIELD_W = 1920
+const FIELD_H = 1080
+
+function buildShadows(count: number): string {
+  const parts: string[] = []
+  for (let i = 0; i < count; i++) {
+    const x = Math.floor(Math.random() * FIELD_W)
+    const y = Math.floor(Math.random() * FIELD_H)
+    const a = (0.2 + Math.random() * 0.4).toFixed(2)
+    parts.push(`${x}px ${y}px 0 0 rgba(255, 255, 255, ${a})`)
+  }
+  return parts.join(', ')
 }
-
-// Each SVG's natural viewBox aspect, placed at a different region so they
-// behave as a scattered field rather than a tiled full-viewport background.
-const LAYERS: Layer[] = [
-  { src: '/stars-1.svg', aspectRatio: '600.128 / 475.806', width: '55vw', top: '-5%',  left: '-8%'  }, // upper-left cluster
-  { src: '/stars-2.svg', aspectRatio: '654.73 / 779.106',  width: '38vw', top: '15%',  left: '55%'  }, // right column
-  { src: '/stars-3.svg', aspectRatio: '600.128 / 550.75',  width: '50vw', top: '50%',  left: '15%'  }, // lower-center cluster
-]
 
 export default function StarFieldDots() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
+
+  const shadows = useMemo(() => buildShadows(DOT_COUNT), [])
 
   if (!mounted || resolvedTheme !== 'dark') return null
 
@@ -32,28 +33,23 @@ export default function StarFieldDots() {
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 0,
         pointerEvents: 'none',
         overflow: 'hidden',
-        opacity: 0.3,
+        zIndex: -1,
       }}
     >
-      {LAYERS.map((layer, i) => (
-        <div
-          key={i}
-          style={{
-            position: 'absolute',
-            top: layer.top,
-            left: layer.left,
-            width: layer.width,
-            aspectRatio: layer.aspectRatio,
-            backgroundImage: `url(${layer.src})`,
-            backgroundSize: '100% 100%',
-            backgroundRepeat: 'no-repeat',
-            imageRendering: 'pixelated',
-          }}
-        />
-      ))}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: 1,
+          height: 1,
+          borderRadius: '50%',
+          background: 'transparent',
+          boxShadow: shadows,
+        }}
+      />
     </div>
   )
 }
