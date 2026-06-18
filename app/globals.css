@@ -65,6 +65,8 @@
   --color-dock-border:       rgba(0, 0, 0, 0.06);
   --color-dock-divider:      rgba(0, 0, 0, 0.06);
   --color-preview-bg:        rgba(255, 255, 255, 0.3);
+  --color-about-card-bg:     rgba(255, 255, 255, 0.1);
+  --color-photo-border:      rgba(168, 168, 168, 0.4);
 
   /* Legacy tokens kept for inner pages */
   --bg: #f1f5fb;
@@ -104,6 +106,8 @@
   --color-dock-border:       rgba(255, 255, 255, 0.1);
   --color-dock-divider:      rgba(255, 255, 255, 0.1);
   --color-preview-bg:        rgba(255, 255, 255, 0.04);
+  --color-about-card-bg:     rgba(255, 255, 255, 0.04);
+  --color-photo-border:      rgba(255, 255, 255, 0.3);
   --color-star-stroke:       rgba(255, 255, 255, 0.45);
   --color-shooting-star:     rgba(252, 221, 106, 0.85);
 
@@ -177,6 +181,10 @@
     animation: none !important;
     opacity: 0 !important;
   }
+}
+
+.dark .about-signature {
+  filter: invert(1);
 }
 
 @theme inline {

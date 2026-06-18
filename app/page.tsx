@@ -12,8 +12,6 @@ import HomeTopBar from '@/components/HomeTopBar'
 import TextBlock from '@/components/TextBlock'
 import PreviewCard from '@/components/PreviewCard'
 import FloatingCard from '@/components/FloatingCard'
-import StarFieldDots from '@/components/StarFieldDots'
-import ShootingStars from '@/components/ShootingStars'
 import CursorTrail from '@/components/CursorTrail'
 
 export default function Home() {
@@ -48,8 +46,6 @@ export default function Home() {
         }}
       >
         <GridBackground />
-        <StarFieldDots />
-        <ShootingStars />
 
         {/* Top color wash — light mode only */}
         {!isDark && (

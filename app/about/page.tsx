@@ -29,7 +29,7 @@ const mono: React.CSSProperties = {
   fontWeight: 400,
   lineHeight: '13.44px',
   letterSpacing: '-0.02em',
-  color: 'rgba(0,0,0,0.45)',
+  color: 'var(--color-status-text)',
 }
 
 const STYLES = `
@@ -62,8 +62,8 @@ function PhotoSlideshow() {
       style={{
         padding: 6,
         borderRadius: 10,
-        background: 'rgba(255,255,255,0.1)',
-        border: '0.8px solid rgba(0,0,0,0.08)',
+        background: 'var(--color-about-card-bg)',
+        border: '0.8px solid var(--color-border)',
         boxShadow: 'rgba(0,0,0,0.18) 0px 0.602187px 0.602187px -1.25px, rgba(0,0,0,0.16) 0px 2.28853px 2.28853px -2.5px, rgba(0,0,0,0.06) 0px 10px 10px -3.75px',
       }}
     >
@@ -74,7 +74,7 @@ function PhotoSlideshow() {
           aspectRatio: '1.4725 / 1',
           borderRadius: 8,
           overflow: 'hidden',
-          border: '0.8px solid rgba(168,168,168,0.4)',
+          border: '1px solid var(--color-photo-border)',
         }}
       >
         {PHOTOS.map((src, i) => {
@@ -172,11 +172,11 @@ export default function About() {
             width: 300,
             flexShrink: 0,
             zIndex: 2,
-            background: 'rgba(255,255,255,0.1)',
+            background: 'var(--color-about-card-bg)',
             borderRadius: 16,
-            border: '0.8px solid rgba(0,0,0,0.08)',
-            backdropFilter: 'blur(5px)',
-            WebkitBackdropFilter: 'blur(5px)',
+            border: '0.8px solid var(--color-border)',
+            backdropFilter: 'blur(var(--card-backdrop-blur))',
+            WebkitBackdropFilter: 'blur(var(--card-backdrop-blur))',
             boxShadow: 'rgba(64, 39, 14, 0.08) 0px 0.602187px 1.56569px -0.833333px, rgba(64, 39, 14, 0.08) 0px 2.28853px 5.95019px -1.66667px, rgba(64, 39, 14, 0.08) 0px 10px 26px -2.5px',
             padding: 16,
             display: 'flex',
@@ -207,7 +207,7 @@ export default function About() {
               </div>
               <span style={{ ...mono, flexShrink: 0 }}>09.11.23</span>
             </div>
-            <div style={{ height: 1, background: 'rgba(0,0,0,0.08)', width: '100%' }} />
+            <div style={{ height: 1, background: 'var(--color-border)', width: '100%' }} />
           </div>
 
           {/* Tagline + Signature — fades out on hover */}
@@ -223,7 +223,7 @@ export default function About() {
                 fontWeight: 400,
                 lineHeight: '1.6em',
                 letterSpacing: '-0.02em',
-                color: 'rgba(0,0,0,0.75)',
+                color: 'var(--color-text-primary)',
                 margin: 0,
               }}
             >
@@ -234,6 +234,7 @@ export default function About() {
             <img
               src={SIGNATURE}
               alt="Elisha"
+              className="about-signature"
               style={{ width: 102, height: 65, objectFit: 'contain', display: 'block' }}
             />
           </motion.div>
@@ -242,16 +243,16 @@ export default function About() {
           <div
             onMouseEnter={() => setHovering(true)}
             style={{
-              border: '1px solid rgba(0,0,0,0.06)',
-              backdropFilter: 'blur(5px)',
-              WebkitBackdropFilter: 'blur(5px)',
-              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid var(--color-border)',
+              backdropFilter: 'blur(var(--card-backdrop-blur))',
+              WebkitBackdropFilter: 'blur(var(--card-backdrop-blur))',
+              background: 'var(--color-about-card-bg)',
               borderRadius: 8,
               padding: 12,
               cursor: 'default',
             }}
           >
-            <span style={{ ...mono, color: 'rgba(0,0,0,0.75)' }}>Currently I&apos;m…</span>
+            <span style={{ ...mono, color: 'var(--color-text-primary)' }}>Currently I&apos;m…</span>
           </div>
 
           {/* Currents panel — absolute, slides in from bottom on hover */}
@@ -266,7 +267,7 @@ export default function About() {
               height: 166,
               padding: 14,
               borderRadius: 8,
-              background: 'rgba(0,0,0,0.03)',
+              background: 'var(--color-card-bg)',
               display: 'flex',
               alignItems: 'center',
               pointerEvents: 'none',
@@ -288,7 +289,7 @@ export default function About() {
                     fontFamily: 'system-ui, -apple-system, sans-serif',
                     fontSize: 10.4,
                     fontWeight: 500,
-                    color: 'rgba(0,0,0,0.45)',
+                    color: 'var(--color-status-text)',
                     margin: 0,
                   }}>
                     {label}
@@ -298,7 +299,7 @@ export default function About() {
                     fontSize: 12.8,
                     fontWeight: 500,
                     lineHeight: '1.4em',
-                    color: 'rgba(0,0,0,0.75)',
+                    color: 'var(--color-text-primary)',
                     margin: 0,
                   }}>
                     {value}
@@ -323,7 +324,7 @@ export default function About() {
               fontWeight: 500,
               letterSpacing: '-0.02em',
               lineHeight: '1.75em',
-              color: 'rgba(0,0,0,0.35)',
+              color: 'var(--color-text-secondary)',
               marginBottom: 30,
             }}
           >
@@ -338,13 +339,13 @@ export default function About() {
                 fontWeight: 500,
                 letterSpacing: '-0.02em',
                 lineHeight: '1.75em',
-                color: 'rgba(0,0,0,0.75)',
+                color: 'var(--color-text-primary)',
                 margin: 0,
               }}
             >
               I&apos;m Mathieu, nice to meet you! I&apos;m a product designer based in Munich,
               currently shaping design systems and consent experiences at{' '}
-              <span style={{ color: 'rgba(0,0,0,0.75)' }}>Usercentrics</span>
+              <span style={{ color: 'var(--color-text-primary)' }}>Usercentrics</span>
               . I&apos;m drawn to the intersection of structure and craft — where rigorous systems
               thinking meets obsessive attention to detail.
               <br /><br />
@@ -367,7 +368,7 @@ export default function About() {
                   fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
                   fontSize: 'calc(1rem * 0.8)',
                   letterSpacing: '-0.02em',
-                  color: 'rgba(0,0,0,0.35)',
+                  color: 'var(--color-text-secondary)',
                   cursor: href ? 'pointer' : 'default',
                   textDecoration: 'none',
                 }

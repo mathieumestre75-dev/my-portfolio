@@ -49,14 +49,21 @@ function buildStars(count: number): Star[] {
 export default function ShootingStars() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const t = setTimeout(() => setVisible(true), 100)
+    return () => clearTimeout(t)
+  }, [])
 
   const stars = useMemo(() => buildStars(COUNT), [])
 
   if (!mounted || resolvedTheme !== 'dark') return null
 
   return (
-    <>
+    <div style={{ opacity: visible ? 1 : 0, transition: 'opacity 200ms ease' }}>
+
       {stars.map((s) => (
         <div
           key={s.id}
@@ -94,6 +101,6 @@ export default function ShootingStars() {
           />
         </div>
       ))}
-    </>
+    </div>
   )
 }

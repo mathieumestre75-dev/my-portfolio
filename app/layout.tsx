@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Caveat, Spline_Sans_Mono } from 'next/font/google'
 import { Providers } from './providers'
+import StarFieldDots from '@/components/StarFieldDots'
+import ShootingStars from '@/components/ShootingStars'
 import './globals.css'
 
 const caveat = Caveat({
@@ -30,7 +32,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${caveat.variable} ${splineSansMono.variable}`}
     >
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <StarFieldDots />
+          <ShootingStars />
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   )
