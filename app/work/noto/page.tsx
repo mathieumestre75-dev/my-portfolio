@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import GridBackground from '@/components/GridBackground'
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 const HERO_VIDEO = 'https://framerusercontent.com/assets/kPKcaYZ2R90b4hWydwXcYTDCx8.mp4'
@@ -147,6 +148,7 @@ export default function NotoPage() {
 
   return (
     <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative' }}>
+      <GridBackground />
 
       {/* ── Fonts + animations ──────────────────────────────────────────── */}
       <style>{`

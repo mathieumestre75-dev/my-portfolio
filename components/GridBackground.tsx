@@ -8,7 +8,25 @@ export default function GridBackground() {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  if (mounted && resolvedTheme === 'dark') return null
+  const isDark = mounted && resolvedTheme === 'dark'
+
+  if (isDark) {
+    return (
+      <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `
+              linear-gradient(rgba(98, 141, 227, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(98, 141, 227, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '24px 24px',
+          }}
+        />
+      </div>
+    )
+  }
 
   const fade = 'rgb(252,252,252)'
 
