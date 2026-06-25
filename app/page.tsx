@@ -12,7 +12,6 @@ import HomeTopBar from '@/components/HomeTopBar'
 import TextBlock from '@/components/TextBlock'
 import PreviewCard from '@/components/PreviewCard'
 import FloatingCard from '@/components/FloatingCard'
-import CursorTrail from '@/components/CursorTrail'
 
 export default function Home() {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null)
@@ -109,7 +108,6 @@ export default function Home() {
         </div>
 
       </div>
-      <CursorTrail />
     </main>
   )
 }

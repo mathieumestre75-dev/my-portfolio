@@ -21,11 +21,14 @@ function buildShadows(count: number): string {
 export default function StarFieldDots() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 50)
+    return () => clearTimeout(t)
+  }, [])
 
   const shadows = useMemo(() => buildShadows(DOT_COUNT), [])
 
-  if (!mounted || resolvedTheme !== 'dark') return null
+  if (!mounted) return null
 
   return (
     <div
@@ -36,6 +39,8 @@ export default function StarFieldDots() {
         pointerEvents: 'none',
         overflow: 'hidden',
         zIndex: -1,
+        opacity: resolvedTheme === 'dark' ? 1 : 0,
+        transition: 'opacity 0.3s ease',
       }}
     >
       <div

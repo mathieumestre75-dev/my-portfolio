@@ -28,10 +28,12 @@ function buildStars(count: number): Star[] {
     })
     if (!ok) continue
     const idx = stars.length
-    // First two stars get a negative delay so the animation is already mid-flight
-    // when dark mode is toggled — visible immediately.
-    const delay = idx < 2
-      ? -(2 + Math.random() * 3)        // -2s to -5s
+    // First three stars: short, deterministic delays so a fresh page load
+    // followed by a dark-mode toggle always has stars at low cycle phase
+    // (opacity > 0 region of shooting-star-fly-short keyframes). Rest: random.
+    const IMMEDIATE_DELAYS = [0, 0.3, 0.7]
+    const delay = idx < IMMEDIATE_DELAYS.length
+      ? IMMEDIATE_DELAYS[idx]
       : Math.random() * 20              // rest: random 0–20s
     stars.push({
       id: idx,
@@ -53,16 +55,20 @@ export default function ShootingStars() {
 
   useEffect(() => {
     setMounted(true)
-    const t = setTimeout(() => setVisible(true), 100)
+    const t = setTimeout(() => setVisible(true), 50)
     return () => clearTimeout(t)
   }, [])
 
   const stars = useMemo(() => buildStars(COUNT), [])
 
-  if (!mounted || resolvedTheme !== 'dark') return null
+  if (!mounted) return null
 
   return (
-    <div style={{ opacity: visible ? 1 : 0, transition: 'opacity 200ms ease' }}>
+    <div style={{
+      opacity: (visible && resolvedTheme === 'dark') ? 1 : 0,
+      transition: 'opacity 0.3s ease',
+      pointerEvents: 'none',
+    }}>
 
       {stars.map((s) => (
         <div

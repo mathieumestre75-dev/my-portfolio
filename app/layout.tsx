@@ -3,6 +3,7 @@ import { Caveat, Spline_Sans_Mono } from 'next/font/google'
 import { Providers } from './providers'
 import StarFieldDots from '@/components/StarFieldDots'
 import ShootingStars from '@/components/ShootingStars'
+import CursorTrail from '@/components/CursorTrail'
 import './globals.css'
 
 const caveat = Caveat({
@@ -33,11 +34,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <Providers>
-          <StarFieldDots />
-          <ShootingStars />
+          <StarFieldDots key="layout-star-field-dots" />
+          <ShootingStars key="layout-shooting-stars" />
           <div style={{ position: 'relative', zIndex: 2 }}>
             {children}
           </div>
+          <CursorTrail key="layout-cursor-trail" />
         </Providers>
       </body>
     </html>
