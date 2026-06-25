@@ -3,17 +3,27 @@
 import { useTheme } from 'next-themes'
 import { useEffect, useMemo, useState } from 'react'
 
-const DOT_COUNT = 280
+const DOT_COUNT = 1000
 const FIELD_W = 1920
 const FIELD_H = 1080
 
 function buildShadows(count: number): string {
   const parts: string[] = []
+  // Hard cap: top 45% of field only — no stars below that line.
+  const maxY = FIELD_H * 0.45
   for (let i = 0; i < count; i++) {
     const x = Math.floor(Math.random() * FIELD_W)
-    const y = Math.floor(Math.random() * FIELD_H)
-    const a = (0.2 + Math.random() * 0.4).toFixed(2)
-    parts.push(`${x}px ${y}px 0 0 rgba(255, 255, 255, ${a})`)
+    const y = Math.floor(Math.random() * maxY)
+
+    // Opacity: 70% dim (0.15), 20% mid (0.35), 10% bright (0.6).
+    const opRoll = Math.random()
+    const a = opRoll < 0.7 ? '0.15' : opRoll < 0.9 ? '0.35' : '0.6'
+
+    // Size via box-shadow spread on the 1×1 host: 80% 1px, 15% 1.5px, 5% 2px.
+    const sizeRoll = Math.random()
+    const spread = sizeRoll < 0.8 ? 0 : sizeRoll < 0.95 ? 0.25 : 0.5
+
+    parts.push(`${x}px ${y}px 0 ${spread}px rgba(255, 255, 255, ${a})`)
   }
   return parts.join(', ')
 }
