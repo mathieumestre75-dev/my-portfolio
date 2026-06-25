@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
@@ -117,6 +118,85 @@ export default function NotoPage() {
   useEffect(() => { setMounted(true) }, [])
   const isDark = mounted && resolvedTheme === 'dark'
 
+  // Scope a class to body so the inline `<style>` below can target the
+  // layout-level stars (StarFieldDots + ShootingStars wrappers) on this
+  // route only.
+  useEffect(() => {
+    if (!isDark) return
+    document.body.classList.add('noto-dark-route')
+    return () => document.body.classList.remove('noto-dark-route')
+  }, [isDark])
+
+  // Portal target for the noto-page-scrollable gradient: a JS-created
+  // div inserted as a body child between DBL and StarFieldDots wrapper.
+  // This lets the gradient sit at root z-index:-1 (covers DBL) while the
+  // layout-level StarFieldDots wrapper (also z-index:-1, later in DOM)
+  // and ShootingStars (z-index:0) paint above it.
+  const [portalNode, setPortalNode] = useState<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!isDark) {
+      setPortalNode(null)
+      return
+    }
+    const prevBodyPosition = document.body.style.position
+    document.body.style.position = 'relative'
+
+    const node = document.createElement('div')
+    node.setAttribute('data-noto-bg', '')
+    node.style.position = 'absolute'
+    node.style.top = '0'
+    node.style.left = '0'
+    node.style.right = '0'
+    node.style.bottom = '0'
+    node.style.zIndex = '-1'
+    node.style.pointerEvents = 'none'
+
+    // Find the StarFieldDots wrapper: a fixed div with z-index:-1 and no
+    // background-image (DBL has the same z but carries a linear-gradient bg).
+    let target: Element | null = null
+    for (const child of Array.from(document.body.children)) {
+      if (child.tagName !== 'DIV') continue
+      const cs = window.getComputedStyle(child as HTMLElement)
+      if (cs.position !== 'fixed') continue
+      if (cs.zIndex !== '-1') continue
+      if (cs.backgroundImage !== 'none') continue
+      target = child
+      break
+    }
+    if (target) document.body.insertBefore(node, target)
+    else document.body.appendChild(node)
+    setPortalNode(node)
+
+    return () => {
+      if (node.parentNode) node.parentNode.removeChild(node)
+      document.body.style.position = prevBodyPosition
+      setPortalNode(null)
+    }
+  }, [isDark])
+
+  // Scroll-driven fade for the layout-level stars on this route only.
+  // 0px → opacity 1, 400px → opacity 0. Throttled via rAF.
+  useEffect(() => {
+    if (!isDark) {
+      document.documentElement.style.removeProperty('--noto-stars-opacity')
+      return
+    }
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const o = Math.max(0, Math.min(1, 1 - window.scrollY / 400))
+      document.documentElement.style.setProperty('--noto-stars-opacity', String(o))
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    update()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+      document.documentElement.style.removeProperty('--noto-stars-opacity')
+    }
+  }, [isDark])
+
   useEffect(() => {
     function updateActive() {
       let current = ''
@@ -153,23 +233,49 @@ export default function NotoPage() {
   return (
     <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative' }}>
 
-      {/* ── Dark-mode page-scrollable gradient ──────────────────────────── */}
-      {isDark && (
+      {/* ── Dark-mode page-scrollable gradient (portaled to body) ────────
+         Rendered into a JS-created node inserted between DBL and the
+         layout-level StarFieldDots wrapper in body's children — so this
+         gradient sits at root z-index:-1 covering DBL, while StarFieldDots
+         (also z=-1, later in DOM) and ShootingStars (z=0) paint above it. */}
+      {portalNode && createPortal(
         <div aria-hidden style={{
           position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          zIndex: 0, pointerEvents: 'none',
-          background: 'linear-gradient(180deg, rgb(10, 10, 10) 0%, rgb(44, 49, 77) 60.35%, rgb(81, 81, 112) 100%)',
+          inset: 0,
+          minHeight: '100%',
+          pointerEvents: 'none',
+          background: 'linear-gradient(180deg, rgb(10, 10, 10) 0%, rgb(44, 49, 77) 8%, rgb(81, 81, 112) 75%, rgb(81, 81, 112) 100%)',
         }}>
           <div style={{
             position: 'absolute',
-            bottom: 0, left: 0, right: 0,
-            height: 700,
+            top: '75%', left: 0, right: 0, bottom: 0,
             opacity: 0.45,
             pointerEvents: 'none',
             background: 'linear-gradient(0deg, rgba(252, 221, 106, 0.6) 0%, rgba(252, 194, 106, 0.6) 5.97%, rgba(157, 138, 158, 0.46) 27.12%, rgba(202, 206, 227, 0.13) 41.41%, rgba(0, 0, 0, 0) 100%)',
           }} />
-        </div>
+        </div>,
+        portalNode
+      )}
+
+      {/* ── Noto-scoped CSS overrides ─────────────────────────────────────
+         (1) Cancel the globals.css clip on .shooting-star (the element-
+             relative inset(0 0 50vh 0) clips 1px-tall stars out entirely).
+         (2) Scroll-fade: filter:opacity multiplies with each layer's own
+             opacity/animations so the shooting-star fly animation still
+             cycles correctly, just attenuated. */}
+      {isDark && (
+        <style>{`
+          body.noto-dark-route .shooting-star {
+            -webkit-clip-path: none !important;
+            clip-path: none !important;
+          }
+          body.noto-dark-route > div:has(> .shooting-star) {
+            filter: opacity(var(--noto-stars-opacity, 1));
+          }
+          body.noto-dark-route > div[aria-hidden][style*="z-index: -1"]:not([style*="linear-gradient"]):not([data-noto-bg]) {
+            filter: opacity(var(--noto-stars-opacity, 1));
+          }
+        `}</style>
       )}
 
       {/* ── Fonts + animations ──────────────────────────────────────────── */}

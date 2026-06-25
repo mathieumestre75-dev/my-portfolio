@@ -28,21 +28,24 @@ function buildQueue(current: number): number[] {
   return shuffle(PLAYLIST.map((_, i) => i).filter(i => i !== current))
 }
 
-const INITIAL = Math.floor(Math.random() * PLAYLIST.length)
-
 export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
   const [playing, setPlaying] = useState(false)
   const [hovered, setHovered] = useState(false)
-  const [index,   setIndex]   = useState(INITIAL)
+  // SSR-safe: start deterministic (0) so server HTML and first client render
+  // agree, then randomize on mount. Avoids the Math.random-at-module-load
+  // hydration mismatch (server "Brazil" vs client "Chega de Saudade").
+  const [index,   setIndex]   = useState(0)
   const audioRef  = useRef<HTMLAudioElement>(null)
-  const queueRef  = useRef<number[]>(buildQueue(INITIAL))
+  const queueRef  = useRef<number[]>([])
 
   const song = PLAYLIST[index]
 
-  // Set initial src once on mount — fully imperative from here on
   useEffect(() => {
-    if (audioRef.current) audioRef.current.src = song.src
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const initial = Math.floor(Math.random() * PLAYLIST.length)
+    setIndex(initial)
+    queueRef.current = buildQueue(initial)
+    if (audioRef.current) audioRef.current.src = PLAYLIST[initial].src
+  }, [])
 
   const nextIndex = useCallback((current: number): number => {
     if (queueRef.current.length === 0) {
@@ -241,13 +244,21 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
                 pointerEvents: 'none',
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/listen-note.svg"
-                alt=""
-                width={140}
-                height={92}
-                style={{ display: 'block', width: 140, height: 92 }}
+              <div
+                aria-hidden
+                className="listen-note"
+                style={{
+                  display: 'block',
+                  width: 140,
+                  height: 92,
+                  backgroundColor: 'rgba(0, 0, 0, 0.35)',
+                  WebkitMaskImage: 'url(/listen-note.svg)',
+                  maskImage: 'url(/listen-note.svg)',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                }}
               />
             </motion.div>
           )}

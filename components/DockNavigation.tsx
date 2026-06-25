@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -212,7 +212,9 @@ export default function DockNavigation() {
 
         <div style={{ width: 1, height: 12, background: 'var(--color-dock-divider)', flexShrink: 0 }} />
 
-        {navItems.map((item) => renderIcon(item))}
+        {navItems.map((item) => (
+          <Fragment key={itemKey(item)}>{renderIcon(item)}</Fragment>
+        ))}
       </motion.div>
     </motion.div>
   )

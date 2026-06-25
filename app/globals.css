@@ -211,9 +211,20 @@
   }
 }
 
+/* Noto case-study only: clip the layout-level stars to the top 50vh of the
+   viewport so they never appear mid-scroll, even if the fixed bg layer bleeds
+   through transparent areas of the page-scrollable noto gradient. */
+body.noto-dark-route .shooting-star {
+  -webkit-clip-path: inset(0 0 50vh 0);
+  clip-path: inset(0 0 50vh 0);
+}
+
 .dark .about-signature {
   filter: invert(1);
 }
+
+/* Listen-note annotation: exact dark-mode color from elishajeon.com */
+.dark .listen-note { background-color: #ffffff73 !important; }
 
 /* Noto dark mode — white card override for 3 specific media containers */
 .dark .noto-white-card {
