@@ -124,7 +124,7 @@
   --color-photo-border:      rgba(255, 255, 255, 0.3);
 
   /* Noto case-study tokens — dark variants */
-  --color-noto-body:         rgba(255, 255, 255, 0.8);
+  --color-noto-body:         rgba(255, 255, 255, 0.45);
   --color-noto-accent:       rgba(255, 255, 255, 0.15);
   --color-noto-tag-bg:       rgba(255, 255, 255, 0.06);
   --color-noto-card:         rgba(255, 255, 255, 0.04);
