@@ -25,7 +25,7 @@ export default function DockNavigation() {
   const isWorkPage = pathname.startsWith('/work') || pathname === '/about'
 
   const allItems: Item[] = [
-    { kind: 'theme', label: theme === 'dark' ? 'Light Mode' : 'Dark Mode', icon: theme === 'dark' ? Sun : Moon },
+    { kind: 'theme', label: theme === 'dark' ? 'Sun mode' : 'Starry mode', icon: theme === 'dark' ? Sun : Moon },
     { kind: 'view', label: isOrganized ? 'Scattered' : 'Organized', icon: LayoutGrid },
     { kind: 'copy', label: copied ? 'Copied!' : 'Copy email', icon: Mail },
   ]

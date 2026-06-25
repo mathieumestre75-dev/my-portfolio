@@ -5,10 +5,10 @@ import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
+import { Sun, Moon } from 'lucide-react'
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 const HERO_VIDEO = 'https://framerusercontent.com/assets/kPKcaYZ2R90b4hWydwXcYTDCx8.mp4'
-const SUN_ICON   = 'https://framerusercontent.com/images/WPQ9VOXXZnAWbWSooANYVFhw.png'
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 const MONO   = "'Spline Sans Mono', var(--font-spline-sans-mono), monospace"
@@ -113,7 +113,8 @@ export default function NotoPage() {
   const [hoveredC1, setHoveredC1] = useState<number | null>(null)
   const [hoveredC2, setHoveredC2] = useState<number | null>(null)
   const [contactVisible, setContactVisible] = useState(false)
-  const { resolvedTheme } = useTheme()
+  const [themeToggleHover, setThemeToggleHover] = useState(false)
+  const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   const isDark = mounted && resolvedTheme === 'dark'
@@ -336,18 +337,25 @@ export default function NotoPage() {
         Back
       </Link>
 
-      {/* ── Fixed: Sun icon (dark mode toggle placeholder) ────────────────── */}
+      {/* ── Fixed: theme toggle (mirrors Back on the right) ────────────────── */}
       <button
-        aria-label="Toggle dark mode"
+        onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        onMouseEnter={() => setThemeToggleHover(true)}
+        onMouseLeave={() => setThemeToggleHover(false)}
+        aria-label={isDark ? 'Sun mode' : 'Starry mode'}
+        title={isDark ? 'Sun mode' : 'Starry mode'}
         style={{
           position: 'fixed', top: 20, right: 20, zIndex: 50,
           background: 'none', border: 'none', padding: 0,
-          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'var(--color-status-text)',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 20, height: 20,
+          color: 'var(--color-icon)',
+          transform: themeToggleHover ? 'scale(1.2)' : 'scale(1)',
+          transition: 'transform 0.15s ease-out',
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={SUN_ICON} alt="" width={20} height={20} style={{ display: 'block', opacity: 0.55 }} />
+        {isDark ? <Sun size={16} strokeWidth={1.5} /> : <Moon size={16} strokeWidth={1.5} />}
       </button>
 
       {/* ── Page body ─────────────────────────────────────────────────────── */}
