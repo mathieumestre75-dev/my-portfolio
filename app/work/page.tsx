@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import ClockWidget from '@/components/ClockWidget'
 import GridBackground from '@/components/GridBackground'
@@ -99,6 +100,11 @@ const monoStyle: React.CSSProperties = {
 }
 
 export default function Work() {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const isDark = mounted && resolvedTheme === 'dark'
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-page-bg)', position: 'relative' }}>
       <style>{CARD_KEYFRAME}</style>
@@ -107,6 +113,47 @@ export default function Work() {
       <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.65 }}>
         <GridBackground />
       </div>
+
+      {/* Top color wash — light mode only (matches app/page.tsx).
+         Horizontal mask fades the left side so it visually mirrors the
+         homepage where the TextBlock/PreviewCard covers that area. */}
+      {!isDark && (
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 101,
+            background: 'linear-gradient(180deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 30%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 30%, black 100%)',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }}
+        />
+      )}
+
+      {/* Bottom color wash — light mode only, mirrors the top via 0deg direction.
+         Same horizontal mask so left side fades in just like the top. */}
+      {!isDark && (
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 101,
+            background: 'linear-gradient(0deg, rgba(217,235,252,0.46) 0%, rgba(255,235,242,0.32) 27.9%, rgba(255,249,242,0.53) 62.25%, rgba(252,252,252,0) 100%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 30%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 30%, black 100%)',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }}
+        />
+      )}
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1500, margin: '0 auto', padding: '0 20px 120px' }}>
 
