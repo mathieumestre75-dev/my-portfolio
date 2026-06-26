@@ -76,10 +76,10 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
             transition={{ duration: 0.2 }}
             style={{
               position: 'absolute',
-              top: 12, bottom: 12, left: 16, right: 16,
+              top: 12, bottom: 12, left: 20, right: 20,
               display: 'flex',
               flexDirection: 'column',
-              gap: 8,
+              gap: 14,
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
             }}
@@ -95,21 +95,35 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
             }}>
               Highlights
             </p>
-            {project.highlights.map((img, i) => (
-              img ? (
-                <img
+            {project.highlights.map((src, i) => {
+              if (!src) {
+                return (
+                  <div
+                    key={i}
+                    style={{ width: '100%', flex: 1, minHeight: 0, borderRadius: 6, border: '1px solid var(--color-border)', background: project.gradient, opacity: 0.7 }}
+                  />
+                )
+              }
+              const isVideo = /\.mp4(\?|$)/i.test(src)
+              return isVideo ? (
+                <video
                   key={i}
-                  src={img}
-                  alt=""
-                  style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', borderRadius: 6, display: 'block' }}
+                  src={src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--color-border)', display: 'block' }}
                 />
               ) : (
-                <div
+                <img
                   key={i}
-                  style={{ width: '100%', flex: 1, minHeight: 0, borderRadius: 6, background: project.gradient, opacity: 0.7 }}
+                  src={src}
+                  alt=""
+                  style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--color-border)', display: 'block' }}
                 />
               )
-            ))}
+            })}
           </motion.div>
         )}
       </AnimatePresence>

@@ -29,7 +29,14 @@ export const homeProjects: HomeProject[] = [
     video: 'https://framerusercontent.com/assets/vJartkUm1cgJd6nwHHK6tzamQ0.mp4',
     titleOverlay: 'Noto',
     tags: ['Mobile Design'],
-    highlights: ['', '', ''],
+    // Temporary — case-study videos from elishajeon.com/noto, spaced across
+    // the page (1st / 3rd / 5th) for visual variety since Elisha's actual
+    // home Highlights URLs are not exposed for noto.
+    highlights: [
+      'https://framerusercontent.com/assets/kPKcaYZ2R90b4hWydwXcYTDCx8.mp4',
+      'https://framerusercontent.com/assets/GdJOJCUgBbwnzlpOwYSlbEBRDk.mp4',
+      'https://framerusercontent.com/assets/2frfO148GUQNItNHj1Nv2NlU.mp4',
+    ],
     initialX: -160,
     initialY: -80,
     initialRotate: -16,
@@ -45,7 +52,14 @@ export const homeProjects: HomeProject[] = [
     gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
     tags: ['Mobile Design', 'Brand Design'],
-    highlights: ['', '', ''],
+    // Temporary — case-study videos from elishajeon.com/omro, spaced across
+    // the page (skipping kxDBV... which is the card video). Bottom-to-middle
+    // reorder per request, plus a more distinct third pick (3mxSu9tnz...).
+    highlights: [
+      'https://framerusercontent.com/assets/FrArKFxbzSeQ8kp4FkNdJ2vEEM.mp4',
+      'https://framerusercontent.com/assets/YSKuDoMAMGuqcYd527S0P0hSUSY.mp4',
+      'https://framerusercontent.com/assets/3mxSu9tnzyKDV8V0XIU8CcCreUY.mp4',
+    ],
     initialX: 160,
     initialY: -110,
     initialRotate: 20,
@@ -61,7 +75,14 @@ export const homeProjects: HomeProject[] = [
     gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     video: 'https://framerusercontent.com/assets/oDc5CCQvvQoL6t8EpijysOmqemY.mp4',
     tags: ['Mobile Design', 'Desktop Design'],
-    highlights: ['', '', ''],
+    // Temporary — case-study videos from elishajeon.com/azure-iot, spaced
+    // across the page (1st / 4th / 6th) so the three previews are visually
+    // distinct rather than three consecutive frames of the same workflow.
+    highlights: [
+      'https://framerusercontent.com/assets/amQlAHPnE4AQi45hW7qsTPqNyRk.mp4',
+      'https://framerusercontent.com/assets/0vls2BDkE046Filg76XLmOdCog.mp4',
+      'https://framerusercontent.com/assets/ZAV024fysBMzPKaTRQFgotFjY.mp4',
+    ],
     initialX: -100,
     initialY: 200,
     initialRotate: -10,
@@ -77,7 +98,14 @@ export const homeProjects: HomeProject[] = [
     gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
     video: 'https://framerusercontent.com/assets/JqE2KiKbDDfKSaHI6MfBg8LJkwo.mp4',
     tags: ['Mobile Design'],
-    highlights: ['', '', ''],
+    // Temporary — first two are the exact motra-1 / motra-2 videos from the
+    // saved reference; slot 3 is empty in the reference, so using the first
+    // video from elishajeon.com/motra case study.
+    highlights: [
+      'https://framerusercontent.com/assets/j9T6Z8D8eqfYpQ2oURICBX78XA.mp4',
+      'https://framerusercontent.com/assets/hipfSAQbOviUISJrOPXRcwi7s.mp4',
+      'https://framerusercontent.com/assets/ZX47GsBQEk9ggbEmJgpxjpc.mp4',
+    ],
     initialX: 130,
     initialY: 100,
     initialRotate: 10,
