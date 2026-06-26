@@ -31,14 +31,27 @@ function buildShadows(count: number): string {
 export default function StarFieldDots() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [enableTransition, setEnableTransition] = useState(false)
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50)
-    return () => clearTimeout(t)
+    setMounted(true)
+    // Enable the fade only AFTER first paint, so hard-refresh lands at the
+    // correct opacity instantly. Theme toggles still fade.
+    let rafId = requestAnimationFrame(() => {
+      rafId = requestAnimationFrame(() => setEnableTransition(true))
+    })
+    return () => cancelAnimationFrame(rafId)
   }, [])
 
   const shadows = useMemo(() => buildShadows(DOT_COUNT), [])
 
   if (!mounted) return null
+
+  // resolvedTheme can be undefined for one render after mount; fall back to
+  // the `dark` class set by next-themes' pre-hydration blocking script so
+  // stars don't start at opacity 0.
+  const isDark = resolvedTheme
+    ? resolvedTheme === 'dark'
+    : document.documentElement.classList.contains('dark')
 
   return (
     <div
@@ -49,8 +62,8 @@ export default function StarFieldDots() {
         pointerEvents: 'none',
         overflow: 'hidden',
         zIndex: -1,
-        opacity: resolvedTheme === 'dark' ? 1 : 0,
-        transition: 'opacity 0.3s ease',
+        opacity: isDark ? 1 : 0,
+        transition: enableTransition ? 'opacity 0.3s ease' : 'none',
       }}
     >
       <div

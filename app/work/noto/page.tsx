@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -119,6 +119,22 @@ export default function NotoPage() {
   useEffect(() => { setMounted(true) }, [])
   const isDark = mounted && resolvedTheme === 'dark'
 
+  // Clip horizontal scroll at <html>/<body> while this route is mounted.
+  // Fixed-position shooting stars animate to translate(120vw) and would
+  // otherwise extend the document's scrollable area past the viewport.
+  useEffect(() => {
+    const html = document.documentElement
+    const body = document.body
+    const prevHtml = html.style.overflowX
+    const prevBody = body.style.overflowX
+    html.style.overflowX = 'hidden'
+    body.style.overflowX = 'hidden'
+    return () => {
+      html.style.overflowX = prevHtml
+      body.style.overflowX = prevBody
+    }
+  }, [])
+
   // Scope a class to body so the inline `<style>` below can target the
   // layout-level stars (StarFieldDots + ShootingStars wrappers) on this
   // route only.
@@ -236,7 +252,7 @@ export default function NotoPage() {
   }
 
   return (
-    <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
 
       {/* ── Dark-mode page-scrollable gradient (portaled to body) ────────
          Rendered into a JS-created node inserted between DBL and the
@@ -428,17 +444,19 @@ export default function NotoPage() {
                 style={{
                   fontFamily: SERIFR, fontSize: 32, fontWeight: 400,
                   color: 'var(--color-text-primary)', lineHeight: '38.4px',
-                  letterSpacing: '-1.28px', margin: 0,
+                  letterSpacing: '-0.04em', margin: 0,
                 }}
               >
-                {'The notes app that captures who you are.'.split(' ').map((word, i) => (
-                  <motion.span
-                    key={i}
-                    variants={titleWord}
-                    style={{ display: 'inline-block', marginRight: '0.28em' }}
-                  >
-                    {word}
-                  </motion.span>
+                {'The notes app that captures who you are.'.split(' ').map((word, i, arr) => (
+                  <Fragment key={i}>
+                    <motion.span
+                      variants={titleWord}
+                      style={{ display: 'inline-block' }}
+                    >
+                      {word}
+                    </motion.span>
+                    {i < arr.length - 1 && ' '}
+                  </Fragment>
                 ))}
               </motion.h1>
 

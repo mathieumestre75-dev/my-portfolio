@@ -255,6 +255,7 @@ body[data-noto="dark"] .dark-bg-fixed-layer { display: none; }
 html,
 body {
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
