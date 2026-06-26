@@ -126,7 +126,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
           {/* Status dot */}
           <div
             style={{
-              width: 17, height: 17, borderRadius: '50%',
+              width: 15, height: 15, borderRadius: '50%',
               background: 'var(--color-dot-outer)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, marginRight: 8,
@@ -135,7 +135,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
             <motion.div
               animate={playing ? { scale: [1, 1.25, 1] } : { scale: 1 }}
               transition={playing ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : {}}
-              style={{ width: 6, height: 6, borderRadius: '50%', background: '#F07055' }}
+              style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF5F33' }}
             />
           </div>
 
@@ -145,7 +145,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
               fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
               fontSize: 10, fontWeight: 500,
               color: 'var(--color-status-text)',
-              letterSpacing: '0.05em', lineHeight: 1,
+              letterSpacing: 'normal', lineHeight: 1, textAlign: 'center',
               flexShrink: 0, minWidth: 46, marginRight: 8,
             }}
           >

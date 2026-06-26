@@ -105,7 +105,9 @@ export default function DockNavigation() {
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: 20, height: 20,
-                color: isOrganized ? 'rgba(120, 120, 120, 0.85)' : 'var(--color-icon)',
+                color: isOrganized
+                  ? (theme === 'dark' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(120, 120, 120, 0.85)')
+                  : 'var(--color-icon)',
                 opacity: isOrganized || isHovered ? 1 : 0.3,
                 transition: 'opacity 0.2s ease, color 0.2s ease',
               }}
