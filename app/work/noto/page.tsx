@@ -199,19 +199,23 @@ export default function NotoPage() {
   }, [isDark])
 
   useEffect(() => {
-    function updateActive() {
-      let current = ''
-      for (const { id } of NAV) {
-        // For overview: wait until the hero video reaches the top (title has scrolled past)
-        const triggerEl = id === 'overview'
-          ? document.querySelector<HTMLElement>('#overview video') ?? document.getElementById(id)
-          : document.getElementById(id)
-        if (triggerEl && triggerEl.getBoundingClientRect().top <= 0) current = id
-      }
-      setActiveSection(current)
+    // Activate a nav item when its section is centred in viewport
+    // (middle 20% band via rootMargin). Only update on intersection enter, so a
+    // section stays highlighted after the user has scrolled past it until the
+    // next section enters the band.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
+        }
+      },
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+    )
+    for (const { id } of NAV) {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
     }
-    window.addEventListener('scroll', updateActive, { passive: true })
-    return () => window.removeEventListener('scroll', updateActive)
+    return () => observer.disconnect()
   }, [])
 
   // Reveal contact footer only when user has scrolled to the bottom of the page
@@ -1517,7 +1521,7 @@ export default function NotoPage() {
 
           {/* ════ NEXT STEPS ═════════════════════════════════════════════════ */}
           {/* framer-11xfupa — col, gap:30, marginTop:100 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 100 }}>
+          <div id="next-steps" style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 100 }}>
 
             {/* framer-fo9447 — heading-and-label, col, gap:30, ai:flex-start */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
@@ -1557,7 +1561,7 @@ export default function NotoPage() {
 
           {/* ════ LOOKING BACK ═══════════════════════════════════════════════ */}
           {/* framer-j58py0 — col, gap:52, marginTop:100 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
+          <div id="what-i-learned" style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
 
             {/* framer-8yg9yo → framer-6f9dqj — heading-and-label, col, gap:30 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
