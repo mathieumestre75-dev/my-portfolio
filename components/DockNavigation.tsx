@@ -4,7 +4,7 @@ import { Fragment, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sun, Moon, LayoutGrid, Copy, Mail, Home, Ghost, Notebook } from 'lucide-react'
+import { Sun, Moon, LayoutGrid, Copy, Mail, Home, Ghost, Notebook, Camera } from 'lucide-react'
 import { springs } from '@/lib/springs'
 import { useView } from '@/app/providers'
 import { useTheme } from 'next-themes'
@@ -22,7 +22,7 @@ export default function DockNavigation() {
   const { view, setView } = useView()
   const { theme, setTheme } = useTheme()
   const isOrganized = view === 'organized'
-  const isWorkPage = pathname.startsWith('/work') || pathname === '/about'
+  const isWorkPage = pathname.startsWith('/work') || pathname === '/about' || pathname === '/photography'
 
   const allItems: Item[] = [
     { kind: 'theme', label: theme === 'dark' ? 'Sun mode' : 'Starry mode', icon: theme === 'dark' ? Sun : Moon },
@@ -33,6 +33,7 @@ export default function DockNavigation() {
   const navItems: Item[] = [
     { kind: 'link', href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { kind: 'link', href: '/work', label: 'Work', icon: Ghost, active: pathname.startsWith('/work') },
+    { kind: 'link', href: '/photography', label: 'Photography', icon: Camera, active: pathname === '/photography' },
     { kind: 'link', href: '/about', label: 'About', icon: Notebook, active: pathname === '/about' },
   ]
 
