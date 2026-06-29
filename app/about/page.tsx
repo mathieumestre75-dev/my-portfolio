@@ -338,14 +338,10 @@ export default function About() {
             onMouseEnter={() => setHovering(true)}
             initial={false}
             animate={{
-              backgroundColor: 'rgba(255, 255, 255, 0.678)',
-              color: 'rgba(0, 0, 0, 0.749)',
+              backgroundColor: hovering ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.678)',
+              color: hovering ? 'rgba(0, 0, 0, 0.349)' : 'rgba(0, 0, 0, 0.749)',
             }}
-            whileHover={{
-              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-              color: 'rgba(0, 0, 0, 0.349)',
-            }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
+            transition={{ duration: 0 }}
             style={{
               width: 268,
               backdropFilter: 'blur(5px)',
