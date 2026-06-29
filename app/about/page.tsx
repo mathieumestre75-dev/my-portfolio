@@ -324,22 +324,39 @@ export default function About() {
             </AnimatePresence>
           </div>
 
-          {/* Pill — last in flex, always visible at bottom of card */}
+          {/* Pill — last in flex, always visible at bottom of card.
+             Values extracted exactly from DevTools on elishajeon.com/about:
+               element     269 × 37.25 (border-box)
+               background  #FFFFFFAD     = rgba(255,255,255,0.678)
+               padding     12px (uniform)
+               font        11.04px 'Spline Sans Mono', monospace
+               text color  #00000059     = rgba(0,0,0,0.349)
+             The visible 1px stroke is rendered via box-shadow inset so
+             it doesn't add to the element's box dimensions (Elisha's
+             computed styles show no border, and 37.25 = 24 + 11.04*1.2). */}
           <motion.div
             onMouseEnter={() => setHovering(true)}
-            animate={{ backgroundColor: hovering ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.3)' }}
-            transition={{ duration: 0.2 }}
+            initial={false}
+            animate={{
+              backgroundColor: 'rgba(255, 255, 255, 0.678)',
+              color: 'rgba(0, 0, 0, 0.749)',
+            }}
+            whileHover={{
+              backgroundColor: 'rgba(0, 0, 0, 0.05)',
+              color: 'rgba(0, 0, 0, 0.349)',
+            }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
             style={{
               width: 268,
               backdropFilter: 'blur(5px)',
               WebkitBackdropFilter: 'blur(5px)',
+              boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
               borderRadius: 8,
-              padding: 12,
-              fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
-              fontSize: 12,
+              padding: '10px 12px',
+              fontFamily: "'Spline Sans Mono', monospace",
+              fontSize: 11.04,
               fontWeight: 400,
               letterSpacing: '-0.02em',
-              color: 'rgba(0, 0, 0, 0.45)',
               cursor: 'default',
               flexShrink: 0,
             }}
