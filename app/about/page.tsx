@@ -38,7 +38,7 @@ const STYLES = `
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.about-marquee { animation: about-marquee 12s linear infinite; display: inline-block; white-space: nowrap; }
+.about-marquee { animation: about-marquee 36s linear infinite; display: inline-block; white-space: nowrap; }
 `
 
 // Photos slide vertically — current exits upward to reveal the next beneath it.
@@ -217,7 +217,7 @@ export default function About() {
           <PhotoSlideshow />
 
           {/* Caption + divider */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingTop: 4 }}>
             <div
               style={{
                 display: 'flex',
@@ -227,12 +227,12 @@ export default function About() {
                 overflow: 'hidden',
               }}
             >
-              <div style={{ flex: 1, overflow: 'hidden' }}>
-                <span className="about-marquee" style={mono}>
+              <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+                <span className="about-marquee" style={{ ...mono, lineHeight: 1 }}>
                   Photo w/ my bestie. I&apos;m rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;Photo w/ my bestie. I&apos;m rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;
                 </span>
               </div>
-              <span style={{ ...mono, flexShrink: 0 }}>09.11.23</span>
+              <span style={{ ...mono, flexShrink: 0, lineHeight: 1, color: 'var(--color-text-secondary)' }}>09.11.23</span>
             </div>
             <div style={{ height: 1, background: 'var(--color-border)', width: '100%' }} />
           </div>
