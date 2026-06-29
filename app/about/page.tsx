@@ -295,12 +295,12 @@ export default function About() {
                     justifyContent: 'space-between',
                   }}>
                     {CURRENTS.map(({ label, value }) => (
-                      <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                         <p style={{
                           fontFamily: "'PP Neue Montreal Medium', sans-serif",
-                          fontSize: 12,
+                          fontSize: 10.5,
                           fontWeight: 500,
-                          lineHeight: 1,
+                          lineHeight: 1.2,
                           color: 'rgba(0, 0, 0, 0.45)',
                           margin: 0,
                         }}>
@@ -308,10 +308,10 @@ export default function About() {
                         </p>
                         <p style={{
                           fontFamily: "'PP Neue Montreal Medium', sans-serif",
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: 500,
-                          lineHeight: 1,
-                          color: 'rgba(0, 0, 0, 0.85)',
+                          lineHeight: 1.2,
+                          color: 'rgba(0, 0, 0, 0.72)',
                           margin: 0,
                         }}>
                           {value}
