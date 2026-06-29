@@ -186,7 +186,7 @@ export default function Work() {
             color: 'var(--color-text-primary)',
             marginBottom: 6,
           }}>
-            One-off projects and some explorations along the years.
+            Case studies, one-offs, and explorations along the years.
           </p>
           <p style={monoStyle}>2022 — Present</p>
         </motion.div>

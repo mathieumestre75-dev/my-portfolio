@@ -94,7 +94,7 @@ function AnimText({ run }: { run: number }) {
     <div ref={ref} style={{ marginBottom: 20, animation: 'pv-fade 0.7s ease-out both' }}>
       <div style={{ ...mono, marginBottom: 4 }}>MATHIEU MESTRE</div>
       <div style={{ fontFamily: "'P22 Mackinac Medium', sans-serif", fontSize: 12, color: 'var(--color-text-primary)', marginBottom: 3 }}>
-        One-off projects and some explorations along the years.
+        Case studies, one-offs, and explorations along the years.
       </div>
       <div style={mono}>2022 — Present</div>
     </div>
