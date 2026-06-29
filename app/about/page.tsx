@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import GridBackground from '@/components/GridBackground'
@@ -237,103 +237,114 @@ export default function About() {
             <div style={{ height: 1, background: 'var(--color-border)', width: '100%' }} />
           </div>
 
-          {/* Tagline + Signature — fades out on hover */}
-          <motion.div
-            animate={{ opacity: hovering ? 0 : 1 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            style={{ display: 'flex', flexDirection: 'column', gap: 19.2 }}
-          >
-            <p
-              style={{
-                fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
-                fontSize: 16,
-                fontWeight: 400,
-                lineHeight: '1.6em',
-                letterSpacing: '-0.02em',
-                color: 'var(--color-text-primary)',
-                margin: 0,
-              }}
+          {/* Tagline+sig + Currents panel share the SAME flex slot:
+             tagline+sig stays in normal flow (defining the slot height);
+             the panel is position:absolute over it. Card height is
+             therefore fixed across both states. */}
+          <div style={{ position: 'relative' }}>
+            <motion.div
+              animate={{ opacity: hovering ? 0 : 1 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              style={{ display: 'flex', flexDirection: 'column', gap: 19.2 }}
             >
-              Finding joy and purpose in creating the things I wish existed :-)
-            </p>
+              <p
+                style={{
+                  fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
+                  fontSize: 16,
+                  fontWeight: 400,
+                  lineHeight: '1.6em',
+                  letterSpacing: '-0.02em',
+                  color: 'var(--color-text-primary)',
+                  margin: 0,
+                }}
+              >
+                Finding joy and purpose in creating the things I wish existed :-)
+              </p>
 
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={SIGNATURE}
-              alt="Elisha"
-              className="about-signature"
-              style={{ width: 102, height: 65, objectFit: 'contain', display: 'block' }}
-            />
-          </motion.div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SIGNATURE}
+                alt="Elisha"
+                className="about-signature"
+                style={{ width: 102, height: 65, objectFit: 'contain', display: 'block' }}
+              />
+            </motion.div>
 
-          {/* Currently I'm… — hover trigger */}
-          <div
-            onMouseEnter={() => setHovering(true)}
-            style={{
-              border: '1px solid var(--color-border)',
-              backdropFilter: 'blur(var(--card-backdrop-blur))',
-              WebkitBackdropFilter: 'blur(var(--card-backdrop-blur))',
-              background: 'var(--color-about-card-bg)',
-              borderRadius: 8,
-              padding: 12,
-              cursor: 'default',
-            }}
-          >
-            <span style={{ ...mono, color: 'var(--color-text-primary)' }}>Currently I&apos;m…</span>
+            <AnimatePresence>
+              {hovering && (
+                <motion.div
+                  key="panel"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.03)',
+                    borderRadius: 8,
+                    padding: 14,
+                    height: '100%',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}>
+                    {CURRENTS.map(({ label, value }) => (
+                      <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        <p style={{
+                          fontFamily: "'PP Neue Montreal Medium', sans-serif",
+                          fontSize: 12,
+                          fontWeight: 500,
+                          lineHeight: 1,
+                          color: 'rgba(0, 0, 0, 0.45)',
+                          margin: 0,
+                        }}>
+                          {label}
+                        </p>
+                        <p style={{
+                          fontFamily: "'PP Neue Montreal Medium', sans-serif",
+                          fontSize: 14,
+                          fontWeight: 500,
+                          lineHeight: 1,
+                          color: 'rgba(0, 0, 0, 0.85)',
+                          margin: 0,
+                        }}>
+                          {value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Currents panel — absolute, slides in from bottom on hover */}
+          {/* Pill — last in flex, always visible at bottom of card */}
           <motion.div
-            animate={{ opacity: hovering ? 1 : 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            onMouseEnter={() => setHovering(true)}
+            animate={{ backgroundColor: hovering ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.3)' }}
+            transition={{ duration: 0.2 }}
             style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 166,
-              padding: 14,
+              width: 268,
+              backdropFilter: 'blur(5px)',
+              WebkitBackdropFilter: 'blur(5px)',
               borderRadius: 8,
-              background: 'var(--color-card-bg)',
-              display: 'flex',
-              alignItems: 'center',
-              pointerEvents: 'none',
-              zIndex: 2,
+              padding: 12,
+              fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
+              fontSize: 12,
+              fontWeight: 400,
+              letterSpacing: '-0.02em',
+              color: 'rgba(0, 0, 0, 0.45)',
+              cursor: 'default',
+              flexShrink: 0,
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              {CURRENTS.map(({ label, value }) => (
-                <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <p style={{
-                    fontFamily: 'system-ui, -apple-system, sans-serif',
-                    fontSize: 10.4,
-                    fontWeight: 500,
-                    color: 'var(--color-status-text)',
-                    margin: 0,
-                  }}>
-                    {label}
-                  </p>
-                  <p style={{
-                    fontFamily: 'system-ui, -apple-system, sans-serif',
-                    fontSize: 12.8,
-                    fontWeight: 500,
-                    lineHeight: '1.4em',
-                    color: 'var(--color-text-primary)',
-                    margin: 0,
-                  }}>
-                    {value}
-                  </p>
-                </div>
-              ))}
-            </div>
+            Currently I&apos;m…
           </motion.div>
         </motion.div>
 
