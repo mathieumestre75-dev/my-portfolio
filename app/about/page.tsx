@@ -16,7 +16,7 @@ const PHOTOS = [
   `${CDN}/5zyj2mIYoYnGcqeSfIVOXwLoXt0.jpg`,
 ]
 
-const SIGNATURE = `${CDN}/K6G4OceU6E7MAZnRlAe9IGbRk.png`
+const SIGNATURE = '/signature-mathieu.png'
 
 const CURRENTS = [
   { label: 'Watching', value: 'Culinary Class Wars 👩🏻‍🍳' },
@@ -264,9 +264,9 @@ export default function About() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={SIGNATURE}
-                alt="Elisha"
+                alt="Mathieu"
                 className="about-signature"
-                style={{ width: 102, height: 65, objectFit: 'contain', display: 'block' }}
+                style={{ width: 102, height: 65, objectFit: 'contain', display: 'block', transform: 'scale(1.3)', transformOrigin: 'left center' }}
               />
             </motion.div>
 
