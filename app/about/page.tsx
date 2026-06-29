@@ -208,7 +208,7 @@ export default function About() {
             padding: 16,
             display: 'flex',
             flexDirection: 'column',
-            gap: 19.2,
+            gap: 16,
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -285,7 +285,7 @@ export default function About() {
                   }}
                 >
                   <div style={{
-                    background: 'rgba(0, 0, 0, 0.03)',
+                    background: 'var(--currently-panel-bg)',
                     borderRadius: 8,
                     padding: 14,
                     height: '100%',
@@ -301,7 +301,7 @@ export default function About() {
                           fontSize: 10.5,
                           fontWeight: 500,
                           lineHeight: 1.2,
-                          color: 'rgba(0, 0, 0, 0.45)',
+                          color: 'var(--currently-label)',
                           margin: 0,
                         }}>
                           {label}
@@ -311,7 +311,7 @@ export default function About() {
                           fontSize: 13,
                           fontWeight: 500,
                           lineHeight: 1.2,
-                          color: 'rgba(0, 0, 0, 0.72)',
+                          color: 'var(--currently-value)',
                           margin: 0,
                         }}>
                           {value}
@@ -338,15 +338,15 @@ export default function About() {
             onMouseEnter={() => setHovering(true)}
             initial={false}
             animate={{
-              backgroundColor: hovering ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.678)',
-              color: hovering ? 'rgba(0, 0, 0, 0.349)' : 'rgba(0, 0, 0, 0.749)',
+              backgroundColor: hovering ? 'var(--currently-pill-bg-hover)' : 'var(--currently-pill-bg)',
+              color: hovering ? 'var(--currently-pill-text-hover)' : 'var(--currently-pill-text)',
             }}
             transition={{ duration: 0 }}
             style={{
               width: 268,
               backdropFilter: 'blur(5px)',
               WebkitBackdropFilter: 'blur(5px)',
-              boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
+              boxShadow: 'inset 0 0 0 1px var(--currently-pill-stroke)',
               borderRadius: 8,
               padding: '10px 12px',
               fontFamily: "'Spline Sans Mono', monospace",

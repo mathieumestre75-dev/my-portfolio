@@ -68,6 +68,16 @@
   --color-about-card-bg:     rgba(255, 255, 255, 0.1);
   --color-photo-border:      rgba(168, 168, 168, 0.4);
 
+  /* Currently I'm pill + Currents hover panel */
+  --currently-pill-bg:         rgba(255, 255, 255, 0.678);
+  --currently-pill-bg-hover:   rgba(0, 0, 0, 0.05);
+  --currently-pill-text:       rgba(0, 0, 0, 0.749);
+  --currently-pill-text-hover: rgba(0, 0, 0, 0.349);
+  --currently-pill-stroke:     rgba(0, 0, 0, 0.08);
+  --currently-panel-bg:        rgba(0, 0, 0, 0.03);
+  --currently-label:           rgba(0, 0, 0, 0.45);
+  --currently-value:           rgba(0, 0, 0, 0.72);
+
   /* Noto case-study tokens (light values match existing hardcoded literals) */
   --color-noto-body:         rgba(0, 0, 0, 0.6);
   --color-noto-accent:       rgba(0, 0, 0, 0.15);
@@ -122,6 +132,16 @@
   --color-preview-bg:        rgba(255, 255, 255, 0.04);
   --color-about-card-bg:     rgba(255, 255, 255, 0.04);
   --color-photo-border:      rgba(255, 255, 255, 0.3);
+
+  /* Currently I'm pill + Currents hover panel — dark variants */
+  --currently-pill-bg:         rgba(255, 255, 255, 0.08);
+  --currently-pill-bg-hover:   rgba(255, 255, 255, 0.035);
+  --currently-pill-text:       rgba(255, 255, 255, 0.72);
+  --currently-pill-text-hover: rgba(255, 255, 255, 0.55);
+  --currently-pill-stroke:     rgba(255, 255, 255, 0.08);
+  --currently-panel-bg:        rgba(255, 255, 255, 0.06);
+  --currently-label:           rgba(255, 255, 255, 0.45);
+  --currently-value:           rgba(255, 255, 255, 0.85);
 
   /* Noto case-study tokens — dark variants */
   --color-noto-body:         rgba(255, 255, 255, 0.45);
