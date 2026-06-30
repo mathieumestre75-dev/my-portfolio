@@ -22,7 +22,7 @@ export default function DockNavigation() {
   const { view, setView } = useView()
   const { theme, setTheme } = useTheme()
   const isOrganized = view === 'organized'
-  const isWorkPage = pathname.startsWith('/work') || pathname === '/about' || pathname === '/photography'
+  const isWorkPage = pathname.startsWith('/work') || pathname === '/about' || pathname === '/art'
 
   const allItems: Item[] = [
     { kind: 'theme', label: theme === 'dark' ? 'Sun mode' : 'Starry mode', icon: theme === 'dark' ? Sun : Moon },
@@ -33,7 +33,7 @@ export default function DockNavigation() {
   const navItems: Item[] = [
     { kind: 'link', href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { kind: 'link', href: '/work', label: 'Work', icon: Ghost, active: pathname.startsWith('/work') },
-    { kind: 'link', href: '/photography', label: 'Photography', icon: Camera, active: pathname === '/photography' },
+    { kind: 'link', href: '/art', label: 'Art', icon: Camera, active: pathname === '/art' },
     { kind: 'link', href: '/about', label: 'About', icon: Notebook, active: pathname === '/about' },
   ]
 
