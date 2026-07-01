@@ -78,6 +78,13 @@ const INSPIRATIONS: Photo[] = [
   { id: 'i-a139e400', ratio: 0.774, src: '/inspirations/i-a139e400.jpg' },
   { id: 'i-c94f104a', ratio: 0.786, src: '/inspirations/i-c94f104a.jpg' },
   { id: 'i-e4d86a35', ratio: 0.986, src: '/inspirations/i-e4d86a35.jpg' },
+  { id: 'i-497de80d', ratio: 0.694, src: '/inspirations/i-497de80d.jpg' },
+  { id: 'i-834e1e35', ratio: 0.804, src: '/inspirations/i-834e1e35.jpg' },
+  { id: 'i-b8ada175', ratio: 0.725, src: '/inspirations/i-b8ada175.jpg' },
+  { id: 'i-b8cdd956', ratio: 0.785, src: '/inspirations/i-b8cdd956.jpg' },
+  { id: 'i-c059de0f', ratio: 0.804, src: '/inspirations/i-c059de0f.jpg' },
+  { id: 'i-cf8aef5a', ratio: 1.000, src: '/inspirations/i-cf8aef5a.jpg' },
+  { id: 'i-e84b1870', ratio: 0.913, src: '/inspirations/i-e84b1870.jpg' },
 ]
 
 // Pre-computed column assignments.
@@ -95,9 +102,13 @@ const PHOTOS_C0 = pick(_pm, ['p0001','p0002','p0000','p0003','p0004','p0005','p0
 const PHOTOS_C1 = pick(_pm, ['p0011','p0012','p0014','p0015','p0013','p0017','p0016','p0020','p0022','p0023','p0019','p0025'])
 const PHOTOS_C2 = pick(_pm, ['p0024','p0027','p0021','p0026','p0028','p0029','p0034','p0035','p0030','p0031','p0032','p0033'])
 
-const INSP_C0 = pick(_im, ['i-23d3b899','i-a0110c59','i-daad0cf3','i-3e0e5b89','i-c94f104a','i-a139e400'])
-const INSP_C1 = pick(_im, ['i-08a8fb3c','i-44a29719','i-adb52e73','i-4f256aae','i-3613a696','i-b38dd289','i-e4d86a35'])
-const INSP_C2 = pick(_im, ['i-fd65770f','i-54d4d27f','i-b29e2baa','i-7c4eb8b5','i-42c6a912','i-813d4f14'])
+// Rule: alternate color families (blue/warm/green/neutral), mix interior+graphic, vary shapes
+// C0: red→orange→interior(warm) | blue/cream→orange-blue→green→B&W→blue→white/yellow
+const INSP_C0 = pick(_im, ['i-23d3b899','i-a0110c59','i-b8ada175','i-daad0cf3','i-3e0e5b89','i-c94f104a','i-a139e400','i-42c6a912','i-813d4f14'])
+// C1: yellow(wide)→blue→blue(wide) | yellow→dark-blue→interior(warm)→blue→green(wide)→red
+const INSP_C1 = pick(_im, ['i-08a8fb3c','i-44a29719','i-adb52e73','i-7c4eb8b5','i-3613a696','i-834e1e35','i-4f256aae','i-b38dd289','i-cf8aef5a'])
+// C2: yellow/blue→cream(wide)→red | blue/green-circle→cream/warm→blue→blue/green→interior(warm)
+const INSP_C2 = pick(_im, ['i-fd65770f','i-54d4d27f','i-b29e2baa','i-e4d86a35','i-e84b1870','i-497de80d','i-b8cdd956','i-c059de0f'])
 
 const CARD_KEYFRAME = `@keyframes photo-rise { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }`
 
