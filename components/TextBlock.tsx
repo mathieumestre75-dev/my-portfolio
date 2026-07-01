@@ -77,7 +77,7 @@ export default function TextBlock({ hoveredProject }: TextBlockProps) {
                 whiteSpace: 'pre-wrap',
               }}
             >
-              {"Hiya! I'm Mathieu."}
+              {"Hey! I'm Mathieu."}
             </motion.h1>
             <motion.p
               variants={item}
@@ -90,7 +90,7 @@ export default function TextBlock({ hoveredProject }: TextBlockProps) {
                 color: 'var(--color-text-primary)',
               }}
             >
-              I&apos;m a designer orbiting vision, craft, &amp; curiosity to create experiences that feel human.
+              I&apos;m a designer driven by curiosity, craft, and a soft spot for things made with intention.
             </motion.p>
             <motion.p
               variants={item}
@@ -102,7 +102,7 @@ export default function TextBlock({ hoveredProject }: TextBlockProps) {
                 color: 'var(--color-text-secondary)',
               }}
             >
-              Prev. designed for Flowdesk, Arcal &amp; Nucleus.
+              Prev. designed for Usercentrics &amp; Tech Alchemy.
             </motion.p>
           </motion.div>
         )}

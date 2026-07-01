@@ -39,6 +39,43 @@ const STYLES = `
   100% { transform: translateX(-50%); }
 }
 .about-marquee { animation: about-marquee 36s linear infinite; display: inline-block; white-space: nowrap; }
+
+.word-franco {
+  background: linear-gradient(90deg,
+    rgba(0,85,164,0.85) 0%,
+    rgba(0,85,164,0.85) 19%,
+    rgba(228,228,228,0.85) 25%,
+    rgba(239,65,53,0.85) 31%,
+    rgba(239,65,53,0.85) 50%,
+    currentColor 50%,
+    currentColor 100%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s ease;
+}
+.word-franco:hover { background-position: 0% 0; }
+
+.word-brazil {
+  background: linear-gradient(90deg,
+    rgba(0,156,59,0.85) 0%,
+    rgba(0,156,59,0.85) 19%,
+    rgba(255,213,0,0.9) 31%,
+    rgba(255,213,0,0.9) 50%,
+    currentColor 50%,
+    currentColor 100%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s ease;
+}
+.word-brazil:hover { background-position: 0% 0; }
 `
 
 // Photos slide vertically — current exits upward to reveal the next beneath it.
@@ -394,19 +431,11 @@ export default function About() {
                 margin: 0,
               }}
             >
-              I&apos;m Mathieu, nice to meet you! I&apos;m a product designer based in Munich,
-              currently shaping design systems and consent experiences at{' '}
-              <span style={{ color: 'var(--color-text-primary)' }}>Usercentrics</span>
-              . I&apos;m drawn to the intersection of structure and craft — where rigorous systems
-              thinking meets obsessive attention to detail.
+              I&apos;m Mathieu, nice to meet you! I&apos;m a <span className="word-franco">Franco</span>-<span className="word-brazil">Brazilian</span> product designer based in Paris, shaped by years living across Brazil, France, the US, Portugal and Canada, and a background spanning law, business, and design.
               <br /><br />
-              I believe great design is invisible. I&apos;m drawn to work where curiosity drives
-              intention — digging into messy problems and refining until the complexity disappears,
-              then obsessing over every detail until it feels right. I love collaborative
-              environments and people who bring the same care to their work.
+              I currently work at <span style={{ color: isDark ? '#ffffff8c' : '#00000073' }}>Usercentrics</span>, shaping privacy compliance products. As a designer, I enjoy untangling problems, refining until the complexity disappears, and obsessing over every detail until it feels right, especially alongside people who bring the same care and curiosity. More generally, I&apos;m drawn to things built with intention and soul: a vintage concert poster, the warmth of a 70s living room, a clean product that feels obvious in hindsight. I&apos;m also genuinely excited by what AI is unlocking in design today.
               <br /><br />
-              Outside work, you&apos;ll find me at a coffee shop, listening to bossa nova, or
-              deep in a side project I probably didn&apos;t need to start.
+              Outside of work, you&apos;ll find me surfing, shooting on film, hunting for vintage objects, or deep in whatever rabbit hole I&apos;ve fallen into lately... right now it&apos;s niche perfumes and MPB and Americana music.
             </p>
 
             <div style={{ display: 'flex', gap: 24 }}>

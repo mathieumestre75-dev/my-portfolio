@@ -9,7 +9,7 @@ import GridBackground from '@/components/GridBackground'
 
 type Tab = 'photos' | 'inspirations'
 
-type Photo = { id: string; ratio: number; src?: string }
+type Photo = { id: string; ratio: number; src?: string; displayRatio?: number }
 
 /* My Photos — film roll R1-08704 (36 frames, 35mm), scanner frame
    cropped out. Order mixes LP / LLP / LLLP chunks so the 3-column
@@ -60,15 +60,44 @@ const PHOTOS: Photo[] = [
    clustering similar heights side by side. */
 const INSPIRATIONS: Photo[] = [
   { id: 'i-42c6a912', ratio: 0.673, src: '/inspirations/i-42c6a912.jpg' },
+  { id: 'i-08a8fb3c', ratio: 1.598, src: '/inspirations/i-08a8fb3c.jpg' },
   { id: 'i-7c4eb8b5', ratio: 0.838, src: '/inspirations/i-7c4eb8b5.jpg' },
+  { id: 'i-3613a696', ratio: 0.649, src: '/inspirations/i-3613a696.jpg' },
   { id: 'i-b29e2baa', ratio: 0.700, src: '/inspirations/i-b29e2baa.jpg' },
+  { id: 'i-54d4d27f', ratio: 1.766, src: '/inspirations/i-54d4d27f.jpg' },
   { id: 'i-4f256aae', ratio: 0.812, src: '/inspirations/i-4f256aae.jpg' },
+  { id: 'i-44a29719', ratio: 0.750, src: '/inspirations/i-44a29719.jpg' },
   { id: 'i-fd65770f', ratio: 0.707, src: '/inspirations/i-fd65770f.jpg' },
+  { id: 'i-813d4f14', ratio: 0.811, src: '/inspirations/i-813d4f14.jpg' },
   { id: 'i-23d3b899', ratio: 0.800, src: '/inspirations/i-23d3b899.jpg' },
+  { id: 'i-a0110c59', ratio: 1.049, src: '/inspirations/i-a0110c59.jpg' },
   { id: 'i-3e0e5b89', ratio: 0.771, src: '/inspirations/i-3e0e5b89.jpg' },
+  { id: 'i-adb52e73', ratio: 1.425, src: '/inspirations/i-adb52e73.jpg' },
   { id: 'i-daad0cf3', ratio: 0.790, src: '/inspirations/i-daad0cf3.jpg' },
+  { id: 'i-b38dd289', ratio: 1.158, src: '/inspirations/i-b38dd289.jpg' },
   { id: 'i-a139e400', ratio: 0.774, src: '/inspirations/i-a139e400.jpg' },
+  { id: 'i-c94f104a', ratio: 0.786, src: '/inspirations/i-c94f104a.jpg' },
+  { id: 'i-e4d86a35', ratio: 0.986, src: '/inspirations/i-e4d86a35.jpg' },
 ]
+
+// Pre-computed column assignments.
+// PHOTOS: exactly 8L+4P per column → identical column heights → mathematically flush bottom.
+//   Portraits are grouped in pairs/bursts rather than evenly spaced, creating dramatic
+//   contrast between tall portrait blocks and wide landscape runs across the three columns.
+// INSPIRATIONS: hand-optimised so col pixel heights are 2982/2985/2979 at 400px col width
+//   (6px max spread — the extra gap in the 7-item column is accounted for).
+const _pm = Object.fromEntries(PHOTOS.map(p => [p.id, p]))
+const _im = Object.fromEntries(INSPIRATIONS.map(p => [p.id, p]))
+const pick = (map: Record<string, Photo>, ids: string[]) => ids.map(id => map[id])
+
+// Col0: PP LLLL PP LLLL  Col1: LLLL PP LLLL PP  Col2: LL PP LL PP LLLL
+const PHOTOS_C0 = pick(_pm, ['p0001','p0002','p0000','p0003','p0004','p0005','p0010','p0018','p0006','p0007','p0008','p0009'])
+const PHOTOS_C1 = pick(_pm, ['p0011','p0012','p0014','p0015','p0013','p0017','p0016','p0020','p0022','p0023','p0019','p0025'])
+const PHOTOS_C2 = pick(_pm, ['p0024','p0027','p0021','p0026','p0028','p0029','p0034','p0035','p0030','p0031','p0032','p0033'])
+
+const INSP_C0 = pick(_im, ['i-23d3b899','i-a0110c59','i-daad0cf3','i-3e0e5b89','i-c94f104a','i-a139e400'])
+const INSP_C1 = pick(_im, ['i-08a8fb3c','i-44a29719','i-adb52e73','i-4f256aae','i-3613a696','i-b38dd289','i-e4d86a35'])
+const INSP_C2 = pick(_im, ['i-fd65770f','i-54d4d27f','i-b29e2baa','i-7c4eb8b5','i-42c6a912','i-813d4f14'])
 
 const CARD_KEYFRAME = `@keyframes photo-rise { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }`
 
@@ -80,7 +109,8 @@ const monoStyle: React.CSSProperties = {
   color: 'var(--color-text-secondary)',
 }
 
-function PhotoTile({ src, ratio }: { src?: string; ratio: number }) {
+function PhotoTile({ src, ratio, displayRatio }: { src?: string; ratio: number; displayRatio?: number }) {
+  const ar = String(displayRatio ?? ratio)
   return (
     <div style={{ breakInside: 'avoid', marginBottom: 10 }}>
       {src ? (
@@ -91,7 +121,7 @@ function PhotoTile({ src, ratio }: { src?: string; ratio: number }) {
           loading="lazy"
           style={{
             width: '100%',
-            aspectRatio: String(ratio),
+            aspectRatio: ar,
             objectFit: 'cover',
             display: 'block',
             background: 'var(--color-card-bg)',
@@ -102,7 +132,7 @@ function PhotoTile({ src, ratio }: { src?: string; ratio: number }) {
           aria-hidden
           style={{
             width: '100%',
-            aspectRatio: String(ratio),
+            aspectRatio: ar,
             background: 'var(--color-card-bg)',
             border: '1px solid var(--color-card-border)',
             backdropFilter: 'blur(5px)',
@@ -121,7 +151,9 @@ export default function Art() {
   const isDark = mounted && resolvedTheme === 'dark'
 
   const [tab, setTab] = useState<Tab>('photos')
-  const set = tab === 'photos' ? PHOTOS : INSPIRATIONS
+  const cols = tab === 'photos'
+    ? [PHOTOS_C0, PHOTOS_C1, PHOTOS_C2]
+    : [INSP_C0, INSP_C1, INSP_C2]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-page-bg)', position: 'relative' }}>
@@ -245,7 +277,7 @@ export default function Art() {
                   transition: 'color 0.2s ease, border-color 0.2s ease',
                 }}
               >
-                {t === 'photos' ? 'My Photos' : 'Inspirations'}
+                {t === 'photos' ? 'My photos' : 'Inspirations'}
               </button>
             )
           })}
@@ -260,10 +292,14 @@ export default function Art() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{ columnCount: 3, columnGap: 10 }}
+          style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}
         >
-          {set.map((p) => (
-            <PhotoTile key={p.id} src={p.src} ratio={p.ratio} />
+          {cols.map((col, ci) => (
+            <div key={ci} style={{ flex: 1 }}>
+              {col.map((p) => (
+                <PhotoTile key={p.id} src={p.src} ratio={p.ratio} displayRatio={p.displayRatio} />
+              ))}
+            </div>
           ))}
         </motion.div>
       </div>
