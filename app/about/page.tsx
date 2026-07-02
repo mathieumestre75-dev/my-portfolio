@@ -300,7 +300,7 @@ export default function About() {
               >
                 Finding joy and purpose in creating the things I wish existed{' '}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/sun.png" alt="" aria-hidden style={{ display: 'inline', width: 21, height: 21, verticalAlign: 'middle', marginBottom: 2, marginLeft: -2, filter: 'sepia(0.25) saturate(1.4) hue-rotate(-8deg) brightness(1.15)' }} />
+                <img src="/sun.png" alt="" aria-hidden style={{ display: 'inline', width: 21, height: 21, verticalAlign: 'middle', marginBottom: 2, marginLeft: -2, filter: 'saturate(1.8) hue-rotate(15deg) brightness(1.2)' }} />
               </p>
 
               {/* eslint-disable-next-line @next/next/no-img-element */}

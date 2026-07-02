@@ -486,7 +486,8 @@ export default function Art() {
             justifyContent: 'center',
             alignItems: 'center',
             gap: 28,
-            padding: '0 0 40px',
+            marginTop: 10,
+            marginBottom: 30,
             position: 'relative',
           }}
         >
@@ -501,9 +502,10 @@ export default function Art() {
                   border: 'none',
                   padding: '4px 2px',
                   cursor: 'pointer',
-                  fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
-                  fontSize: 11.2,
-                  letterSpacing: '0.02em',
+                  fontFamily: "'PP Neue Montreal Medium', system-ui, sans-serif",
+                  fontSize: 12.5,
+                  fontWeight: 500,
+                  letterSpacing: '0.005em',
                   color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
                   borderBottom: `1px solid ${isActive ? 'var(--color-text-primary)' : 'transparent'}`,
                   transition: 'color 0.2s ease, border-color 0.2s ease',
