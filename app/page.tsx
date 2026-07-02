@@ -18,10 +18,13 @@ export default function Home() {
   const hoveredProject: HomeProject | null = hoveredSlug ? (homeProjects.find(p => p.slug === hoveredSlug) ?? null) : null
   const { view } = useView()
   const isOrganized = view === 'organized'
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  const isDark = mounted && resolvedTheme === 'dark'
+  const { resolvedTheme } = useTheme()  // subscribe to theme changes
+  // Read directly from the .dark class on <html> (set synchronously by
+  // next-themes' inline script before React runs). This gives us the
+  // correct value on the very first render of a client-side navigation,
+  // with no one-tick gap that could flash the light-mode wash.
+  const isDark = (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
+                 || resolvedTheme === 'dark'
 
   return (
     <main

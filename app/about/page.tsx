@@ -19,9 +19,9 @@ const PHOTOS = [
 const SIGNATURE = '/signature-mathieu.png'
 
 const CURRENTS = [
-  { label: 'Watching', value: 'Culinary Class Wars 👩🏻‍🍳' },
-  { label: 'Reading',  value: 'Monte Cristo' },
-  { label: 'Learning', value: 'after effects and blender ;-;' },
+  { label: 'Watching', value: 'The Talented Mr. Ripley' },
+  { label: 'Listening', value: 'Six Blade Knife · Dire Straits' },
+  { label: 'Learning', value: 'to keep up with AI tools and workflows 🤓' },
 ]
 
 const mono: React.CSSProperties = {
@@ -55,7 +55,7 @@ const STYLES = `
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: background-position 0.3s ease;
+  transition: background-position 0.15s ease-out;
 }
 .word-franco:hover { background-position: 0% 0; }
 
@@ -73,7 +73,7 @@ const STYLES = `
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: background-position 0.3s ease;
+  transition: background-position 0.15s ease-out;
 }
 .word-brazil:hover { background-position: 0% 0; }
 `
@@ -149,10 +149,13 @@ function PhotoSlideshow() {
 
 export default function About() {
   const [hovering, setHovering] = useState(false)
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  const isDark = mounted && resolvedTheme === 'dark'
+  const { resolvedTheme } = useTheme()  // subscribe to theme changes
+  // Read directly from the .dark class on <html> (set synchronously by
+  // next-themes' inline script before React runs). This gives us the
+  // correct value on the very first render of a client-side navigation,
+  // with no one-tick gap that could flash the light-mode wash.
+  const isDark = (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
+                 || resolvedTheme === 'dark'
 
   return (
     <div

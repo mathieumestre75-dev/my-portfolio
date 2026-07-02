@@ -1,14 +1,15 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
 
 export default function GridBackground() {
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-
-  const isDark = mounted && resolvedTheme === 'dark'
+  const { resolvedTheme } = useTheme()  // subscribe to theme changes
+  // Read directly from the .dark class on <html> — set synchronously by
+  // next-themes' inline script before React runs, and persists across
+  // navigations. This avoids the one-tick flash of the light-mode white
+  // edge-fade gradients when this component remounts on page navigation.
+  const isDark = (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
+                 || resolvedTheme === 'dark'
 
   if (isDark) {
     return (

@@ -62,7 +62,10 @@ const INSPIRATIONS: Photo[] = [
   { id: 'i-42c6a912', ratio: 0.673, src: '/inspirations/i-42c6a912.jpg' },
   { id: 'i-08a8fb3c', ratio: 1.598, src: '/inspirations/i-08a8fb3c.jpg' },
   { id: 'i-7c4eb8b5', ratio: 0.838, src: '/inspirations/i-7c4eb8b5.jpg' },
-  { id: 'i-3613a696', ratio: 0.649, src: '/inspirations/i-3613a696.jpg' },
+  { id: 'i-67d4cecb', ratio: 0.716, src: '/inspirations/i-67d4cecb.jpg' },
+  { id: 'i-4f62bce0', ratio: 0.669, src: '/inspirations/i-4f62bce0.jpg' },
+  { id: 'i-5dc234be', ratio: 0.662, src: '/inspirations/i-5dc234be.jpg' },
+  { id: 'i-95048160', ratio: 0.750, src: '/inspirations/i-95048160.jpg' },
   { id: 'i-b29e2baa', ratio: 0.700, src: '/inspirations/i-b29e2baa.jpg' },
   { id: 'i-54d4d27f', ratio: 1.766, src: '/inspirations/i-54d4d27f.jpg' },
   { id: 'i-4f256aae', ratio: 0.812, src: '/inspirations/i-4f256aae.jpg' },
@@ -78,13 +81,128 @@ const INSPIRATIONS: Photo[] = [
   { id: 'i-a139e400', ratio: 0.774, src: '/inspirations/i-a139e400.jpg' },
   { id: 'i-c94f104a', ratio: 0.786, src: '/inspirations/i-c94f104a.jpg' },
   { id: 'i-e4d86a35', ratio: 0.986, src: '/inspirations/i-e4d86a35.jpg' },
-  { id: 'i-497de80d', ratio: 0.694, src: '/inspirations/i-497de80d.jpg' },
+  { id: 'i-497de80d', ratio: 0.692, src: '/inspirations/i-497de80d.jpg' },
   { id: 'i-834e1e35', ratio: 0.804, src: '/inspirations/i-834e1e35.jpg' },
   { id: 'i-b8ada175', ratio: 0.725, src: '/inspirations/i-b8ada175.jpg' },
   { id: 'i-b8cdd956', ratio: 0.785, src: '/inspirations/i-b8cdd956.jpg' },
   { id: 'i-c059de0f', ratio: 0.804, src: '/inspirations/i-c059de0f.jpg' },
   { id: 'i-cf8aef5a', ratio: 1.000, src: '/inspirations/i-cf8aef5a.jpg' },
   { id: 'i-e84b1870', ratio: 0.913, src: '/inspirations/i-e84b1870.jpg' },
+
+  // Second batch — appended after row 7 of the existing masonry.
+  { id: 'i-0dc15efe', ratio: 1.000, src: '/inspirations/i-0dc15efe.jpg' },
+  { id: 'i-18cfd324', ratio: 0.667, src: '/inspirations/i-18cfd324.jpg' },
+  { id: 'i-1dbc0808', ratio: 0.800, src: '/inspirations/i-1dbc0808.jpg' },
+  { id: 'i-20aeb916', ratio: 0.939, src: '/inspirations/i-20aeb916.jpg' },
+  { id: 'i-2ca715f0', ratio: 1.329, src: '/inspirations/i-2ca715f0.jpg' },
+  { id: 'i-37c27a0b', ratio: 0.678, src: '/inspirations/i-37c27a0b.jpg' },
+  { id: 'i-39af9563', ratio: 0.857, src: '/inspirations/i-39af9563.jpg' },
+  { id: 'i-4453533a', ratio: 0.847, src: '/inspirations/i-4453533a.jpg' },
+  { id: 'i-4a07538f', ratio: 0.765, src: '/inspirations/i-4a07538f.jpg' },
+  { id: 'i-61d609d9', ratio: 0.820, src: '/inspirations/i-61d609d9.jpg' },
+  { id: 'i-6d9e679b', ratio: 1.472, src: '/inspirations/i-6d9e679b.jpg' },
+  { id: 'i-7df10804', ratio: 0.750, src: '/inspirations/i-7df10804.jpg' },
+  { id: 'i-7efb4f5e', ratio: 0.750, src: '/inspirations/i-7efb4f5e.jpg' },
+  { id: 'i-88451454', ratio: 0.821, src: '/inspirations/i-88451454.jpg' },
+  { id: 'i-8a5ab776', ratio: 0.981, src: '/inspirations/i-8a5ab776.jpg' },
+  { id: 'i-96dd0151', ratio: 0.750, src: '/inspirations/i-96dd0151.jpg' },
+  { id: 'i-9796963c', ratio: 1.500, src: '/inspirations/i-9796963c.jpg' },
+  { id: 'i-9de43a48', ratio: 1.401, src: '/inspirations/i-9de43a48.jpg' },
+  { id: 'i-a0e5751c', ratio: 0.752, src: '/inspirations/i-a0e5751c.jpg' },
+  { id: 'i-a3ddd1dc', ratio: 1.000, src: '/inspirations/i-a3ddd1dc.jpg' },
+  { id: 'i-a52f90d5', ratio: 0.800, src: '/inspirations/i-a52f90d5.jpg' },
+  { id: 'i-a68e3342', ratio: 0.562, src: '/inspirations/i-a68e3342.jpg' },
+  { id: 'i-a996a516', ratio: 0.802, src: '/inspirations/i-a996a516.jpg' },
+  { id: 'i-afb0f378', ratio: 1.333, src: '/inspirations/i-afb0f378.jpg' },
+  { id: 'i-bc7c9384', ratio: 1.497, src: '/inspirations/i-bc7c9384.jpg' },
+  { id: 'i-bcf59f0c', ratio: 0.668, src: '/inspirations/i-bcf59f0c.jpg' },
+  { id: 'i-c4290c3e', ratio: 0.667, src: '/inspirations/i-c4290c3e.jpg' },
+  { id: 'i-c5e25cdb', ratio: 1.548, src: '/inspirations/i-c5e25cdb.jpg' },
+  { id: 'i-cef9374f', ratio: 0.750, src: '/inspirations/i-cef9374f.jpg' },
+  { id: 'i-e78d797e', ratio: 0.740, src: '/inspirations/i-e78d797e.jpg' },
+  { id: 'i-ea8d7942', ratio: 0.759, src: '/inspirations/i-ea8d7942.jpg' },
+  { id: 'i-eb0d6f2d', ratio: 1.000, src: '/inspirations/i-eb0d6f2d.jpg' },
+  { id: 'i-f3da9619', ratio: 0.803, src: '/inspirations/i-f3da9619.jpg' },
+  { id: 'i-ffa6224c', ratio: 0.713, src: '/inspirations/i-ffa6224c.jpg' },
+
+  // Third batch — appended after the flush-bottom fix. Distribution
+  // computed to keep all three columns at equal final height.
+  { id: 'i-00028592', ratio: 0.772, src: '/inspirations/i-00028592.jpg' },
+  { id: 'i-0bd146ef', ratio: 0.632, src: '/inspirations/i-0bd146ef.jpg' },
+  { id: 'i-0c8b31a0', ratio: 0.707, src: '/inspirations/i-0c8b31a0.jpg' },
+  { id: 'i-0f74bab2', ratio: 0.858, src: '/inspirations/i-0f74bab2.jpg' },
+  { id: 'i-15a67397', ratio: 0.740, src: '/inspirations/i-15a67397.jpg' },
+  { id: 'i-1d430978', ratio: 0.801, src: '/inspirations/i-1d430978.jpg' },
+  { id: 'i-20a3ac77', ratio: 1.000, src: '/inspirations/i-20a3ac77.jpg' },
+  { id: 'i-262ee033', ratio: 0.820, src: '/inspirations/i-262ee033.jpg' },
+  { id: 'i-2cbf09fa', ratio: 0.758, src: '/inspirations/i-2cbf09fa.jpg' },
+  { id: 'i-31bdde48', ratio: 0.687, src: '/inspirations/i-31bdde48.jpg' },
+  { id: 'i-36ea6305', ratio: 1.005, src: '/inspirations/i-36ea6305.jpg' },
+  { id: 'i-3a1ab08d', ratio: 0.773, src: '/inspirations/i-3a1ab08d.jpg' },
+  { id: 'i-3abd23f0', ratio: 0.750, src: '/inspirations/i-3abd23f0.jpg' },
+  { id: 'i-42b42a89', ratio: 0.993, src: '/inspirations/i-42b42a89.jpg' },
+  { id: 'i-47c1fb1f', ratio: 0.800, src: '/inspirations/i-47c1fb1f.jpg' },
+  { id: 'i-4a50670b', ratio: 0.707, src: '/inspirations/i-4a50670b.jpg' },
+  { id: 'i-4e0d754a', ratio: 0.800, src: '/inspirations/i-4e0d754a.jpg' },
+  { id: 'i-5040ee6b', ratio: 1.000, src: '/inspirations/i-5040ee6b.jpg' },
+  { id: 'i-557e0f48', ratio: 0.695, src: '/inspirations/i-557e0f48.jpg' },
+  { id: 'i-5a007a4c', ratio: 0.789, src: '/inspirations/i-5a007a4c.jpg' },
+  { id: 'i-692dea80', ratio: 0.690, src: '/inspirations/i-692dea80.jpg' },
+  { id: 'i-70fa1a7e', ratio: 0.711, src: '/inspirations/i-70fa1a7e.jpg' },
+  { id: 'i-782d3a82', ratio: 0.738, src: '/inspirations/i-782d3a82.jpg' },
+  { id: 'i-8363a93c', ratio: 0.808, src: '/inspirations/i-8363a93c.jpg' },
+  { id: 'i-9c9793ce', ratio: 1.000, src: '/inspirations/i-9c9793ce.jpg' },
+  { id: 'i-9dc84ecd', ratio: 0.750, src: '/inspirations/i-9dc84ecd.jpg' },
+  { id: 'i-b5e44651', ratio: 1.453, src: '/inspirations/i-b5e44651.jpg' },
+  { id: 'i-b819c443', ratio: 0.707, src: '/inspirations/i-b819c443.jpg' },
+  { id: 'i-b95e6dce', ratio: 1.000, src: '/inspirations/i-b95e6dce.jpg' },
+  { id: 'i-baced945', ratio: 1.333, src: '/inspirations/i-baced945.jpg' },
+  { id: 'i-c26be60c', ratio: 0.562, src: '/inspirations/i-c26be60c.jpg' },
+  { id: 'i-c2b1c781', ratio: 0.800, src: '/inspirations/i-c2b1c781.jpg' },
+  { id: 'i-d078c37b', ratio: 0.750, src: '/inspirations/i-d078c37b.jpg' },
+  { id: 'i-d3ed4d9f', ratio: 0.771, src: '/inspirations/i-d3ed4d9f.jpg' },
+  { id: 'i-e47a7706', ratio: 0.706, src: '/inspirations/i-e47a7706.jpg' },
+  { id: 'i-e5376e27', ratio: 0.706, src: '/inspirations/i-e5376e27.jpg' },
+  { id: 'i-ec1ee0c7', ratio: 0.997, src: '/inspirations/i-ec1ee0c7.jpg' },
+  { id: 'i-ef5a06aa', ratio: 0.815, src: '/inspirations/i-ef5a06aa.jpg' },
+  { id: 'i-faa67c13', ratio: 0.746, src: '/inspirations/i-faa67c13.jpg' },
+  { id: 'i-fc9d2b7e', ratio: 0.998, src: '/inspirations/i-fc9d2b7e.jpg' },
+
+  // Fourth batch — flush-bottom partition (0px spread across columns).
+  { id: 'i-0fe00c5b', ratio: 1.108, src: '/inspirations/i-0fe00c5b.jpg' },
+  { id: 'i-11d3a502', ratio: 0.750, src: '/inspirations/i-11d3a502.jpg' },
+  { id: 'i-3372b50e', ratio: 0.672, src: '/inspirations/i-3372b50e.jpg' },
+  { id: 'i-36091bd2', ratio: 1.000, src: '/inspirations/i-36091bd2.jpg' },
+  { id: 'i-3704d673', ratio: 1.087, src: '/inspirations/i-3704d673.jpg' },
+  { id: 'i-3d845413', ratio: 0.800, src: '/inspirations/i-3d845413.jpg' },
+  { id: 'i-4a1feaf1', ratio: 0.677, src: '/inspirations/i-4a1feaf1.jpg' },
+  { id: 'i-5350df9b', ratio: 0.753, src: '/inspirations/i-5350df9b.jpg' },
+  { id: 'i-63fbc624', ratio: 1.435, src: '/inspirations/i-63fbc624.jpg' },
+  { id: 'i-65bd6de1', ratio: 1.006, src: '/inspirations/i-65bd6de1.jpg' },
+  { id: 'i-6773e3f1', ratio: 1.000, src: '/inspirations/i-6773e3f1.jpg' },
+  { id: 'i-6dced705', ratio: 0.994, src: '/inspirations/i-6dced705.jpg' },
+  { id: 'i-7046cfaf', ratio: 1.480, src: '/inspirations/i-7046cfaf.jpg' },
+  { id: 'i-7377ed38', ratio: 1.175, src: '/inspirations/i-7377ed38.jpg' },
+  { id: 'i-739becfb', ratio: 1.009, src: '/inspirations/i-739becfb.jpg' },
+  { id: 'i-749d1f96', ratio: 0.780, src: '/inspirations/i-749d1f96.jpg' },
+  { id: 'i-8618f269', ratio: 1.258, src: '/inspirations/i-8618f269.jpg' },
+  { id: 'i-9b72d85f', ratio: 0.949, src: '/inspirations/i-9b72d85f.jpg' },
+  { id: 'i-a10c1f14', ratio: 0.563, src: '/inspirations/i-a10c1f14.jpg' },
+  { id: 'i-a2814262', ratio: 1.000, src: '/inspirations/i-a2814262.jpg' },
+  { id: 'i-a9232bb8', ratio: 1.379, src: '/inspirations/i-a9232bb8.jpg' },
+  { id: 'i-c4d0a9fb', ratio: 1.787, src: '/inspirations/i-c4d0a9fb.jpg' },
+  { id: 'i-d3405709', ratio: 0.754, src: '/inspirations/i-d3405709.jpg' },
+  { id: 'i-d9fbcb21', ratio: 0.998, src: '/inspirations/i-d9fbcb21.jpg' },
+  { id: 'i-e5577c14', ratio: 0.757, src: '/inspirations/i-e5577c14.jpg' },
+  { id: 'i-eb6db00f', ratio: 1.562, src: '/inspirations/i-eb6db00f.jpg' },
+  { id: 'i-f64611b2', ratio: 0.563, src: '/inspirations/i-f64611b2.jpg' },
+
+  // Fifth batch
+  { id: 'i-3bb4dcbc', ratio: 1.018, src: '/inspirations/i-3bb4dcbc.jpg' },
+  { id: 'i-6dbb8115', ratio: 1.050, src: '/inspirations/i-6dbb8115.jpg' },
+  { id: 'i-7f0fd34e', ratio: 0.621, src: '/inspirations/i-7f0fd34e.jpg' },
+  { id: 'i-9d32f8a5', ratio: 0.750, src: '/inspirations/i-9d32f8a5.jpg' },
+  { id: 'i-a15bb450', ratio: 1.176, src: '/inspirations/i-a15bb450.jpg' },
 ]
 
 // Pre-computed column assignments.
@@ -102,13 +220,34 @@ const PHOTOS_C0 = pick(_pm, ['p0001','p0002','p0000','p0003','p0004','p0005','p0
 const PHOTOS_C1 = pick(_pm, ['p0011','p0012','p0014','p0015','p0013','p0017','p0016','p0020','p0022','p0023','p0019','p0025'])
 const PHOTOS_C2 = pick(_pm, ['p0024','p0027','p0021','p0026','p0028','p0029','p0034','p0035','p0030','p0031','p0032','p0033'])
 
-// Rule: alternate color families (blue/warm/green/neutral), mix interior+graphic, vary shapes
-// C0: red→orange→interior(warm) | blue/cream→orange-blue→green→B&W→blue→white/yellow
-const INSP_C0 = pick(_im, ['i-23d3b899','i-a0110c59','i-b8ada175','i-daad0cf3','i-3e0e5b89','i-c94f104a','i-a139e400','i-42c6a912','i-813d4f14'])
-// C1: yellow(wide)→blue→blue(wide) | yellow→dark-blue→interior(warm)→blue→green(wide)→red
-const INSP_C1 = pick(_im, ['i-08a8fb3c','i-44a29719','i-adb52e73','i-7c4eb8b5','i-3613a696','i-834e1e35','i-4f256aae','i-b38dd289','i-cf8aef5a'])
-// C2: yellow/blue→cream(wide)→red | blue/green-circle→cream/warm→blue→blue/green→interior(warm)
-const INSP_C2 = pick(_im, ['i-fd65770f','i-54d4d27f','i-b29e2baa','i-e4d86a35','i-e84b1870','i-497de80d','i-b8cdd956','i-c059de0f'])
+// Rule: alternate color families (blue/warm/green/neutral), mix interior+graphic, vary shapes.
+// The first 9 items in each column are the original layout; items after are the
+// new batch — appended so each column starts with a landscape or square to break
+// the trailing-portrait pattern from the first batch, and orientations/tones
+// alternate down the column.
+// Fully re-optimised: Djidjelli removed, new photo added, pavements
+// separated (i-11d3a502 → C1, i-a10c1f14 → C2), Yucca Fins/Top Shop
+// spaced with 2 non-brand items between them, interiors distributed
+// 5/4/4 across columns, orientations alternated, 0px column-height
+// spread (dead flush bottom).
+// Full re-optimization: 3 new photos added, last-row-left swapped for a
+// graphic/typography image (i-813d4f14 Sol Ecuador oval), C1 & C2 last
+// items preserved (i-4453533a and i-3d845413). Pavements in different
+// columns, Yucca/Top Shop in different columns, interiors 7/6/6, 0px
+// column-height spread (dead flush bottom).
+// Re-optimized with STRONG cross-column interior separation (1500× penalty).
+// Result: 0 interior visual-adjacencies, 8/8/7 balanced, 0px flush bottom.
+// Fixed lasts: C1=i-4453533a (surf), C2=i-3d845413 (Black Tusk).
+// C0 last swapped for typography (i-1dbc0808 Rastro Tequila).
+const INSP_C0 = pick(_im, [
+  'i-23d3b899','i-a0110c59','i-b8ada175','i-daad0cf3','i-3e0e5b89','i-c94f104a','i-a139e400','i-7df10804','i-0f74bab2','i-4a07538f','i-15a67397','i-5dc234be','i-9796963c','i-ef5a06aa','i-3a1ab08d','i-42c6a912','i-a9232bb8','i-eb6db00f','i-67d4cecb','i-8618f269','i-5040ee6b','i-47c1fb1f','i-3372b50e','i-6dced705','i-31bdde48','i-6d9e679b','i-20aeb916','i-88451454','i-c4290c3e','i-bcf59f0c','i-ffa6224c','i-cef9374f','i-a10c1f14','i-a15bb450','i-9b72d85f','i-813d4f14','i-8363a93c','i-a52f90d5','i-6773e3f1','i-11d3a502','i-9c9793ce','i-a2814262','i-7377ed38','i-2ca715f0','i-1dbc0808',
+])
+const INSP_C1 = pick(_im, [
+  'i-08a8fb3c','i-44a29719','i-adb52e73','i-7c4eb8b5','i-834e1e35','i-4f256aae','i-a68e3342','i-eb0d6f2d','i-1d430978','i-e5577c14','i-a3ddd1dc','i-b819c443','i-0dc15efe','i-63fbc624','i-61d609d9','i-7f0fd34e','i-d078c37b','i-c26be60c','i-5350df9b','i-36ea6305','i-7efb4f5e','i-65bd6de1','i-e78d797e','i-9de43a48','i-cf8aef5a','i-fc9d2b7e','i-9d32f8a5','i-b5e44651','i-8a5ab776','i-e5376e27','i-5a007a4c','i-2cbf09fa','i-4a50670b','i-ec1ee0c7','i-95048160','i-a0e5751c','i-d3405709','i-00028592','i-c2b1c781','i-39af9563','i-36091bd2','i-20a3ac77','i-b95e6dce','i-d3ed4d9f','i-4453533a',
+])
+const INSP_C2 = pick(_im, [
+  'i-fd65770f','i-54d4d27f','i-b29e2baa','i-e4d86a35','i-e84b1870','i-497de80d','i-b8cdd956','i-4a1feaf1','i-ea8d7942','i-b38dd289','i-42b42a89','i-bc7c9384','i-0fe00c5b','i-692dea80','i-3704d673','i-d9fbcb21','i-782d3a82','i-96dd0151','i-6dbb8115','i-0c8b31a0','i-3abd23f0','i-37c27a0b','i-baced945','i-afb0f378','i-0bd146ef','i-4f62bce0','i-3bb4dcbc','i-70fa1a7e','i-749d1f96','i-c5e25cdb','i-262ee033','i-faa67c13','i-739becfb','i-f64611b2','i-9dc84ecd','i-557e0f48','i-e47a7706','i-c4d0a9fb','i-f3da9619','i-7046cfaf','i-a996a516','i-18cfd324','i-c059de0f','i-4e0d754a','i-3d845413',
+])
 
 const CARD_KEYFRAME = `@keyframes photo-rise { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }`
 
@@ -156,10 +295,13 @@ function PhotoTile({ src, ratio, displayRatio }: { src?: string; ratio: number; 
 }
 
 export default function Art() {
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  const isDark = mounted && resolvedTheme === 'dark'
+  const { resolvedTheme } = useTheme()  // subscribe to theme changes
+  // Read directly from the .dark class on <html> (set synchronously by
+  // next-themes' inline script before React runs). This gives us the
+  // correct value on the very first render of a client-side navigation,
+  // with no one-tick gap that could flash the light-mode wash.
+  const isDark = (typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
+                 || resolvedTheme === 'dark'
 
   const [tab, setTab] = useState<Tab>('photos')
   const cols = tab === 'photos'
