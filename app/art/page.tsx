@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useTransition } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import ClockWidget from '@/components/ClockWidget'
 import GridBackground from '@/components/GridBackground'
+import { INSPIRATION_META, PHOTO_META } from './imageMeta'
+import { shuffleGrid } from './shuffle'
 
 type Tab = 'photos' | 'inspirations'
 
@@ -294,6 +296,44 @@ function PhotoTile({ src, ratio, displayRatio }: { src?: string; ratio: number; 
   )
 }
 
+// Subtle shuffle button — mono, uppercase, tracked (matches the top-left
+// MATHIEU MESTRE label). Icon is static; the delight lives in the grid itself.
+function ShuffleButton({ onShuffle }: { onShuffle: () => void }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <motion.button
+      onClick={onShuffle}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      aria-label="Shuffle grid"
+      whileTap={{ scale: 0.94 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+      style={{
+        position: 'absolute',
+        right: 0,
+        top: '50%',
+        y: '-50%',
+        background: 'none',
+        border: 'none',
+        padding: '3px 5px',
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 5,
+        fontFamily: "'Inter', system-ui, sans-serif",
+        fontSize: 11,
+        fontWeight: 500,
+        letterSpacing: '-0.005em',
+        color: hover ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+        transition: 'color 0.2s ease',
+      }}
+    >
+      <span style={{ fontSize: 11.5, lineHeight: 1, display: 'inline-block' }}>↺</span>
+      <span>Shuffle</span>
+    </motion.button>
+  )
+}
+
 export default function Art() {
   const { resolvedTheme } = useTheme()  // subscribe to theme changes
   // Read directly from the .dark class on <html> (set synchronously by
@@ -304,9 +344,45 @@ export default function Art() {
                  || resolvedTheme === 'dark'
 
   const [tab, setTab] = useState<Tab>('photos')
+
+  // Shuffle state — nonce per tab (drives the tile ripple key on shuffle),
+  // plus an instant "pulse" tick that flips on click (before the solver runs),
+  // so the grid gives immediate feedback even when the Inspirations pool takes
+  // a beat to re-solve.
+  const [photosNonce, setPhotosNonce] = useState(0)
+  const [inspNonce, setInspNonce] = useState(0)
+  const [photosCols, setPhotosCols] = useState<Photo[][] | null>(null)
+  const [inspCols, setInspCols] = useState<Photo[][] | null>(null)
+  const [pulse, setPulse] = useState(0)
+  const [, startTransition] = useTransition()
+
   const cols = tab === 'photos'
-    ? [PHOTOS_C0, PHOTOS_C1, PHOTOS_C2]
-    : [INSP_C0, INSP_C1, INSP_C2]
+    ? (photosCols ?? [PHOTOS_C0, PHOTOS_C1, PHOTOS_C2])
+    : (inspCols ?? [INSP_C0, INSP_C1, INSP_C2])
+  const nonce = tab === 'photos' ? photosNonce : inspNonce
+
+  const handleShuffle = () => {
+    // Immediate acknowledgment — bump pulse so the current grid dips + settles
+    // this frame, regardless of how long the solver takes.
+    setPulse(p => p + 1)
+    // Defer the solver to the next frame + mark the state update as a
+    // transition so React can keep the UI responsive while it runs.
+    requestAnimationFrame(() => {
+      if (tab === 'photos') {
+        const next = shuffleGrid([...PHOTOS], PHOTO_META, { attemptFlush: true })
+        startTransition(() => {
+          setPhotosCols(next)
+          setPhotosNonce(n => n + 1)
+        })
+      } else {
+        const next = shuffleGrid([...INSPIRATIONS], INSPIRATION_META, { attemptFlush: true })
+        startTransition(() => {
+          setInspCols(next)
+          setInspNonce(n => n + 1)
+        })
+      }
+    })
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-page-bg)', position: 'relative' }}>
@@ -399,7 +475,8 @@ export default function Art() {
         </motion.div>
 
         {/* Toggle — two mono labels with an active underline.
-           Restrained, matches the portfolio's quiet typography. */}
+           Restrained, matches the portfolio's quiet typography.
+           Shuffle button sits to the right, subtle by default. */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -407,8 +484,10 @@ export default function Art() {
           style={{
             display: 'flex',
             justifyContent: 'center',
+            alignItems: 'center',
             gap: 28,
             padding: '0 0 40px',
+            position: 'relative',
           }}
         >
           {(['photos', 'inspirations'] as Tab[]).map((t) => {
@@ -434,26 +513,60 @@ export default function Art() {
               </button>
             )
           })}
+          <ShuffleButton onShuffle={handleShuffle} />
         </motion.div>
 
-        {/* Masonry — wrapped in a motion.div keyed by tab so the same
-           subtle fade-up animation plays when the user lands on the
-           page and again whenever they switch between My Photos and
-           Inspirations. One animation, both tabs, no per-tile timing. */}
+        {/* Masonry — outer wrapper handles the tab-change fade AND an instant
+           "dip" on shuffle click (via pulse key) that plays this frame while
+           the solver runs on the next. Inner tiles animate on nonce change
+           when the new arrangement arrives. */}
         <motion.div
           key={tab}
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}
+          style={{ position: 'relative' }}
         >
-          {cols.map((col, ci) => (
-            <div key={ci} style={{ flex: 1 }}>
-              {col.map((p) => (
-                <PhotoTile key={p.id} src={p.src} ratio={p.ratio} displayRatio={p.displayRatio} />
-              ))}
-            </div>
-          ))}
+          <motion.div
+            key={`pulse-${pulse}`}
+            initial={pulse === 0 ? false : { opacity: 0.6, scale: 0.995 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              opacity: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+              scale: { type: 'spring', stiffness: 240, damping: 26 },
+            }}
+            style={{ display: 'flex', gap: 10, alignItems: 'flex-start', transformOrigin: 'center top' }}
+          >
+            {cols.map((col, ci) => (
+              <div key={ci} style={{ flex: 1 }}>
+                {col.map((p, ri) => {
+                  // Soft rise — clean slide up from 16px with a smooth fade.
+                  // No tilt, no bounce. Diagonal cascade top-left → bottom-right.
+                  // Slightly longer duration + softer easing than the preview
+                  // so the fade feels unhurried.
+                  const delay = nonce === 0 ? 0 : Math.min(0.7, ri * 0.035 + ci * 0.06)
+                  return (
+                    <motion.div
+                      key={`${nonce}-${p.id}`}
+                      initial={
+                        nonce === 0
+                          ? false
+                          : { opacity: 0, y: 16 }
+                      }
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 1.75,
+                        ease: [0.16, 1, 0.3, 1],
+                        delay,
+                      }}
+                    >
+                      <PhotoTile src={p.src} ratio={p.ratio} displayRatio={p.displayRatio} />
+                    </motion.div>
+                  )
+                })}
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </div>
