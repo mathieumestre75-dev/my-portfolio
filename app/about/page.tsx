@@ -21,7 +21,7 @@ const SIGNATURE = '/signature-mathieu.png'
 const CURRENTS = [
   { label: 'Watching', value: 'The Talented Mr. Ripley' },
   { label: 'Listening', value: 'Six Blade Knife · Dire Straits' },
-  { label: 'Learning', value: 'to keep up with AI tools and workflows 🤓' },
+  { label: 'Learning', value: 'Keeping up with AI tools and workflows 🤓' },
 ]
 
 const mono: React.CSSProperties = {
@@ -298,7 +298,9 @@ export default function About() {
                   margin: 0,
                 }}
               >
-                Finding joy and purpose in creating the things I wish existed :-)
+                Finding joy and purpose in creating the things I wish existed{' '}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/sun.png" alt="" aria-hidden style={{ display: 'inline', width: 21, height: 21, verticalAlign: 'middle', marginBottom: 2, marginLeft: -2, filter: 'sepia(0.25) saturate(1.4) hue-rotate(-8deg) brightness(1.15)' }} />
               </p>
 
               {/* eslint-disable-next-line @next/next/no-img-element */}
