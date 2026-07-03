@@ -8,12 +8,11 @@ import GridBackground from '@/components/GridBackground'
 import DotParticles from '@/components/DotParticles'
 import ClockWidget from '@/components/ClockWidget'
 
-const CDN = 'https://framerusercontent.com/images'
-
 const PHOTOS = [
-  `${CDN}/xj2ByBC3nJVc6F6HtI6nqcbnTw.jpg`,
-  `${CDN}/60U0IdoPtBAMAmLmMKGolwQI.jpg`,
-  `${CDN}/5zyj2mIYoYnGcqeSfIVOXwLoXt0.jpg`,
+  { src: '/about-fern.jpg',   pos: '40% center', scale: 1.45 },
+  { src: '/about-cave.jpg',   pos: '55% 68%',    scale: 1.12 },
+  { src: '/about-cactus.jpg', pos: 'center 78%', scale: 1.08 },
+  { src: '/about-cliff.jpg',  pos: '38% 58%',    scale: 1.12 },
 ]
 
 const SIGNATURE = '/signature-mathieu.png'
@@ -91,7 +90,7 @@ function PhotoSlideshow() {
         setPrevIdx(i)
         return next
       })
-    }, 3500)
+    }, 6000)
     return () => clearInterval(t)
   }, [])
 
@@ -115,7 +114,7 @@ function PhotoSlideshow() {
           border: '1px solid var(--color-photo-border)',
         }}
       >
-        {PHOTOS.map((src, i) => {
+        {PHOTOS.map(({ src, pos, scale }, i) => {
           const isExiting = i === prevIdx
           return (
             <motion.div
@@ -131,13 +130,14 @@ function PhotoSlideshow() {
                 position: 'absolute',
                 inset: 0,
                 zIndex: isExiting ? 2 : i === idx ? 1 : 0,
+                overflow: 'hidden',
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
                 alt=""
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: pos, display: 'block', transform: `scale(${scale})`, transformOrigin: pos }}
               />
             </motion.div>
           )
@@ -269,7 +269,7 @@ export default function About() {
             >
               <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
                 <span className="about-marquee" style={{ ...mono, lineHeight: 1 }}>
-                  Photo w/ my bestie. I&apos;m rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;Photo w/ my bestie. I&apos;m rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;
+                  Lanzarote w/ my bestie Pierre. Canary Islands.&nbsp;&nbsp;·&nbsp;&nbsp;Lanzarote w/ my bestie Pierre. Canary Islands.&nbsp;&nbsp;·&nbsp;&nbsp;
                 </span>
               </div>
               <span style={{ ...mono, flexShrink: 0, lineHeight: 1, color: 'var(--color-text-secondary)' }}>09.11.23</span>
