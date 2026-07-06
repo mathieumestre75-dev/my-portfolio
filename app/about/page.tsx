@@ -13,6 +13,7 @@ const PHOTOS = [
   { src: '/about-cave.jpg',   pos: '55% 68%',    scale: 1.12 },
   { src: '/about-cactus.jpg', pos: 'center 78%', scale: 1.08 },
   { src: '/about-cliff.jpg',  pos: '38% 58%',    scale: 1.12 },
+  { src: '/about-lanzarote-window.jpg', pos: '72% 55%', scale: 1.08 },
 ]
 
 const SIGNATURE = '/signature-mathieu.png'
@@ -37,7 +38,7 @@ const STYLES = `
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.about-marquee { animation: about-marquee 36s linear infinite; display: inline-block; white-space: nowrap; }
+.about-marquee { animation: about-marquee 30s linear infinite; display: inline-block; white-space: nowrap; }
 
 .word-franco {
   background: linear-gradient(90deg,
@@ -269,10 +270,10 @@ export default function About() {
             >
               <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
                 <span className="about-marquee" style={{ ...mono, lineHeight: 1 }}>
-                  Lanzarote w/ my bestie Pierre. Canary Islands.&nbsp;&nbsp;·&nbsp;&nbsp;Lanzarote w/ my bestie Pierre. Canary Islands.&nbsp;&nbsp;·&nbsp;&nbsp;
+                  Me and my best friend Pierre in Lanzarote, Canary Islands&nbsp;&nbsp;·&nbsp;&nbsp;Me and my best friend Pierre in Lanzarote, Canary Islands&nbsp;&nbsp;·&nbsp;&nbsp;
                 </span>
               </div>
-              <span style={{ ...mono, flexShrink: 0, lineHeight: 1, color: 'var(--color-text-secondary)' }}>09.11.23</span>
+              <span style={{ ...mono, flexShrink: 0, lineHeight: 1, color: 'var(--color-text-secondary)' }}>03.05.25</span>
             </div>
             <div style={{ height: 1, background: 'var(--color-border)', width: '100%' }} />
           </div>

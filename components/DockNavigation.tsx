@@ -23,6 +23,20 @@ export default function DockNavigation() {
   const { theme, setTheme } = useTheme()
   const isOrganized = view === 'organized'
   const isWorkPage = pathname.startsWith('/work') || pathname === '/about' || pathname === '/art'
+  // Frosted-glass override for Work + Art pages only — same dark tint in
+  // both light and dark modes so the pill reads consistently regardless of
+  // background. The light border + blur define the edges on either surface.
+  const useGlass = pathname === '/work' || pathname === '/art'
+  const glassIconColor = 'rgba(255, 255, 255, 0.85)'
+  const glassBg = useGlass ? 'rgba(60, 60, 60, 0.36)' : 'var(--color-dock-bg)'
+  const glassBorder = useGlass
+    ? '1px solid rgba(255, 255, 255, 0.2)'
+    : '1px solid var(--color-dock-border)'
+  const glassBlur = useGlass ? 'blur(8px) saturate(1.5)' : 'blur(10px)'
+  const glassShadow = useGlass
+    ? '0 2px 10px rgba(0, 0, 0, 0.08)'
+    : 'var(--dock-shadow)'
+  const glassDivider = useGlass ? 'rgba(255, 255, 255, 0.22)' : 'var(--color-dock-divider)'
 
   const allItems: Item[] = [
     { kind: 'theme', label: theme === 'dark' ? 'Sun mode' : 'Starry mode', icon: theme === 'dark' ? Sun : Moon },
@@ -91,7 +105,7 @@ export default function DockNavigation() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'var(--color-icon)',
+                width: 20, height: 20, color: useGlass ? glassIconColor : 'var(--color-icon)',
                 opacity,
                 transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
@@ -122,7 +136,7 @@ export default function DockNavigation() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'var(--color-icon)',
+                width: 20, height: 20, color: useGlass ? glassIconColor : 'var(--color-icon)',
                 opacity,
                 transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
@@ -135,7 +149,7 @@ export default function DockNavigation() {
               href={item.href}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, color: 'var(--color-icon)',
+                width: 20, height: 20, color: useGlass ? glassIconColor : 'var(--color-icon)',
                 opacity,
                 transition: 'opacity 0.2s ease, color 0.4s ease',
               }}
@@ -171,12 +185,12 @@ export default function DockNavigation() {
         layout
         transition={{ type: 'spring', stiffness: 280, damping: 30, mass: 1 }}
         style={{
-          background: 'var(--color-dock-bg)',
+          background: glassBg,
           borderRadius: 1100,
-          border: '1px solid var(--color-dock-border)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          boxShadow: 'var(--dock-shadow)',
+          border: glassBorder,
+          backdropFilter: glassBlur,
+          WebkitBackdropFilter: glassBlur,
+          boxShadow: glassShadow,
           padding: '10px 14px',
           display: 'flex',
           flexDirection: 'row',
@@ -213,7 +227,7 @@ export default function DockNavigation() {
           </div>
         </div>
 
-        <div style={{ width: 1, height: 12, background: 'var(--color-dock-divider)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 12, background: glassDivider, flexShrink: 0 }} />
 
         {navItems.map((item) => (
           <Fragment key={itemKey(item)}>{renderIcon(item)}</Fragment>

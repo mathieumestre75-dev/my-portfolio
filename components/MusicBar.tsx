@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 import { springs } from '@/lib/springs'
 
 const PLAYLIST = [
@@ -31,6 +32,21 @@ function buildQueue(current: number): number[] {
 export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
   const [playing, setPlaying] = useState(false)
   const [hovered, setHovered] = useState(false)
+  const pathname = usePathname()
+  // Same dark-tinted glass in both light and dark modes — matches the dock's
+  // values so the pill + dock read as a matched pair on Work/Art pages.
+  const useGlass = pathname === '/work' || pathname === '/art'
+  const glassText = 'rgba(255, 255, 255, 0.85)'
+  const glassTextSoft = 'rgba(255, 255, 255, 0.55)'
+  const glassBg = useGlass ? 'rgba(60, 60, 60, 0.36)' : 'var(--color-music-pill-bg)'
+  const glassBorder = useGlass
+    ? '1px solid rgba(255, 255, 255, 0.2)'
+    : '1px solid var(--color-music-pill-border)'
+  const glassBlur = useGlass ? 'blur(8px) saturate(1.5)' : 'blur(10px)'
+  const glassShadow = useGlass
+    ? '0 2px 10px rgba(0, 0, 0, 0.08)'
+    : 'none'
+  const glassDivider = useGlass ? 'rgba(255, 255, 255, 0.22)' : 'var(--color-music-divider)'
   // SSR-safe: start deterministic (0) so server HTML and first client render
   // agree, then randomize on mount. Avoids the Math.random-at-module-load
   // hydration mismatch (server "Brazil" vs client "Chega de Saudade").
@@ -115,12 +131,13 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
             alignItems: 'center',
             gap: 0,
             height: 30,
-            background: 'var(--color-music-pill-bg)',
+            background: glassBg,
             borderRadius: 100,
             padding: '0 10px 0 7px',
-            border: '1px solid var(--color-music-pill-border)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
+            border: glassBorder,
+            backdropFilter: glassBlur,
+            WebkitBackdropFilter: glassBlur,
+            boxShadow: glassShadow,
           }}
         >
           {/* Status dot */}
@@ -144,7 +161,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
             style={{
               fontFamily: "'Spline Sans Mono', var(--font-spline-sans-mono), monospace",
               fontSize: 10, fontWeight: 500,
-              color: 'var(--color-status-text)',
+              color: useGlass ? glassTextSoft : 'var(--color-status-text)',
               letterSpacing: 'normal', lineHeight: 1, textAlign: 'center',
               flexShrink: 0, minWidth: 46, marginRight: 8,
             }}
@@ -153,7 +170,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
           </span>
 
           {/* Divider */}
-          <div style={{ width: 1, height: 12, background: 'var(--color-music-divider)', flexShrink: 0, marginRight: 8 }} />
+          <div style={{ width: 1, height: 12, background: glassDivider, flexShrink: 0, marginRight: 8 }} />
 
           {/* Song title */}
           {playing && (
@@ -177,7 +194,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
                 style={{
                   display: 'inline-block', whiteSpace: 'nowrap',
                   fontFamily: "'PP Neue Montreal Medium', sans-serif",
-                  fontSize: 11, color: 'var(--color-text-primary)',
+                  fontSize: 11, color: useGlass ? glassText : 'var(--color-text-primary)',
                 }}
               >
                 <span style={{ fontWeight: 500 }}>{song.title}</span>
@@ -200,7 +217,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
             style={{ overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', height: '100%' }}
           >
             <div style={{ paddingLeft: 8, display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-              <div style={{ width: 1, height: 12, background: 'var(--color-music-divider)', flexShrink: 0 }} />
+              <div style={{ width: 1, height: 12, background: glassDivider, flexShrink: 0 }} />
               <motion.button
                 animate={{ opacity: hovered ? 0.5 : 0 }}
                 whileHover={{ opacity: 1 }}
@@ -210,7 +227,7 @@ export default function MusicBar({ showHint = false }: { showHint?: boolean }) {
                   background: 'none', border: 'none', padding: 0,
                   cursor: 'pointer', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', flexShrink: 0,
-                  color: 'var(--color-status-text)',
+                  color: useGlass ? glassText : 'var(--color-status-text)',
                   pointerEvents: hovered ? 'auto' : 'none',
                 }}
                 title="Skip to random song"
