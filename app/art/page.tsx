@@ -591,7 +591,7 @@ const GP_BRAZIL   = pick(_pm, ['p02','p04','p03','p05','p06','p08','p07','p10','
   'p48','p50','p51','p54','p55','p56','p57','p59','p60','p63'])
 const GP_PORTUGAL = pick(_pm, ['p22','p24','p23','p27','p25','p30','p26','p28','n119',
   'p29','p31','p32','p33','p52',
-  'm104','m105','m106','m108','m116','m117','m122','m137',
+  'm104','m105','m106','m108','m116','m117','m137',
   'lf03'])
 const GP_SICILY   = pick(_pm, ['n01','n03','n02','n04','n05','n06','n07','n08','n10','n14','n16','m123'])
 const GP_BW       = pick(_pm, ['n11','n13','n19','n17','n29','n22','n57','n55','n59'])
@@ -600,14 +600,14 @@ const GP_DUNES    = pick(_pm, ['n12','n09','n15','n21','n18','n23','n20','n25','
   'n43','n34','n44','n35','n46','n39','n47','n40','n50','n41',
   'n52','n45','n53','n48','n54','n49','n58','n51','n60','n56',
   'n105','n107','n106','n108','n109','n110','n111',
-  'm107','m109','m111','m122','m126','m128','m131','lf01','lf06'])
+  'm107','m109','m111','m126','m128','m131','lf01','lf06'])
 const GP_COASTAL  = pick(_pm, ['n63','n61','n65','n62','n66','n64','n68','n67','n69','n73',
   'n70','n79','n71','n81','n72','n88','n74','n89','n75','n90',
   'n76','n92','n77','n94','n78','n95','n80','n99','n82','n101',
   'n83','n84','n112','n85','n113','n86','n114','n87','n115',
   'n91','n120','n93','n121','n96','n123','n97','n124','n98','n127',
   'n100','n128','n102','n129','n103','n116','n117','n118','n122','n125','n126',
-  'm112','m124','m125','m127','m132','m134','m140','n130','lf02','lf04','lf05','lf07'])
+  'm112','m124','m125','m127','m134','m140','n130','lf02','lf04','lf05','lf07'])
 const GP_MOROCCO  = pick(_pm, ['m06','m08','m09','m10','m13','m12','m14','m20','m19','m23',
   'm25','m29','m26','m30','m28','m34','m31','m35','m32','m36',
   'm33','m39','m37','m41','m38','m84','m42','m43','m83','m85',
@@ -620,7 +620,7 @@ const GP_LANZAROT = pick(_pm, ['m01','m02','m21','m03','m22','m04','m24','m05','
   'm70','m65','m71','m66','m72','m80','m73','m89','m74','m90',
   'm75','m92','m76','m93','m77','m95','m78','m98','m79','m99',
   'm81','m101','m82','m102','m91','m94','m96','m97','m100','m103',
-  'm132','m133','m135','m137','m138','m139'])
+  'm122','m132','m133','m135','m138','m139'])
 
 // All photos in diversity order.
 // COASTAL moved to pos 7 (was pos 5) so DUNES(2) and COASTAL(7) are 5 apart —
@@ -691,6 +691,84 @@ function assignByHeight(
   return cols
 }
 
+// Flush-tail optimiser — reorders the last FLUSH_K photos in the remaining
+// sequence so the three columns end at the same height. Runs once at module
+// load (never during renders or shuffle) so it has zero effect on animation.
+const FLUSH_K = 15
+
+function flushOptimize(
+  photos: Photo[],
+  startHeights: number[],
+  startTags: (string | undefined)[],
+): Photo[] {
+  if (photos.length <= FLUSH_K) return photos
+  const body = photos.slice(0, photos.length - FLUSH_K)
+  const tail = photos.slice(photos.length - FLUSH_K)
+
+  // Simulate the body to capture intermediate state
+  const bh = [...startHeights]
+  const bColH = startTags.map(t => [t as string | undefined])
+  const bRG: (string | undefined)[] = []
+  for (const p of body) {
+    const tag = _tag[p.id]
+    const blocked = tag ? bColH.map(h => h.includes(tag)) : [false, false, false]
+    const allB = blocked.every(Boolean)
+    const eff = bh.map((hi, i) => {
+      if (!allB && blocked[i]) return Infinity
+      return hi + ((tag && bRG.includes(tag)) ? CROSS_COL_PENALTY : 0)
+    })
+    let ci = 0; if (eff[1] < eff[ci]) ci = 1; if (eff[2] < eff[ci]) ci = 2
+    bh[ci] += 1 / (p.displayRatio ?? p.ratio)
+    bColH[ci].push(tag); if (bColH[ci].length > COL_HISTORY) bColH[ci].shift()
+    bRG.push(tag);       if (bRG.length > GLOBAL_WIN) bRG.shift()
+  }
+
+  // Score a tail permutation: returns final spread (lower = better)
+  const evalTail = (perm: Photo[]): number => {
+    const h = [...bh]
+    const colH = bColH.map(c => [...c])
+    const rG = [...bRG]
+    for (const p of perm) {
+      const tag = _tag[p.id]
+      const blocked = tag ? colH.map(c => c.includes(tag)) : [false, false, false]
+      const allB = blocked.every(Boolean)
+      const eff = h.map((hi, i) => {
+        if (!allB && blocked[i]) return Infinity
+        return hi + ((tag && rG.includes(tag)) ? CROSS_COL_PENALTY : 0)
+      })
+      let ci = 0; if (eff[1] < eff[ci]) ci = 1; if (eff[2] < eff[ci]) ci = 2
+      h[ci] += 1 / (p.displayRatio ?? p.ratio)
+      colH[ci].push(tag); if (colH[ci].length > COL_HISTORY) colH[ci].shift()
+      rG.push(tag);       if (rG.length > GLOBAL_WIN) rG.shift()
+    }
+    return Math.max(...h) - Math.min(...h)
+  }
+
+  // Deterministic seeded shuffle (same result on every page load)
+  let seed = 0x9E3779B9 | 0
+  const rnd = () => {
+    seed = Math.imul(seed ^ (seed >>> 16), 0x45D9F3B) | 0
+    return (seed >>> 0) / 0xFFFFFFFF
+  }
+  const shufflePerm = (arr: Photo[]) => {
+    const a = [...arr]
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]]
+    }
+    return a
+  }
+
+  let bestPerm = tail
+  let bestSpread = evalTail(tail)
+  for (let t = 0; t < 3000; t++) {
+    const perm = shufflePerm(tail)
+    const spread = evalTail(perm)
+    if (spread < bestSpread) { bestSpread = spread; bestPerm = perm }
+  }
+  return [...body, ...bestPerm]
+}
+
 // Photos pinned to the top of each column in the default view.
 const C0_PINS = pick(_pm, ['m101'])
 const C1_PINS = pick(_pm, ['n89',  'n81'])
@@ -698,8 +776,13 @@ const C2_PINS = pick(_pm, ['p14',  'n17'])
 const _pinIds = new Set(['m101', 'n89', 'n81', 'p14', 'n17'])
 const _pinH   = (pins: Photo[]) => pins.reduce((h, p) => h + 1 / (p.displayRatio ?? p.ratio), 0)
 const _lastPinTag = (pins: Photo[]) => _tag[pins[pins.length - 1]?.id]
-const [REST_C0, REST_C1, REST_C2] = assignByHeight(
+const _remaining = flushOptimize(
   _allPhotos.filter(p => !_pinIds.has(p.id)),
+  [_pinH(C0_PINS), _pinH(C1_PINS), _pinH(C2_PINS)],
+  [_lastPinTag(C0_PINS), _lastPinTag(C1_PINS), _lastPinTag(C2_PINS)],
+)
+const [REST_C0, REST_C1, REST_C2] = assignByHeight(
+  _remaining,
   [_pinH(C0_PINS), _pinH(C1_PINS), _pinH(C2_PINS)],
   [_lastPinTag(C0_PINS), _lastPinTag(C1_PINS), _lastPinTag(C2_PINS)],
 )
@@ -818,66 +901,77 @@ export default function Art() {
   // a beat to re-solve.
   const [photosNonce, setPhotosNonce] = useState(0)
   const [inspNonce, setInspNonce] = useState(0)
-  const [photosCols, setPhotosCols] = useState<Photo[][] | null>(null)
+  // Initialise with the static layout (not null) so every update follows the
+  // same state→state code path — null→value on first click was a different,
+  // slower React reconciliation path.
+  const [photosCols, setPhotosCols] = useState<Photo[][]>([PHOTOS_C0, PHOTOS_C1, PHOTOS_C2])
   const [inspCols, setInspCols] = useState<Photo[][] | null>(null)
   const [pulse, setPulse] = useState(0)
   const [, startTransition] = useTransition()
 
-  // For static photos, cols is unused — segments + featured rows render instead.
-  // For shuffled photos and inspirations, cols drives the flat-column render.
-  const cols = tab === 'photos'
-    ? (photosCols ?? [PHOTOS_C0, PHOTOS_C1, PHOTOS_C2])
-    : (inspCols ?? [INSP_C0, INSP_C1, INSP_C2])
+  // Pre-computed first shuffle: computed at mount with fresh Math.random() so
+  // (a) the first click needs zero computation → animation is instantly smooth,
+  // (b) the result is genuinely random (different on every page load).
+  const _preShuffled = useRef<Photo[][] | null>(null)
+
+  // Extracted shuffle logic — same computation used both at mount (pre-warm)
+  // and on every subsequent click.
+  const computePhotosShuffle = (): Photo[][] => {
+    const arr = [...PHOTOS]
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    const isL = (p: Photo) => (p.displayRatio ?? p.ratio) > 1.05
+    for (let i = 1; i < arr.length; i++) {
+      if (isL(arr[i]) === isL(arr[i - 1])) {
+        for (let j = i + 1; j < Math.min(i + 12, arr.length); j++) {
+          if (isL(arr[j]) !== isL(arr[i - 1])) {
+            ;[arr[i], arr[j]] = [arr[j], arr[i]]
+            break
+          }
+        }
+      }
+    }
+    const cols: Photo[][] = [[], [], []]
+    const heights = [0, 0, 0]
+    for (const p of arr) {
+      let ci = 0
+      if (heights[1] < heights[ci]) ci = 1
+      if (heights[2] < heights[ci]) ci = 2
+      cols[ci].push(p)
+      heights[ci] += 1 / (p.displayRatio ?? p.ratio)
+    }
+    const isP = (p: Photo) => (p.displayRatio ?? p.ratio) <= 1.05
+    if (!cols.some(c => c.length > 0 && isP(c[0]))) {
+      for (const col of cols) {
+        const pi = col.findIndex(isP)
+        if (pi > 0) { [col[0], col[pi]] = [col[pi], col[0]]; break }
+      }
+    }
+    return cols
+  }
+
+  // Run one shuffle immediately after mount, storing the result in a ref.
+  // This warms up the V8 JIT, pre-initialises React's startTransition
+  // machinery, and ensures the first click is indistinguishable from the rest.
+  useEffect(() => {
+    _preShuffled.current = computePhotosShuffle()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const cols = tab === 'photos' ? photosCols : (inspCols ?? [INSP_C0, INSP_C1, INSP_C2])
   const nonce = tab === 'photos' ? photosNonce : inspNonce
 
   const handleShuffle = () => {
-    // Step 1 — bump pulse immediately so the wrapper dips (opacity 0.6 → 1,
-    // scale 0.995 → 1) on the CURRENT grid before the new one arrives.
     setPulse(p => p + 1)
-
-    // Step 2 — defer the grid update to the next frame so the pulse render
-    // commits first. Both tabs use the same pattern so the animation is
-    // identical: pulse on old grid → tiles stagger into new grid.
     requestAnimationFrame(() => {
       if (tab === 'photos') {
-        // O(n) shuffle — fast enough to run inline without startTransition.
-        const arr = [...PHOTOS]
-        for (let i = arr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]]
-        }
-        // Break consecutive same-orientation runs (light diversification pass).
-        const isL = (p: Photo) => (p.displayRatio ?? p.ratio) > 1.05
-        for (let i = 1; i < arr.length; i++) {
-          if (isL(arr[i]) === isL(arr[i - 1])) {
-            for (let j = i + 1; j < Math.min(i + 12, arr.length); j++) {
-              if (isL(arr[j]) !== isL(arr[i - 1])) {
-                ;[arr[i], arr[j]] = [arr[j], arr[i]]
-                break
-              }
-            }
-          }
-        }
-        // Pack into columns by height.
-        const cols: Photo[][] = [[], [], []]
-        const heights = [0, 0, 0]
-        for (const p of arr) {
-          let ci = 0
-          if (heights[1] < heights[ci]) ci = 1
-          if (heights[2] < heights[ci]) ci = 2
-          cols[ci].push(p)
-          heights[ci] += 1 / (p.displayRatio ?? p.ratio)
-        }
-        // Guarantee at least one portrait in the first row.
-        const isP = (p: Photo) => (p.displayRatio ?? p.ratio) <= 1.05
-        if (!cols.some(c => c.length > 0 && isP(c[0]))) {
-          for (const col of cols) {
-            const pi = col.findIndex(isP)
-            if (pi > 0) { [col[0], col[pi]] = [col[pi], col[0]]; break }
-          }
-        }
+        // Use the pre-computed result on first click; compute fresh afterwards.
+        const next = _preShuffled.current ?? computePhotosShuffle()
+        _preShuffled.current = null
         startTransition(() => {
-          setPhotosCols(cols)
+          setPhotosCols(next)
           setPhotosNonce(n => n + 1)
         })
       } else {
