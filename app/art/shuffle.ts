@@ -208,5 +208,16 @@ export function shuffleGrid(
     }
   }
 
+  // Ensure at least one portrait in the first row
+  if (best) {
+    const hasPortrait = best.some(col => col.length > 0 && orient(col[0].ratio) === 'P')
+    if (!hasPortrait) {
+      for (const col of best) {
+        const pi = col.findIndex(p => orient(p.ratio) === 'P')
+        if (pi > 0) { [col[0], col[pi]] = [col[pi], col[0]]; break }
+      }
+    }
+  }
+
   return best!
 }
