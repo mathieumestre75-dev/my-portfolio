@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useTransition, useRef, useEffect } from 'react'
+import { useState, useTransition } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
+import Image from 'next/image'
 import Link from 'next/link'
 import ClockWidget from '@/components/ClockWidget'
 import GridBackground from '@/components/GridBackground'
@@ -808,25 +809,42 @@ const monoStyle: React.CSSProperties = {
   color: 'var(--color-text-secondary)',
 }
 
-function PhotoTile({ src, ratio, displayRatio, scale = 1 }: { src?: string; ratio: number; displayRatio?: number; scale?: number }) {
+function PhotoTile({ src, ratio, displayRatio, scale = 1, optimized = false }: { src?: string; ratio: number; displayRatio?: number; scale?: number; optimized?: boolean }) {
   const ar = String(displayRatio ?? ratio)
   return (
     <div style={{ breakInside: 'avoid', marginBottom: 10, overflow: 'hidden' }}>
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={src}
-          alt=""
-          loading="lazy"
-          style={{
-            width: '100%',
-            aspectRatio: ar,
-            objectFit: 'cover',
-            display: 'block',
-            background: 'var(--color-card-bg)',
-            transform: scale !== 1 ? `scale(${scale})` : undefined,
-          }}
-        />
+        optimized ? (
+          <div style={{ position: 'relative', width: '100%', aspectRatio: ar }}>
+            <Image
+              src={src}
+              alt=""
+              fill
+              quality={90}
+              sizes="(max-width: 768px) 100vw, 480px"
+              style={{
+                objectFit: 'cover',
+                background: 'var(--color-card-bg)',
+                transform: scale !== 1 ? `scale(${scale})` : undefined,
+              }}
+            />
+          </div>
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src}
+            alt=""
+            loading="lazy"
+            style={{
+              width: '100%',
+              aspectRatio: ar,
+              objectFit: 'cover',
+              display: 'block',
+              background: 'var(--color-card-bg)',
+              transform: scale !== 1 ? `scale(${scale})` : undefined,
+            }}
+          />
+        )
       ) : (
         <div
           aria-hidden
@@ -909,76 +927,25 @@ export default function Art() {
   const [pulse, setPulse] = useState(0)
   const [, startTransition] = useTransition()
 
-  // Pre-computed first shuffle: computed at mount with fresh Math.random() so
-  // (a) the first click needs zero computation → animation is instantly smooth,
-  // (b) the result is genuinely random (different on every page load).
-  const _preShuffled = useRef<Photo[][] | null>(null)
-
-  // Extracted shuffle logic — same computation used both at mount (pre-warm)
-  // and on every subsequent click.
-  const computePhotosShuffle = (): Photo[][] => {
-    const arr = [...PHOTOS]
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]]
-    }
-    const isL = (p: Photo) => (p.displayRatio ?? p.ratio) > 1.05
-    for (let i = 1; i < arr.length; i++) {
-      if (isL(arr[i]) === isL(arr[i - 1])) {
-        for (let j = i + 1; j < Math.min(i + 12, arr.length); j++) {
-          if (isL(arr[j]) !== isL(arr[i - 1])) {
-            ;[arr[i], arr[j]] = [arr[j], arr[i]]
-            break
-          }
-        }
-      }
-    }
-    const cols: Photo[][] = [[], [], []]
-    const heights = [0, 0, 0]
-    for (const p of arr) {
-      let ci = 0
-      if (heights[1] < heights[ci]) ci = 1
-      if (heights[2] < heights[ci]) ci = 2
-      cols[ci].push(p)
-      heights[ci] += 1 / (p.displayRatio ?? p.ratio)
-    }
-    const isP = (p: Photo) => (p.displayRatio ?? p.ratio) <= 1.05
-    if (!cols.some(c => c.length > 0 && isP(c[0]))) {
-      for (const col of cols) {
-        const pi = col.findIndex(isP)
-        if (pi > 0) { [col[0], col[pi]] = [col[pi], col[0]]; break }
-      }
-    }
-    return cols
-  }
-
-  // Run one shuffle immediately after mount, storing the result in a ref.
-  // This warms up the V8 JIT, pre-initialises React's startTransition
-  // machinery, and ensures the first click is indistinguishable from the rest.
-  useEffect(() => {
-    _preShuffled.current = computePhotosShuffle()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const cols = tab === 'photos' ? photosCols : (inspCols ?? [INSP_C0, INSP_C1, INSP_C2])
   const nonce = tab === 'photos' ? photosNonce : inspNonce
 
   const handleShuffle = () => {
-    setPulse(p => p + 1)
     requestAnimationFrame(() => {
       if (tab === 'photos') {
-        // Use the pre-computed result on first click; compute fresh afterwards.
-        const next = _preShuffled.current ?? computePhotosShuffle()
-        _preShuffled.current = null
+        const next = shuffleGrid([...PHOTOS], PHOTO_META, { attemptFlush: true })
         startTransition(() => {
           setPhotosCols(next)
           setPhotosNonce(n => n + 1)
+          setPulse(p => p + 1)
         })
       } else {
         const next = shuffleGrid([...INSPIRATIONS], INSPIRATION_META, { attemptFlush: true })
         startTransition(() => {
           setInspCols(next)
           setInspNonce(n => n + 1)
+          setPulse(p => p + 1)
         })
       }
     })
@@ -1141,9 +1108,6 @@ export default function Art() {
               {cols.map((col, ci) => (
                 <div key={ci} style={{ flex: 1 }}>
                   {col.map((p: Photo, ri: number) => {
-                    // CSS @keyframes instead of motion.div: the animation runs
-                    // on the GPU compositor so it never competes with Framer
-                    // Motion's JS loop driving the pulse wrapper.
                     const delay = nonce === 0 ? 0 : Math.min(0.7, ri * 0.035 + ci * 0.06)
                     return (
                       <div
@@ -1152,7 +1116,7 @@ export default function Art() {
                           animation: `photo-rise 1.75s ${delay}s both cubic-bezier(0.16,1,0.3,1)`,
                         } : undefined}
                       >
-                        <PhotoTile src={p.src} ratio={p.ratio} displayRatio={p.displayRatio} scale={p.scale} />
+                        <PhotoTile src={p.src} ratio={p.ratio} displayRatio={p.displayRatio} scale={p.scale} optimized={tab === 'photos'} />
                       </div>
                     )
                   })}

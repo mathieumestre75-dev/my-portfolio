@@ -171,6 +171,20 @@ export function shuffleGrid(
   meta: Record<string, Meta>,
   opts: { attemptFlush?: boolean } = {},
 ): ShufflePhoto[][] {
+  // Fast path for large pools: buildCache is O(n²) — too slow for 300+ photos.
+  if (pool.length > 150) {
+    const shuffled = shuffleArray(pool)
+    const cols = packColumns(shuffled)
+    const hasPortrait = cols.some(col => col.length > 0 && orient(col[0].ratio) === 'P')
+    if (!hasPortrait) {
+      for (const col of cols) {
+        const pi = col.findIndex(p => orient(p.ratio) === 'P')
+        if (pi > 0) { [col[0], col[pi]] = [col[pi], col[0]]; break }
+      }
+    }
+    return cols
+  }
+
   const attemptFlush = opts.attemptFlush ?? true
   const spreadWeight = attemptFlush ? 50 : 0
 
