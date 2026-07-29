@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathieu Mestre — Living Room</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+
+/* ─ reset ─ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',ui-monospace,monospace;color:#3a2615;background:#f8f0e8;overflow-x:hidden}
+img{display:block;user-select:none;-webkit-user-drag:none}
+::selection{background:rgba(160,80,30,.25)}
+
+/* ─ scroll skeleton ─
+   page is 200vh tall so the about cover can fade off as the room fades in. */
+body{min-height:200vh}
+
+/* ─ about cover (fixed, fades out on scroll) ─ */
+.about-cover{
+  position:fixed; inset:0; z-index:30;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:0 8vw; text-align:center;
+  background:radial-gradient(120% 90% at 50% 30%, #fbf3e8 0%, #f3e1cc 60%, #e8c7a0 100%);
+  will-change:opacity;
+}
+.about-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9a7a5a;margin-bottom:24px}
+.about-cover h1{font-size:clamp(28px,4.4vw,56px);font-weight:400;line-height:1.15;letter-spacing:-.01em;color:#3a2615;max-width:18ch;margin-bottom:18px}
+.about-cover p{font-size:clamp(13px,1.1vw,15px);line-height:1.7;color:#6a4d33;max-width:54ch}
+.about-cta{
+  margin-top:46px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#9a7a5a;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+.about-cta .chev{
+  width:10px;height:10px;border-right:1px solid #b08962;border-bottom:1px solid #b08962;
+  transform:rotate(45deg); animation:nudge 2.2s ease-in-out infinite;
+}
+@keyframes nudge{0%,100%{transform:translateY(0) rotate(45deg);opacity:.4}50%{transform:translateY(4px) rotate(45deg);opacity:1}}
+
+/* ─ stage (fixed, fades in) ─ */
+.stage{
+  position:fixed; inset:0; z-index:10; overflow:hidden;
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(255,245,225,.55) 0%, rgba(255,245,225,0) 70%),
+    radial-gradient(120% 100% at 50% 100%, #DBA882 0%, #EDD5B8 45%, #F8F0E8 100%);
+  will-change:opacity;
+}
+
+/* atmosphere layers (over everything but the corner UI/modal) */
+.stripes{
+  position:absolute; inset:-20%;
+  background:repeating-linear-gradient(
+    22deg,
+    rgba(245,232,208,0) 0px,
+    rgba(245,232,208,0) 60px,
+    rgba(245,232,208,.10) 60px,
+    rgba(245,232,208,.10) 110px,
+    rgba(245,232,208,0) 110px,
+    rgba(245,232,208,0) 230px
+  );
+  mix-blend-mode:screen; pointer-events:none; z-index:20;
+  mask-image:radial-gradient(60% 50% at 50% 55%, #000 0%, transparent 80%);
+  -webkit-mask-image:radial-gradient(60% 50% at 50% 55%, #000 0%, transparent 80%);
+}
+.grain{
+  position:absolute; inset:0; pointer-events:none; z-index:21;
+  opacity:.12; mix-blend-mode:overlay;
+}
+.vignette{
+  position:absolute; inset:0; pointer-events:none; z-index:22;
+  background:radial-gradient(120% 90% at 50% 55%, transparent 55%, rgba(100,50,20,.28) 100%);
+}
+
+/* ─ parallax world ─ */
+.world{position:absolute; inset:0; z-index:5}
+.obj{
+  position:absolute; pointer-events:auto;
+  filter:drop-shadow(0 12px 28px rgba(120,60,20,.18));
+  opacity:0; transform:translateY(14px);
+  animation:enter .6s ease-out forwards;
+  will-change:transform,opacity;
+}
+.obj img{width:100%;height:auto}
+@keyframes enter{to{opacity:1;transform:translateY(0)}}
+
+/* per-object placement + size + entrance stagger */
+.o-plant1     {left:2%;  top:14%; width:13vw; min-width:120px; animation-delay: 80ms; transform-origin:bottom center; }
+.o-bookshelf  {left:8%;  top:18%; width:20vw; min-width:200px; animation-delay:160ms; z-index:3 }
+.o-rug        {left:28%; top:52%; width:38vw; min-width:340px; animation-delay:240ms; z-index:1 }
+.o-sofa       {left:30%; top:34%; width:30vw; min-width:300px; animation-delay:320ms; z-index:2 }
+.o-coffee     {left:36%; top:60%; width:20vw; min-width:200px; animation-delay:400ms; z-index:3 }
+.o-chair      {left:56%; top:40%; width:16vw; min-width:170px; animation-delay:480ms; z-index:3 }
+.o-credenza   {left:62%; top:26%; width:22vw; min-width:220px; animation-delay:560ms; z-index:3 }
+.o-tv         {left:78%; top:34%; width:14vw; min-width:140px; animation-delay:640ms; z-index:3 }
+.o-cameras    {left:18%; top:62%; width:14vw; min-width:140px; animation-delay:720ms; z-index:4 }
+.o-plant2     {left:86%; top:14%; width:11vw; min-width:110px; animation-delay:800ms; transform-origin:bottom center }
+
+/* nested sway — keeps entrance + sway independent */
+.sway{display:block; transform-origin:bottom center}
+.o-plant1 .sway{animation:sway1 4.2s ease-in-out infinite alternate}
+.o-plant2 .sway{animation:sway2 5.1s ease-in-out infinite alternate}
+@keyframes sway1{from{transform:rotate(-1.6deg)} to{transform:rotate(1.6deg)}}
+@keyframes sway2{from{transform:rotate(1.4deg)} to{transform:rotate(-1.8deg)}}
+
+/* ─ bookshelf hotspots (records middle shelf, films top shelf) ─ */
+.shelf-hots{
+  position:absolute; inset:0; pointer-events:none;
+}
+.hot{
+  position:absolute; cursor:pointer; pointer-events:auto;
+  background:transparent;
+  border-radius:2px;
+  transition:background .25s ease;
+}
+.hot:hover{background:rgba(255,235,200,.18)}
+.hot.vinyl{width:8%; height:7%}
+.hot.film{width:8%; height:6%}
+
+/* top shelf — films at ~14% top */
+.f1{left:18%; top:14%}
+.f2{left:30%; top:14%}
+.f3{left:42%; top:14%}
+.f4{left:54%; top:14%}
+.f5{left:66%; top:14%}
+
+/* middle shelf — vinyls at ~40% top */
+.v1{left:18%; top:40%}
+.v2{left:36%; top:40%}
+.v3{left:54%; top:40%}
+
+/* small label that hovers over a vinyl hotspot */
+.hot-pill{
+  position:absolute; left:50%; top:-22px; transform:translateX(-50%);
+  font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+  background:rgba(40,22,10,.88); color:#f3e1c4;
+  padding:4px 8px; border-radius:99px; white-space:nowrap;
+  opacity:0; transition:opacity .2s ease, transform .2s ease;
+  pointer-events:none;
+}
+.hot:hover .hot-pill{opacity:1; transform:translateX(-50%) translateY(-2px)}
+
+/* ─ flying record (animated bookshelf → turntable) ─ */
+.flying-record{
+  position:absolute; width:32px; height:32px; border-radius:50%;
+  background:
+    radial-gradient(circle, #f2c576 0 8%, #2a1a0f 9% 14%, #1a0f08 15% 49%, #2a1a0f 50% 53%, #1a0f08 54% 100%);
+  box-shadow:0 8px 16px rgba(0,0,0,.35), inset 0 0 0 1px rgba(0,0,0,.5);
+  pointer-events:none; opacity:0; z-index:60;
+  filter:drop-shadow(0 8px 14px rgba(80,30,5,.4));
+}
+
+/* ─ spinning disc on credenza turntable ─ */
+.turntable{
+  position:absolute; left:34%; top:24%; width:22%; aspect-ratio:1;
+  border-radius:50%;
+  background:
+    radial-gradient(circle, #e9b87a 0 8%, #1a0f08 9% 14%, #0e0805 15% 49%, #1a0f08 50% 53%, #0e0805 54% 100%);
+  box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 0 0 1px rgba(0,0,0,.5);
+  opacity:0; pointer-events:none;
+  transition:opacity .35s ease;
+}
+.turntable.on{opacity:1; animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─ camera hover zones ─ */
+.cam-hots{position:absolute; inset:0}
+.cam{position:absolute; width:30%; height:90%; top:5%; cursor:default}
+.cam.c1{left:2%}
+.cam.c2{left:35%}
+.cam.c3{left:68%}
+.cam .tip{
+  position:absolute; left:50%; bottom:108%; transform:translateX(-50%);
+  background:rgba(30,18,8,.94); color:#f3e1c4;
+  padding:8px 12px; border-radius:8px; font-size:11px; line-height:1.5;
+  white-space:nowrap; opacity:0; transition:opacity .2s ease, transform .2s ease;
+  pointer-events:none; max-width:260px;
+}
+.cam:hover .tip{opacity:1; transform:translateX(-50%) translateY(-4px)}
+
+/* ─ film hover card (cursor-anchored, JS positioned) ─ */
+.film-card{
+  position:fixed; z-index:60; pointer-events:none;
+  background:rgba(28,18,8,.94); color:#f3e1c4;
+  padding:14px 16px; border-radius:10px; max-width:280px;
+  font-size:12px; line-height:1.55; letter-spacing:.01em;
+  box-shadow:0 16px 40px rgba(40,20,5,.45);
+  opacity:0; transition:opacity .18s ease;
+}
+.film-card .ft{font-size:13px; color:#f8eccf; margin-bottom:2px}
+.film-card .fy{font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#b89878; margin-bottom:8px}
+.film-card .fl{font-style:italic; color:#e9d4ac}
+
+/* ─ now playing pill ─ */
+.np{
+  position:fixed; left:24px; bottom:24px; z-index:60;
+  background:rgba(30,18,8,.92); color:#f3e1c4;
+  padding:10px 14px; border-radius:99px;
+  font-size:11px; letter-spacing:.08em;
+  display:flex; align-items:center; gap:10px;
+  opacity:0; transform:translateY(6px);
+  transition:opacity .35s ease, transform .35s ease;
+  pointer-events:none;
+}
+.np.show{opacity:1; transform:none}
+.np .dot{width:6px; height:6px; border-radius:50%; background:#e6a35a; box-shadow:0 0 8px #e6a35a}
+.np .label{opacity:.6; text-transform:uppercase; letter-spacing:.14em; font-size:9px}
+
+/* ─ TV modal ─ */
+.modal-back{
+  position:fixed; inset:0; z-index:80; background:rgba(20,10,4,.55);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .25s ease;
+}
+.modal-back.open{display:flex; opacity:1}
+.modal{
+  background:#1a1208; color:#f3e1c4; border:1px solid rgba(220,180,120,.18);
+  padding:32px 36px; border-radius:14px;
+  max-width:520px; width:90vw;
+  font-family:'IBM Plex Mono',monospace;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  transform:scale(.96); opacity:0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+}
+.modal-back.open .modal{transform:none; opacity:1}
+.modal .ch{font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:#b89878; margin-bottom:6px}
+.modal h2{font-size:18px; font-weight:500; letter-spacing:.02em; margin-bottom:24px; color:#f8eccf}
+.modal ul{list-style:none}
+.modal li{padding:14px 0; border-top:1px dashed rgba(220,180,120,.18); display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:baseline}
+.modal li:first-child{border-top:none}
+.modal li .t{font-size:13px; color:#f8eccf}
+.modal li .y{font-size:10px; letter-spacing:.16em; color:#b89878}
+.modal li .l{grid-column:1/-1; font-style:italic; font-size:11.5px; color:#d9bf94; line-height:1.55}
+.modal .close-hint{margin-top:20px; font-size:10px; letter-spacing:.18em; color:#7a6042; text-transform:uppercase; text-align:right}
+
+/* ─ corner UI ─ */
+.corner{
+  position:fixed; z-index:70;
+  font-family:'IBM Plex Mono',monospace; font-size:11px;
+  color:#9a7a5a; letter-spacing:.14em; text-transform:uppercase;
+  opacity:0; animation:fadeIn 1.2s ease 1s forwards;
+}
+@keyframes fadeIn{to{opacity:1}}
+.tl{top:24px; left:24px}
+.br{bottom:24px; right:24px}
+
+/* ─ reduce motion ─ */
+@media (prefers-reduced-motion: reduce){
+  .obj{animation:none; opacity:1; transform:none}
+  .sway, .turntable.on, .about-cta .chev{animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ABOUT COVER (fades out) -->
+<div class="about-cover" id="aboutCover">
+  <div class="about-eyebrow">About</div>
+  <h1>I make software that feels like a room someone lives in.</h1>
+  <p>Product designer at Usercentrics. Before that — film, music, photography, places I keep returning to. The work I love has the same texture as the things below: warm, specific, a little worn-in.</p>
+  <div class="about-cta">
+    <div>Scroll to come in</div>
+    <div class="chev"></div>
+  </div>
+</div>
+
+<!-- ROOM STAGE -->
+<div class="stage" id="stage">
+
+  <!-- atmosphere layers above objects -->
+  <div class="stripes"></div>
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="g">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 .9 0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#g)"/>
+  </svg>
+  <div class="vignette"></div>
+
+  <!-- parallax world -->
+  <div class="world" id="world">
+
+    <div class="obj o-plant1" data-depth="0.03"><div class="sway"><img src="./public/sprites/plant1.png" alt=""></div></div>
+
+    <!-- bookshelf with hotspots -->
+    <div class="obj o-bookshelf" data-depth="0.03">
+      <img src="./public/sprites/bookshelf.png" alt="">
+      <div class="shelf-hots">
+        <!-- films (top shelf) -->
+        <div class="hot film f1" data-film="0"></div>
+        <div class="hot film f2" data-film="1"></div>
+        <div class="hot film f3" data-film="2"></div>
+        <div class="hot film f4" data-film="3"></div>
+        <div class="hot film f5" data-film="4"></div>
+        <!-- vinyls (middle shelf) -->
+        <div class="hot vinyl v1" data-vinyl="0"><span class="hot-pill">Marvin Gaye</span></div>
+        <div class="hot vinyl v2" data-vinyl="1"><span class="hot-pill">Bill Withers</span></div>
+        <div class="hot vinyl v3" data-vinyl="2"><span class="hot-pill">Curtis Mayfield</span></div>
+      </div>
+    </div>
+
+    <div class="obj o-rug" data-depth="0.06"><img src="./public/sprites/rug.png" alt=""></div>
+    <div class="obj o-sofa" data-depth="0.06"><img src="./public/sprites/sofa.png" alt=""></div>
+    <div class="obj o-coffee" data-depth="0.10"><img src="./public/sprites/coffee-table.png" alt=""></div>
+    <div class="obj o-chair" data-depth="0.06"><img src="./public/sprites/chair.png" alt=""></div>
+
+    <!-- credenza with turntable overlay -->
+    <div class="obj o-credenza" data-depth="0.03">
+      <img src="./public/sprites/Object-7.png" alt="">
+      <div class="turntable" id="turntable"></div>
+    </div>
+
+    <!-- TV — clickable -->
+    <div class="obj o-tv" data-depth="0.03" id="tv" style="cursor:pointer">
+      <img src="./public/sprites/tv.png" alt="">
+    </div>
+
+    <!-- cameras with hover zones -->
+    <div class="obj o-cameras" data-depth="0.10">
+      <img src="./public/sprites/cameras.png" alt="">
+      <div class="cam-hots">
+        <div class="cam c1"><div class="tip">Canon AE-1<br><span style="color:#b89878;font-size:10px">My first film camera. Still use it.</span></div></div>
+        <div class="cam c2"><div class="tip">Olympus Mju II<br><span style="color:#b89878;font-size:10px">Pocket-sized. Goes everywhere.</span></div></div>
+        <div class="cam c3"><div class="tip">Polaroid<br><span style="color:#b89878;font-size:10px">For the shots that don't need to be perfect.</span></div></div>
+      </div>
+    </div>
+
+    <div class="obj o-plant2" data-depth="0.03"><div class="sway"><img src="./public/sprites/plant2.png" alt=""></div></div>
+
+    <!-- flying record element (moves from bookshelf to turntable) -->
+    <div class="flying-record" id="flyer"></div>
+
+  </div>
+</div>
+
+<!-- floating UI -->
+<div class="film-card" id="filmCard">
+  <div class="ft"></div>
+  <div class="fy"></div>
+  <div class="fl"></div>
+</div>
+
+<div class="np" id="np">
+  <span class="dot"></span>
+  <span class="label">Now playing</span>
+  <span class="title"></span>
+</div>
+
+<div class="modal-back" id="modalBack">
+  <div class="modal" id="modal">
+    <div class="ch">CH 04 · TV Guide</div>
+    <h2>Films I keep coming back to</h2>
+    <ul id="modalList"></ul>
+    <div class="close-hint">Click anywhere to close</div>
+  </div>
+</div>
+
+<!-- corner UI -->
+<div class="corner tl">Paris, France</div>
+<div class="corner br" id="clock">--:--:--</div>
+
+<script>
+/* ─ data ─ */
+const VINYLS = [
+  { title: "Marvin Gaye — What's Going On" },
+  { title: "Bill Withers — Still Bill" },
+  { title: "Curtis Mayfield — Superfly" }
+];
+const FILMS = [
+  { title: "Apocalypse Now",   year: "1979", line: "Watched it at 17. Still haven't recovered." },
+  { title: "Blade Runner",     year: "1982", line: "Where I learned that design is world-building." },
+  { title: "La Haine",         year: "1995", line: "Paris as I know it, underneath." },
+  { title: "City of God",      year: "2002", line: "Cinema as testimony." },
+  { title: "Mulholland Drive", year: "2001", line: "Four watches. Still not sure what happens." }
+];
+
+/* ─ scroll fade (about → room) ─ */
+const aboutCover = document.getElementById('aboutCover');
+const stage = document.getElementById('stage');
+function onScroll(){
+  const vh = window.innerHeight;
+  // transition zone: 0 → 1 viewport of scroll
+  const t = Math.max(0, Math.min(1, window.scrollY / vh));
+  // about fades out faster (front), room fades in
+  aboutCover.style.opacity = (1 - t).toFixed(3);
+  aboutCover.style.pointerEvents = t > 0.6 ? 'none' : 'auto';
+  stage.style.opacity = (0.15 + 0.85 * t).toFixed(3);
+}
+stage.style.opacity = 0.15;
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ─ mouse parallax with lerp ─ */
+const world = document.getElementById('world');
+const objs = Array.from(document.querySelectorAll('.obj'));
+const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+let mx = 0, my = 0;     // target offset (px from center, normalized -1..1)
+let cx = 0, cy = 0;     // current (lerped)
+
+if (!isTouch) {
+  document.addEventListener('mousemove', (e) => {
+    const w = window.innerWidth, h = window.innerHeight;
+    mx = (e.clientX - w / 2) / (w / 2);
+    my = (e.clientY - h / 2) / (h / 2);
+  });
+}
+
+function tick(){
+  cx += (mx - cx) * 0.08;
+  cy += (my - cy) * 0.08;
+  // scale to translation magnitude
+  const sx = cx * 60, sy = cy * 60; // max ~60px shift at depth=1
+  for (const el of objs) {
+    const d = parseFloat(el.dataset.depth || '0');
+    el.style.translate = `${(sx * d).toFixed(2)}px ${(sy * d).toFixed(2)}px`;
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ─ vinyl interactions ─ */
+const flyer = document.getElementById('flyer');
+const turntable = document.getElementById('turntable');
+const np = document.getElementById('np');
+const npTitle = np.querySelector('.title');
+let npTimer = null;
+
+document.querySelectorAll('.hot.vinyl').forEach((el) => {
+  el.addEventListener('click', () => {
+    const idx = +el.dataset.vinyl;
+    const v = VINYLS[idx];
+    // compute start/end positions in viewport coords
+    const start = el.getBoundingClientRect();
+    const end = turntable.getBoundingClientRect();
+    const sx = start.left + start.width / 2 - 16;
+    const sy = start.top + start.height / 2 - 16;
+    const ex = end.left + end.width / 2 - 16;
+    const ey = end.top + end.height / 2 - 16;
+    // place + animate flyer with WAAPI for clean arc
+    flyer.style.left = sx + 'px';
+    flyer.style.top = sy + 'px';
+    flyer.style.opacity = 1;
+    flyer.style.transform = 'translate(0,0) scale(1) rotate(0)';
+    flyer.animate(
+      [
+        { transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 0 },
+        { transform: `translate(${(ex - sx) * 0.5}px, ${Math.min(sy, ey) - sy - 80}px) scale(1.05) rotate(180deg)`, offset: 0.55 },
+        { transform: `translate(${ex - sx}px, ${ey - sy}px) scale(.85) rotate(360deg)`, offset: 1 }
+      ],
+      { duration: 700, easing: 'cubic-bezier(.22,.7,.2,1)', fill: 'forwards' }
+    ).onfinish = () => {
+      flyer.style.opacity = 0;
+      turntable.classList.add('on');
+      // now playing
+      npTitle.textContent = v.title;
+      np.classList.add('show');
+      clearTimeout(npTimer);
+      npTimer = setTimeout(() => np.classList.remove('show'), 4000);
+    };
+  });
+});
+
+/* ─ film hover cards ─ */
+const filmCard = document.getElementById('filmCard');
+const fT = filmCard.querySelector('.ft');
+const fY = filmCard.querySelector('.fy');
+const fL = filmCard.querySelector('.fl');
+document.querySelectorAll('.hot.film').forEach((el) => {
+  el.addEventListener('mouseenter', () => {
+    const f = FILMS[+el.dataset.film];
+    fT.textContent = f.title;
+    fY.textContent = f.year;
+    fL.textContent = f.line;
+    filmCard.style.opacity = 1;
+  });
+  el.addEventListener('mousemove', (e) => {
+    const w = filmCard.offsetWidth, h = filmCard.offsetHeight;
+    let x = e.clientX + 18, y = e.clientY + 18;
+    if (x + w > window.innerWidth - 12) x = e.clientX - w - 18;
+    if (y + h > window.innerHeight - 12) y = e.clientY - h - 18;
+    filmCard.style.left = x + 'px';
+    filmCard.style.top = y + 'px';
+  });
+  el.addEventListener('mouseleave', () => { filmCard.style.opacity = 0; });
+});
+
+/* ─ TV modal ─ */
+const modalBack = document.getElementById('modalBack');
+const modal = document.getElementById('modal');
+const modalList = document.getElementById('modalList');
+modalList.innerHTML = FILMS.map(f =>
+  `<li><span class="t">${f.title}</span><span class="y">${f.year}</span><span class="l">${f.line}</span></li>`
+).join('');
+
+document.getElementById('tv').addEventListener('click', () => {
+  modalBack.classList.add('open');
+});
+modalBack.addEventListener('click', (e) => {
+  if (!modal.contains(e.target)) modalBack.classList.remove('open');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') modalBack.classList.remove('open');
+});
+
+/* ─ clock (Paris time) ─ */
+const clockEl = document.getElementById('clock');
+function tickClock(){
+  try {
+    clockEl.textContent = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false, timeZone: 'Europe/Paris'
+    }).format(new Date());
+  } catch {
+    const d = new Date();
+    clockEl.textContent = String(d.getHours()).padStart(2,'0') + ':' +
+                          String(d.getMinutes()).padStart(2,'0') + ':' +
+                          String(d.getSeconds()).padStart(2,'0');
+  }
+}
+tickClock();
+setInterval(tickClock, 1000);
+</script>
+</body>
+</html>

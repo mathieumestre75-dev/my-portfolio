@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shuffle preview — animations + fonts</title>
+
+  <!-- Fonts loaded from the same sources as the portfolio globals.css -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,500&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face { font-family: 'P22 Mackinac Medium'; src: url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+    @font-face { font-family: 'PP Neue Montreal Medium'; src: url('https://framerusercontent.com/assets/6uIfYl8bnz9kOy3KOuV7PxhFPhA.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+
+    :root {
+      --bg: rgb(252,252,252);
+      --ink: rgba(0,0,0,0.75);
+      --ink-mid: rgba(0,0,0,0.5);
+      --ink-soft: rgba(0,0,0,0.35);
+      --card-bg: rgba(0,0,0,0.03);
+      --border: rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: 'PP Neue Montreal Medium', system-ui, sans-serif; }
+    body { padding: 40px 40px 120px; max-width: 1400px; margin: 0 auto; }
+    h1 { font-family: 'P22 Mackinac Medium', serif; font-weight: 500; font-size: 28px; margin: 0 0 8px; }
+    .lead { color: var(--ink-mid); font-size: 14px; margin: 0 0 48px; max-width: 640px; line-height: 1.5; }
+
+    section { margin-bottom: 72px; }
+    h2 { font-family: 'P22 Mackinac Medium', serif; font-weight: 500; font-size: 20px; margin: 0 0 6px; }
+    h2 + .sub { font-size: 12px; color: var(--ink-soft); margin: 0 0 24px; letter-spacing: 0.02em; }
+
+    /* -----------------------  FONT SHOWCASE  ----------------------- */
+    .fonts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .font-card {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 24px; background: rgba(255,255,255,0.6);
+      border: 1px solid var(--border); border-radius: 8px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .font-card .meta { font-family: 'Spline Sans Mono', monospace; font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.02em; text-transform: uppercase; }
+    .font-card .btn { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--ink); user-select: none; opacity: 0.72; transition: opacity 0.2s ease; }
+    .font-card .btn:hover { opacity: 1; }
+    .font-card .btn .glyph { display: inline-block; }
+
+    /* Font variants */
+    .f-neue-md { font-family: 'PP Neue Montreal Medium', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.01em; }
+    .f-neue-lg { font-family: 'PP Neue Montreal Medium', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: -0.005em; }
+    .f-mackinac { font-family: 'P22 Mackinac Medium', serif; font-size: 14px; font-weight: 500; letter-spacing: 0.01em; }
+    .f-instrument { font-family: 'Instrument Serif', serif; font-size: 15px; font-style: italic; }
+    .f-mono-caps { font-family: 'Spline Sans Mono', monospace; font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; }
+    .f-fraunces { font-family: 'Fraunces', serif; font-variation-settings: 'opsz' 24, 'wght' 500; font-size: 14px; }
+    .f-inter { font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500; letter-spacing: -0.005em; }
+    .f-icon-only { font-family: 'PP Neue Montreal Medium', sans-serif; font-size: 16px; font-weight: 500; }
+
+    /* -----------------------  ANIMATION PREVIEWS  ----------------------- */
+    .anim-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .anim-card {
+      padding: 20px; background: rgba(255,255,255,0.6);
+      border: 1px solid var(--border); border-radius: 10px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .anim-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 14px; }
+    .anim-title { font-family: 'P22 Mackinac Medium', serif; font-size: 15px; font-weight: 500; }
+    .anim-desc { font-size: 11.5px; color: var(--ink-mid); margin: 0 0 14px; line-height: 1.45; }
+    .anim-shuffle { display: inline-flex; align-items: center; gap: 6px; font-family: 'PP Neue Montreal Medium', sans-serif; font-size: 12px; font-weight: 500; color: var(--ink); cursor: pointer; opacity: 0.72; transition: opacity 0.2s ease; user-select: none; }
+    .anim-shuffle:hover { opacity: 1; }
+
+    /* Mini masonry — 3 columns × ~5 tiles */
+    .mini-masonry { display: flex; gap: 6px; align-items: flex-start; }
+    .mini-masonry .col { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .tile {
+      width: 100%; background: linear-gradient(135deg, #f0d3b8, #d47f5a);
+      border-radius: 3px; will-change: transform, opacity, filter, clip-path;
+    }
+    /* Deterministic tile colors so previews aren't all orange */
+    .col:nth-child(1) .tile:nth-child(1) { background: linear-gradient(135deg, #b8d4f0, #5a94d4); }
+    .col:nth-child(1) .tile:nth-child(2) { background: linear-gradient(135deg, #f0e8b8, #d4c05a); }
+    .col:nth-child(1) .tile:nth-child(3) { background: linear-gradient(135deg, #d0b8f0, #7a5ad4); }
+    .col:nth-child(2) .tile:nth-child(1) { background: linear-gradient(135deg, #b8f0d4, #5ad494); }
+    .col:nth-child(2) .tile:nth-child(2) { background: linear-gradient(135deg, #f0b8b8, #d45a5a); }
+    .col:nth-child(2) .tile:nth-child(3) { background: linear-gradient(135deg, #d4d4d4, #808080); }
+    .col:nth-child(2) .tile:nth-child(4) { background: linear-gradient(135deg, #f0d3b8, #d47f5a); }
+    .col:nth-child(3) .tile:nth-child(1) { background: linear-gradient(135deg, #f0c8e0, #b45a94); }
+    .col:nth-child(3) .tile:nth-child(2) { background: linear-gradient(135deg, #b8e8f0, #5ac0d4); }
+    .col:nth-child(3) .tile:nth-child(3) { background: linear-gradient(135deg, #e8f0b8, #a4d45a); }
+
+    .a1 { aspect-ratio: 0.75; }
+    .a2 { aspect-ratio: 1.5; }
+    .a3 { aspect-ratio: 1; }
+
+    /* Utility: replay button */
+    .replay {
+      background: none; border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px;
+      font-family: 'PP Neue Montreal Medium', sans-serif; font-size: 11.5px; font-weight: 500;
+      color: var(--ink); cursor: pointer; opacity: 0.85; transition: opacity 0.15s ease, background 0.15s ease;
+    }
+    .replay:hover { opacity: 1; background: rgba(0,0,0,0.03); }
+  </style>
+</head>
+<body>
+
+  <h1>Shuffle button — fonts & animations</h1>
+  <p class="lead">Compare styles side-by-side. Click any shuffle label to preview its grid animation. This page is a scratchpad — nothing here is wired to the portfolio.</p>
+
+  <!-- ================  FONTS  ================ -->
+  <section>
+    <h2>1. Font options for the shuffle button</h2>
+    <p class="sub">Same label, different typefaces. Hover to see full opacity.</p>
+
+    <div class="fonts">
+      <div class="font-card">
+        <div class="meta">A · Currently used</div>
+        <div class="btn f-neue-md"><span class="glyph">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">B · Neue Montreal, larger, tighter</div>
+        <div class="btn f-neue-lg"><span class="glyph">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">C · Mackinac (title serif)</div>
+        <div class="btn f-mackinac"><span class="glyph">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">D · Instrument Serif italic</div>
+        <div class="btn f-instrument"><span class="glyph">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">E · Spline Mono, uppercase tracked</div>
+        <div class="btn f-mono-caps"><span class="glyph" style="font-size:12px">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">F · Fraunces (contemporary serif)</div>
+        <div class="btn f-fraunces"><span class="glyph">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">G · Inter, quiet</div>
+        <div class="btn f-inter"><span class="glyph" style="font-size:13px">↺</span><span>Shuffle</span></div>
+      </div>
+
+      <div class="font-card">
+        <div class="meta">H · Icon only</div>
+        <div class="btn f-icon-only"><span class="glyph">↺</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================  ANIMATIONS  ================ -->
+  <section>
+    <h2>2. Grid animation options</h2>
+    <p class="sub">Click the shuffle label on each card (or the replay button) to play. All effects are ~0.4–0.7s.</p>
+
+    <div class="anim-grid">
+      <!-- ANIM 1 -->
+      <div class="anim-card" data-anim="fade">
+        <div class="anim-head">
+          <div class="anim-title">A · Whisper fade</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Pure opacity, tight diagonal stagger. The quietest option — no motion, just presence. Best for a very restrained portfolio.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 2 -->
+      <div class="anim-card" data-anim="focus">
+        <div class="anim-head">
+          <div class="anim-title">B · Focus in</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Blur → sharp with a hint of scale. Like a photograph developing. No directional motion.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 3 -->
+      <div class="anim-card" data-anim="rise">
+        <div class="anim-head">
+          <div class="anim-title">C · Soft rise</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Slide up from below with a clean ease-out. No tilt, no spring bounce. Confident and calm.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 4 -->
+      <div class="anim-card" data-anim="pop">
+        <div class="anim-head">
+          <div class="anim-title">D · Elastic pop</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Scale from 0.85 with a spring overshoot. Playful — feels like tiles snapping into place.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 5 -->
+      <div class="anim-card" data-anim="wipe">
+        <div class="anim-head">
+          <div class="anim-title">E · Curtain wipe</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Each tile reveals top-down via clip-path. Reads like a page loading. Editorial, quiet.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 6 -->
+      <div class="anim-card" data-anim="ripple">
+        <div class="anim-head">
+          <div class="anim-title">F · Ripple from center</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Center tile first, then outward in rings. The stagger is spatial, not linear.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+
+      <!-- ANIM 7 -->
+      <div class="anim-card" data-anim="drift">
+        <div class="anim-head">
+          <div class="anim-title">G · Soft drift</div>
+          <button class="replay">Replay</button>
+        </div>
+        <p class="anim-desc">Each tile drifts in from a random small direction (±6px). Feels natural, never metronomic.</p>
+        <div class="mini-masonry"></div>
+        <div style="margin-top:12px"><span class="anim-shuffle"><span>↺</span><span>Shuffle</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // -----------------------  MINI GRID BUILDER  -----------------------
+    // 3 columns, varied aspect ratios per tile for a masonry feel.
+    const LAYOUT = [
+      ['a1','a2','a3','a1'],
+      ['a2','a1','a1','a3','a2'],
+      ['a3','a2','a1','a2'],
+    ];
+    document.querySelectorAll('.mini-masonry').forEach(m => {
+      LAYOUT.forEach(col => {
+        const c = document.createElement('div'); c.className = 'col';
+        col.forEach(ar => {
+          const t = document.createElement('div');
+          t.className = 'tile ' + ar;
+          c.appendChild(t);
+        });
+        m.appendChild(c);
+      });
+    });
+
+    // -----------------------  ANIMATIONS  -----------------------
+    // Each returns a promise that resolves when the tile arrives.
+    // Ordering / delays are controlled per-anim.
+    function playAnim(card, name) {
+      const tiles = [...card.querySelectorAll('.tile')];
+      // Reset first — force reflow.
+      tiles.forEach(t => t.style.cssText = t._base || '');
+      tiles.forEach(t => t.getBoundingClientRect());
+
+      const colCount = 3;
+      const tilePositions = tiles.map((t, i) => {
+        // Determine column + row from DOM index
+        let ci = 0, sum = 0;
+        for (let k = 0; k < LAYOUT.length; k++) {
+          if (i < sum + LAYOUT[k].length) { ci = k; break; }
+          sum += LAYOUT[k].length;
+        }
+        const ri = i - sum;
+        return { t, ci, ri, i };
+      });
+
+      // Grid center for ripple
+      const gridRect = card.querySelector('.mini-masonry').getBoundingClientRect();
+      const cx = gridRect.left + gridRect.width / 2;
+      const cy = gridRect.top + gridRect.height / 2;
+
+      tilePositions.forEach(({ t, ci, ri, i }) => {
+        const tRect = t.getBoundingClientRect();
+        const dx = (tRect.left + tRect.width/2) - cx;
+        const dy = (tRect.top + tRect.height/2) - cy;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        // Diagonal cascade delay
+        const diag = Math.min(0.55, ri * 0.045 + ci * 0.07);
+        // Ripple (from center) delay
+        const ripple = Math.min(0.55, dist / 500);
+        // Column-then-row
+        const colFirst = ci * 0.15 + ri * 0.03;
+        // Randomized drift
+        const rx = (Math.sin(i * 12.9898) * 43758.5453) % 1;
+        const ry = (Math.sin(i * 78.233) * 43758.5453) % 1;
+        const drift = 5 * (rx - 0.5) * 2;
+        const drifty = 5 * (ry - 0.5) * 2;
+        const rTilt = ((i % 2 === 0 ? -1 : 1) * (1.4 + (i % 3) * 0.4));
+
+        let from = '', to = '', dur = 500, delay = diag * 1000;
+        let easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+        switch (name) {
+          case 'fade':
+            from = 'opacity: 0;';
+            to = 'opacity: 1;';
+            dur = 380; delay = (ri * 0.028 + ci * 0.045) * 1000;
+            break;
+          case 'focus':
+            from = 'opacity: 0; filter: blur(6px); transform: scale(1.04);';
+            to = 'opacity: 1; filter: blur(0px); transform: scale(1);';
+            dur = 560;
+            break;
+          case 'rise':
+            from = 'opacity: 0; transform: translateY(14px);';
+            to = 'opacity: 1; transform: translateY(0);';
+            dur = 500;
+            break;
+          case 'pop':
+            from = 'opacity: 0; transform: scale(0.82);';
+            to = 'opacity: 1; transform: scale(1);';
+            dur = 620;
+            easing = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+            break;
+          case 'wipe':
+            from = 'clip-path: inset(0 0 100% 0); opacity: 0.4;';
+            to = 'clip-path: inset(0 0 0 0); opacity: 1;';
+            dur = 620;
+            easing = 'cubic-bezier(0.7, 0, 0.3, 1)';
+            break;
+          case 'ripple':
+            from = 'opacity: 0; transform: scale(0.9);';
+            to = 'opacity: 1; transform: scale(1);';
+            dur = 500; delay = ripple * 1000;
+            break;
+          case 'drift':
+            from = `opacity: 0; transform: translate(${drift}px, ${drifty}px);`;
+            to = 'opacity: 1; transform: translate(0, 0);';
+            dur = 560;
+            break;
+          case 'card':
+            from = `opacity: 0; transform: translateY(22px) scale(0.9) rotate(${rTilt}deg);`;
+            to = 'opacity: 1; transform: translateY(0) scale(1) rotate(0deg);';
+            dur = 620;
+            easing = 'cubic-bezier(0.34, 1.4, 0.5, 1)';
+            break;
+        }
+
+        t.style.cssText = from + `transition: none;`;
+        t.getBoundingClientRect();
+        setTimeout(() => {
+          t.style.cssText = to + `transition: all ${dur}ms ${easing};`;
+        }, delay);
+      });
+    }
+
+    // Wire replay + label clicks
+    document.querySelectorAll('.anim-card').forEach(card => {
+      const name = card.dataset.anim;
+      const trigger = () => playAnim(card, name);
+      card.querySelector('.replay').addEventListener('click', trigger);
+      card.querySelector('.anim-shuffle').addEventListener('click', trigger);
+      // Auto-play once on load
+      setTimeout(trigger, 300);
+    });
+  </script>
+</body>
+</html>

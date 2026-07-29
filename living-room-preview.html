@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mathieu Mestre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'P22 Mackinac Medium';src:url('https://framerusercontent.com/assets/xzdc8djK4HzjEKup45LHgzjbjsM.woff2') format('woff2');font-weight:500;font-display:swap}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+::-webkit-scrollbar{display:none}
+html{scrollbar-width:none;scroll-behavior:smooth}
+body{background:rgb(252,252,252);color:rgba(0,0,0,0.75);-webkit-font-smoothing:antialiased;font-family:'Spline Sans Mono',monospace}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes scrollDrop{0%{height:0;opacity:0}15%{opacity:1}70%{height:28px;opacity:1}100%{height:28px;opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.grid-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.grid-layer{position:absolute;inset:0;background-color:rgb(252,252,252);background-image:linear-gradient(rgba(98,141,227,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(98,141,227,.08) 1px,transparent 1px);background-size:24px 24px}
+.gf{position:absolute;pointer-events:none}
+.gf-t{inset:0;bottom:auto;height:160px;background:linear-gradient(to bottom,rgb(252,252,252) 30%,transparent)}
+.gf-b{inset:0;top:auto;height:160px;background:linear-gradient(to top,rgb(252,252,252) 30%,transparent)}
+.gf-l{inset:0;right:auto;width:200px;background:linear-gradient(to right,rgb(252,252,252) 40%,transparent)}
+.gf-r{inset:0;left:auto;width:160px;background:linear-gradient(to left,rgb(252,252,252) 30%,transparent)}
+
+.about-section{position:relative;height:100vh;overflow:hidden;background:rgb(252,252,252)}
+.topbar{position:absolute;top:20px;left:20px;right:20px;display:flex;align-items:flex-start;justify-content:space-between;z-index:10;pointer-events:none;animation:fadeIn .7s ease-out both}
+.topbar-name{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:normal;color:rgba(0,0,0,.35);text-decoration:none;pointer-events:auto}
+.clock{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.clock p{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;color:rgba(0,0,0,.35);text-align:right}
+.about-layout{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:200px;padding:60px 60px 80px}
+.left-card{width:300px;flex-shrink:0;z-index:2;background:rgba(255,255,255,.1);border-radius:16px;border:.8px solid rgba(0,0,0,.08);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:rgba(64,39,14,.08) 0 .6px 1.57px -.83px,rgba(64,39,14,.08) 0 2.29px 5.95px -1.67px,rgba(64,39,14,.08) 0 10px 26px -2.5px;padding:16px;display:flex;flex-direction:column;gap:19.2px;position:relative;overflow:hidden;animation:fadeSlideUp .5s ease-out .05s both}
+.photo-frame{padding:6px;border-radius:10px;background:rgba(255,255,255,.1);border:.8px solid rgba(0,0,0,.08);box-shadow:rgba(0,0,0,.18) 0 .6px .6px -1.25px,rgba(0,0,0,.16) 0 2.29px 2.29px -2.5px,rgba(0,0,0,.06) 0 10px 10px -3.75px}
+.photo-container{position:relative;width:100%;aspect-ratio:1.4725/1;border-radius:8px;overflow:hidden;border:.8px solid rgba(168,168,168,.4)}
+.photo-slide{position:absolute;inset:0}
+.photo-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.caption-section{display:flex;flex-direction:column;gap:14px}
+.caption-row{display:flex;align-items:center;justify-content:space-between;gap:12.8px;overflow:hidden}
+.marquee-wrap{flex:1;overflow:hidden}
+.about-marquee{animation:marquee 12s linear infinite;display:inline-block;white-space:nowrap}
+.mono{font-family:'Spline Sans Mono',monospace;font-size:11.2px;font-weight:400;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.45)}
+.caption-date{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.45);flex-shrink:0}
+.divider{height:1px;background:rgba(0,0,0,.08);width:100%}
+.tagline-section{display:flex;flex-direction:column;gap:19.2px;transition:opacity .25s ease-in-out}
+.tagline{font-family:'Spline Sans Mono',monospace;font-size:16px;line-height:1.6em;letter-spacing:-.02em;color:rgba(0,0,0,.75)}
+.signature{width:102px;height:65px;object-fit:contain;display:block}
+.currently-box{border:1px solid rgba(0,0,0,.06);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(255,255,255,.1);border-radius:8px;padding:12px;cursor:default}
+.currently-label{font-family:'Spline Sans Mono',monospace;font-size:11.2px;line-height:13.44px;letter-spacing:-.02em;color:rgba(0,0,0,.75)}
+.currents-panel{position:absolute;bottom:0;left:0;right:0;height:166px;padding:14px;border-radius:8px;background:rgba(0,0,0,.03);display:flex;align-items:center;pointer-events:none;z-index:2;opacity:0;transition:opacity .25s ease-in-out}
+.currents-list{display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%}
+.current-item{display:flex;flex-direction:column;gap:6px}
+.current-item .c-lbl{font-family:system-ui,sans-serif;font-size:10.4px;font-weight:500;color:rgba(0,0,0,.45)}
+.current-item .c-val{font-family:system-ui,sans-serif;font-size:12.8px;font-weight:500;line-height:1.4em;color:rgba(0,0,0,.75)}
+.right-content{width:490px;flex-shrink:0;position:relative;z-index:2;animation:fadeSlideUp .5s ease-out .12s both}
+.section-label{font-family:'P22 Mackinac Medium',serif;font-size:12.8px;font-weight:500;letter-spacing:-.02em;line-height:1.75em;color:rgba(0,0,0,.35);display:block}
+.bio-section{display:flex;flex-direction:column;gap:30px;margin-top:30px}
+.bio-text{font-family:'P22 Mackinac Medium',serif;font-size:13.6px;font-weight:500;letter-spacing:-.02em;line-height:1.75em;color:rgba(0,0,0,.75)}
+.links-row{display:flex;gap:24px}
+.lnk{font-family:'Spline Sans Mono',monospace;font-size:12.8px;letter-spacing:-.02em;color:rgba(0,0,0,.35);text-decoration:none;cursor:pointer;transition:color .15s ease}
+.lnk:hover{color:rgba(0,0,0,.6)}
+.lnk-muted{cursor:default}.lnk-muted:hover{color:rgba(0,0,0,.35)}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;z-index:10}
+.scroll-hint-line{width:1px;background:rgba(0,0,0,.2);animation:scrollDrop 1.8s ease-in-out infinite}
+
+/* DOCK */
+.dock{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:center;z-index:200;pointer-events:none}
+.dock-inner{background:rgba(252,252,252,.95);border-radius:1100px;border:1px solid rgba(0,0,0,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 5px 25px 3px rgba(79,44,9,.02);padding:10px 14px;display:flex;align-items:center;gap:14px;height:40px;pointer-events:auto;animation:fadeSlideUp .6s ease-out .4s both}
+.dock-divider{width:1px;height:12px;background:rgba(0,0,0,.06);flex-shrink:0}
+.dock-btn{position:relative;display:flex;align-items:center;justify-content:center;width:20px;height:20px;background:none;border:none;cursor:pointer;padding:0;color:rgba(0,0,0,.75);opacity:.3;transition:opacity .2s ease,transform .15s ease-out}
+.dock-btn:hover,.dock-btn.active{opacity:1}
+.dock-btn:hover{transform:scale(1.2)}
+.dock-btn svg{display:block}
+.dock-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:rgb(255,95,51);border-radius:100px;padding:6px 12px;font-family:'Spline Sans Mono',monospace;font-size:11.68px;color:#fff;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s ease,transform .15s ease;z-index:10}
+.dock-btn:hover .dock-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.dock-link{display:flex;align-items:center;justify-content:center;width:20px;height:20px;color:rgba(0,0,0,.75);opacity:.3;transition:opacity .2s ease,transform .15s ease-out;position:relative;text-decoration:none}
+.dock-link:hover,.dock-link.active{opacity:1}
+.dock-link:hover{transform:scale(1.2)}
+.dock-link svg{display:block}
+.dock-link .dock-tip{bottom:calc(100% + 8px)}
+.dock-link:hover .dock-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* BRIDGE */
+.room-bridge{height:100px;background:linear-gradient(to bottom,rgb(252,252,252),#2C1A0E);pointer-events:none}
+
+/* ROOM */
+.room-wrap{position:relative;width:100%;background:#2C1A0E;line-height:0;overflow:hidden}
+#room-svg{display:block;width:100%;height:600px}
+
+/* TOOLTIPS */
+.tip-layer{position:absolute;inset:0;pointer-events:none;z-index:10}
+.r-tip{position:absolute;background:rgba(255,255,255,.98);border-radius:8px;padding:12px 15px;box-shadow:0 4px 24px rgba(40,20,5,.3),0 1px 4px rgba(40,20,5,.12);opacity:0;transform:translateY(5px);transition:opacity 200ms ease,transform 200ms ease;pointer-events:none;width:215px;max-width:min(215px,88vw)}
+.r-tip.vis{opacity:1;transform:translateY(0)}
+.r-tip-title{font-family:'P22 Mackinac Medium',serif;font-size:11.5px;font-weight:500;letter-spacing:-.02em;color:rgba(0,0,0,.75);margin-bottom:1px}
+.r-tip-year{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:-.02em;color:rgba(0,0,0,.3);margin-bottom:7px}
+.r-tip-note{font-family:'P22 Mackinac Medium',serif;font-size:11px;letter-spacing:-.02em;line-height:1.6em;color:rgba(0,0,0,.45);font-style:italic}
+.r-tip-sm{position:absolute;background:rgba(255,255,255,.97);border-radius:7px;padding:7px 12px;box-shadow:0 3px 14px rgba(40,20,5,.22);opacity:0;transform:translateY(5px);transition:opacity 200ms ease,transform 200ms ease;pointer-events:none;font-family:Georgia,serif;font-size:10.5px;font-style:italic;color:#8B7355;white-space:nowrap}
+.r-tip-sm.vis{opacity:1;transform:translateY(0)}
+.now-playing-wrap{position:absolute;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s ease;white-space:nowrap;transform:translateX(-50%)}
+.now-playing-wrap.vis{opacity:1}
+.np-title{font-family:'P22 Mackinac Medium',serif;font-size:12px;font-weight:500;letter-spacing:-.02em;color:rgba(200,160,100,.9)}
+.np-artist{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:-.02em;color:rgba(180,130,70,.6);margin-top:2px}
+
+/* Vinyl spinning on platter */
+.platter-disc{transform-origin:612px 317px;transform-box:view-box}
+.platter-disc.spinning{animation:spin 2s linear infinite}
+</style>
+</head>
+<body>
+
+<!-- ABOUT -->
+<div class="about-section">
+  <div class="grid-bg">
+    <div class="grid-layer"></div>
+    <div class="gf gf-t"></div><div class="gf gf-b"></div>
+    <div class="gf gf-l"></div><div class="gf gf-r"></div>
+  </div>
+  <div class="topbar">
+    <a href="/" class="topbar-name">MATHIEU MESTRE</a>
+    <div class="clock"><p id="clock-time"></p><p>PARIS, FR</p></div>
+  </div>
+  <div class="about-layout">
+    <div class="left-card" id="left-card">
+      <div class="photo-frame">
+        <div class="photo-container" id="photo-container"></div>
+      </div>
+      <div class="caption-section">
+        <div class="caption-row">
+          <div class="marquee-wrap"><span class="about-marquee mono">Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;Photo w/ my bestie. I'm rocking the cowboy hat.&nbsp;&nbsp;·&nbsp;&nbsp;</span></div>
+          <span class="caption-date">09.11.23</span>
+        </div>
+        <div class="divider"></div>
+      </div>
+      <div class="tagline-section" id="tagline-section">
+        <p class="tagline">Finding joy and purpose in creating the things I wish existed :-)</p>
+        <img class="signature" src="https://framerusercontent.com/images/K6G4OceU6E7MAZnRlAe9IGbRk.png" alt="">
+      </div>
+      <div class="currently-box" id="currently-box"><span class="currently-label">Currently I'm…</span></div>
+      <div class="currents-panel" id="currents-panel">
+        <div class="currents-list">
+          <div class="current-item"><p class="c-lbl">Watching</p><p class="c-val">Culinary Class Wars 👩🏻‍🍳</p></div>
+          <div class="current-item"><p class="c-lbl">Reading</p><p class="c-val">Monte Cristo</p></div>
+          <div class="current-item"><p class="c-lbl">Learning</p><p class="c-val">after effects and blender ;-;</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="right-content">
+      <span class="section-label">About</span>
+      <div class="bio-section">
+        <p class="bio-text">I'm Mathieu, nice to meet you! I'm a product designer based in Munich, currently shaping design systems and consent experiences at Usercentrics. I'm drawn to the intersection of structure and craft — where rigorous systems thinking meets obsessive attention to detail.<br><br>I believe great design is invisible. I'm drawn to work where curiosity drives intention — digging into messy problems and refining until the complexity disappears, then obsessing over every detail until it feels right. I love collaborative environments and people who bring the same care to their work.<br><br>Outside work, you'll find me at a coffee shop, listening to bossa nova, or deep in a side project I probably didn't need to start.</p>
+        <div class="links-row">
+          <a href="mailto:mathieu.mestre@usercentrics.com" class="lnk">Email</a>
+          <span class="lnk lnk-muted">Resume</span>
+          <a href="https://www.linkedin.com/in/mathieu-mestre-bba038102/" class="lnk" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-hint-line"></div></div>
+</div>
+
+<!-- BRIDGE -->
+<div class="room-bridge"></div>
+
+<!-- ROOM -->
+<div class="room-wrap" id="room-wrap">
+<svg id="room-svg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+
+<!-- Grain filter -->
+<filter id="grain" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" stitchTiles="stitch" result="noise"/>
+  <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.09 0" in="noise"/>
+</filter>
+
+<!-- Warm ceiling light -->
+<radialGradient id="warmLight" cx="50%" cy="0%" r="72%" gradientUnits="objectBoundingBox">
+  <stop offset="0%" stop-color="rgba(255,205,100,0.26)"/>
+  <stop offset="55%" stop-color="rgba(255,180,70,0.1)"/>
+  <stop offset="100%" stop-color="rgba(255,180,70,0)"/>
+</radialGradient>
+
+<!-- Vignette -->
+<radialGradient id="vignette" cx="50%" cy="50%" r="75%" gradientUnits="objectBoundingBox">
+  <stop offset="30%" stop-color="rgba(0,0,0,0)"/>
+  <stop offset="75%" stop-color="rgba(10,4,2,0.38)"/>
+  <stop offset="100%" stop-color="rgba(10,4,2,0.72)"/>
+</radialGradient>
+
+<!-- Floor gradient -->
+<radialGradient id="floorLight" cx="50%" cy="0%" r="65%" gradientUnits="objectBoundingBox">
+  <stop offset="0%" stop-color="#7A5028"/>
+  <stop offset="100%" stop-color="#4A2E14"/>
+</radialGradient>
+
+<!-- Shelf gradient -->
+<linearGradient id="shelfGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+  <stop offset="0%" stop-color="#180A03"/>
+  <stop offset="15%" stop-color="#2A1508"/>
+  <stop offset="85%" stop-color="#221206"/>
+  <stop offset="100%" stop-color="#100602"/>
+</linearGradient>
+
+<!-- Credenza gradient -->
+<linearGradient id="credGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#5A3418"/>
+  <stop offset="100%" stop-color="#3A1E08"/>
+</linearGradient>
+
+<!-- Sofa gradient -->
+<linearGradient id="sofaBack" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#DDD0AE"/>
+  <stop offset="100%" stop-color="#C8B890"/>
+</linearGradient>
+<linearGradient id="sofaSeat" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#C8B890"/>
+  <stop offset="100%" stop-color="#B4A47C"/>
+</linearGradient>
+
+<!-- Eames chair -->
+<linearGradient id="chairShell" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#6A4228"/>
+  <stop offset="100%" stop-color="#3C2210"/>
+</linearGradient>
+<linearGradient id="chairLeather" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#261408"/>
+  <stop offset="100%" stop-color="#140A04"/>
+</linearGradient>
+
+<!-- Plinth gradient -->
+<linearGradient id="plinthGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#8A6442"/>
+  <stop offset="100%" stop-color="#6A4828"/>
+</linearGradient>
+
+<!-- Tonearm pivot gradient -->
+<radialGradient id="pivotGrad" cx="35%" cy="35%" r="65%">
+  <stop offset="0%" stop-color="#E0D8C8"/>
+  <stop offset="100%" stop-color="#9A9080"/>
+</radialGradient>
+
+<!-- Vinyl record clipPaths -->
+<clipPath id="vclip-0"><rect x="35" y="152" width="36" height="36" rx="3"/></clipPath>
+<clipPath id="vclip-1"><rect x="77" y="152" width="36" height="36" rx="3"/></clipPath>
+<clipPath id="vclip-2"><rect x="119" y="152" width="36" height="36" rx="3"/></clipPath>
+<clipPath id="vclip-3"><rect x="161" y="152" width="36" height="36" rx="3"/></clipPath>
+<clipPath id="vclip-4"><rect x="0" y="152" width="36" height="36" rx="3"/><!-- x adjusted below --></clipPath>
+
+<!-- Platter record clip (circle at platter center) -->
+<clipPath id="platClip">
+  <circle cx="612" cy="317" r="38"/>
+</clipPath>
+
+<!-- Frame glow filter -->
+<filter id="frameGlow" x="-30%" y="-30%" width="160%" height="160%">
+  <feGaussianBlur stdDeviation="6" result="blur"/>
+  <feFlood flood-color="rgba(200,150,60,0.5)" result="color"/>
+  <feComposite in="color" in2="blur" operator="in" result="glow"/>
+  <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+
+</defs>
+
+<!-- ═══ LAYER BG: wall, floor, frames ═══ -->
+<g id="layer-bg">
+
+  <!-- Back wall -->
+  <rect x="0" y="0" width="1440" height="406" fill="#2C1A0E"/>
+  <!-- Ceiling zone (darker) -->
+  <rect x="0" y="0" width="1440" height="88" fill="#1A0E06"/>
+  <!-- Wall mid-section warm highlight -->
+  <rect x="0" y="88" width="1440" height="318" fill="url(#warmLight)" opacity="0.6"/>
+
+  <!-- Vertical wood grain lines on wall -->
+  <g stroke-linecap="butt" opacity="1">
+    <line x1="28" y1="0" x2="28" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="47" y1="0" x2="47" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="1"/>
+    <line x1="89" y1="0" x2="89" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="132" y1="0" x2="132" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="1"/>
+    <line x1="165" y1="0" x2="165" y2="406" stroke="rgba(255,150,50,0.07)" stroke-width="0.8"/>
+    <line x1="198" y1="0" x2="198" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="241" y1="0" x2="241" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="1"/>
+    <line x1="278" y1="0" x2="278" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="310" y1="0" x2="310" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="0.8"/>
+    <line x1="352" y1="0" x2="352" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="388" y1="0" x2="388" y2="406" stroke="rgba(255,150,50,0.07)" stroke-width="1"/>
+    <line x1="421" y1="0" x2="421" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="457" y1="0" x2="457" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="0.8"/>
+    <line x1="498" y1="0" x2="498" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="534" y1="0" x2="534" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="1"/>
+    <line x1="571" y1="0" x2="571" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="608" y1="0" x2="608" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="0.8"/>
+    <line x1="645" y1="0" x2="645" y2="406" stroke="rgba(255,150,50,0.07)" stroke-width="1"/>
+    <line x1="682" y1="0" x2="682" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="718" y1="0" x2="718" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="754" y1="0" x2="754" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="1"/>
+    <line x1="791" y1="0" x2="791" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="828" y1="0" x2="828" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="0.8"/>
+    <line x1="864" y1="0" x2="864" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="901" y1="0" x2="901" y2="406" stroke="rgba(255,150,50,0.07)" stroke-width="1"/>
+    <line x1="938" y1="0" x2="938" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="974" y1="0" x2="974" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="1"/>
+    <line x1="1011" y1="0" x2="1011" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="1048" y1="0" x2="1048" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="0.8"/>
+    <line x1="1084" y1="0" x2="1084" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="1121" y1="0" x2="1121" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="1"/>
+    <line x1="1158" y1="0" x2="1158" y2="406" stroke="rgba(255,150,50,0.07)" stroke-width="0.8"/>
+    <line x1="1194" y1="0" x2="1194" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="1231" y1="0" x2="1231" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="1"/>
+    <line x1="1268" y1="0" x2="1268" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+    <line x1="1305" y1="0" x2="1305" y2="406" stroke="rgba(255,150,50,0.06)" stroke-width="1"/>
+    <line x1="1341" y1="0" x2="1341" y2="406" stroke="rgba(255,150,50,0.03)" stroke-width="2"/>
+    <line x1="1378" y1="0" x2="1378" y2="406" stroke="rgba(255,150,50,0.05)" stroke-width="0.8"/>
+    <line x1="1412" y1="0" x2="1412" y2="406" stroke="rgba(255,150,50,0.04)" stroke-width="1.5"/>
+  </g>
+
+  <!-- Floor (trapezoid — slightly wider at bottom for perspective) -->
+  <polygon points="-15,408 1455,408 1440,600 0,600" fill="url(#floorLight)"/>
+  <!-- Floor horizontal grain -->
+  <line x1="0" y1="421" x2="1440" y2="421" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+  <line x1="0" y1="434" x2="1440" y2="434" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+  <line x1="0" y1="447" x2="1440" y2="447" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+  <line x1="0" y1="460" x2="1440" y2="460" stroke="rgba(0,0,0,0.03)" stroke-width="1"/>
+  <line x1="0" y1="473" x2="1440" y2="473" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+  <line x1="0" y1="486" x2="1440" y2="486" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+  <line x1="0" y1="499" x2="1440" y2="499" stroke="rgba(0,0,0,0.03)" stroke-width="1"/>
+  <line x1="0" y1="512" x2="1440" y2="512" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+  <!-- Floor shadow at wall base -->
+  <linearGradient id="floorShadow" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="userSpaceOnUse" y1="408" y2="452">
+    <stop offset="0%" stop-color="rgba(0,0,0,0.45)"/>
+    <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+  </linearGradient>
+  <rect x="0" y="408" width="1440" height="44" fill="url(#floorShadow)"/>
+  <!-- Baseboard -->
+  <rect x="220" y="400" width="1220" height="10" fill="#3A1A08"/>
+  <rect x="220" y="408" width="1220" height="3" fill="rgba(0,0,0,0.3)"/>
+
+  <!-- Rug under Eames chair -->
+  <ellipse cx="378" cy="406" rx="148" ry="14" fill="#7A5020" opacity="0.9"/>
+  <ellipse cx="378" cy="406" rx="138" ry="10" fill="#8B5E2A" opacity="0.7"/>
+  <!-- Rug abstract pattern suggestion -->
+  <ellipse cx="358" cy="406" rx="60" ry="6" fill="#6B4820" opacity="0.5"/>
+  <ellipse cx="398" cy="406" rx="40" ry="4" fill="#6B4820" opacity="0.4"/>
+
+  <!-- Wall shadows on right side near frames -->
+  <rect x="1050" y="0" width="200" height="406" fill="rgba(0,0,0,0.08)"/>
+
+  <!-- PHOTO FRAMES (right wall) -->
+  <!-- Frame 0 -->
+  <g id="frame-0" style="cursor:pointer" transform="rotate(-1.2, 1213, 88)">
+    <!-- Shadow behind frame -->
+    <rect x="1162" y="49" width="102" height="80" rx="4" fill="rgba(0,0,0,0.35)" transform="translate(4,5)"/>
+    <!-- Frame border -->
+    <rect x="1162" y="49" width="102" height="80" rx="2" fill="#5C3319"/>
+    <!-- Mat fill -->
+    <rect x="1167" y="54" width="92" height="70" rx="1" fill="#A89070"/>
+    <!-- TODO: replace fill with real image -->
+    <rect x="1169" y="56" width="88" height="66" fill="#B09878" opacity="0.6"/>
+    <!-- Subtle photo gradient -->
+    <rect x="1169" y="56" width="88" height="66" fill="url(#photoGrad0)" opacity="0.4"/>
+  </g>
+  <!-- Frame 1 -->
+  <g id="frame-1" style="cursor:pointer" transform="rotate(1.5, 1103, 120)">
+    <rect x="1064" y="92" width="88" height="70" rx="4" fill="rgba(0,0,0,0.32)" transform="translate(4,5)"/>
+    <rect x="1064" y="92" width="88" height="70" rx="2" fill="#5C3319"/>
+    <rect x="1069" y="97" width="78" height="60" rx="1" fill="#A89070"/>
+    <!-- TODO: replace fill with real image -->
+    <rect x="1071" y="99" width="74" height="56" fill="#B49C7A" opacity="0.6"/>
+  </g>
+  <!-- Frame 2 -->
+  <g id="frame-2" style="cursor:pointer" transform="rotate(-0.8, 1197, 174)">
+    <rect x="1156" y="149" width="92" height="64" rx="4" fill="rgba(0,0,0,0.3)" transform="translate(4,5)"/>
+    <rect x="1156" y="149" width="92" height="64" rx="2" fill="#5C3319"/>
+    <rect x="1161" y="154" width="82" height="54" rx="1" fill="#A89070"/>
+    <!-- TODO: replace fill with real image -->
+    <rect x="1163" y="156" width="78" height="50" fill="#AC9878" opacity="0.6"/>
+  </g>
+
+</g>
+
+<!-- ═══ LAYER MID: furniture ═══ -->
+<g id="layer-mid">
+
+  <!-- BOOKSHELF structure (back panel + boards — shelf contents in layer-fg) -->
+  <!-- Shelf body -->
+  <rect x="0" y="0" width="220" height="406" fill="url(#shelfGrad)"/>
+  <!-- Shelf right edge highlight (catching wall light) -->
+  <rect x="210" y="0" width="10" height="406" fill="rgba(255,180,80,0.04)"/>
+  <!-- Side panels (darker) -->
+  <rect x="0" y="0" width="13" height="406" fill="#120804"/>
+  <rect x="207" y="0" width="13" height="406" fill="#0E0602"/>
+  <!-- Vertical grain on shelf face -->
+  <line x1="55" y1="0" x2="55" y2="406" stroke="rgba(255,160,60,0.04)" stroke-width="1"/>
+  <line x1="90" y1="0" x2="90" y2="406" stroke="rgba(255,160,60,0.06)" stroke-width="1"/>
+  <line x1="125" y1="0" x2="125" y2="406" stroke="rgba(255,160,60,0.03)" stroke-width="1.5"/>
+  <line x1="160" y1="0" x2="160" y2="406" stroke="rgba(255,160,60,0.05)" stroke-width="1"/>
+  <!-- Shelf boards -->
+  <rect x="0" y="134" width="220" height="8" fill="#1A0A04"/>
+  <rect x="0" y="142" width="220" height="5" fill="rgba(0,0,0,0.4)"/>
+  <rect x="0" y="274" width="220" height="8" fill="#1A0A04"/>
+  <rect x="0" y="282" width="220" height="5" fill="rgba(0,0,0,0.4)"/>
+  <rect x="0" y="383" width="220" height="8" fill="#1A0A04"/>
+  <!-- Shelf shadow cast on floor -->
+  <rect x="0" y="406" width="240" height="30" fill="rgba(0,0,0,0.35)"/>
+
+  <!-- EAMES LOUNGE CHAIR -->
+  <!-- Ottoman (in front) -->
+  <rect x="248" y="374" width="98" height="26" rx="5" fill="#2A1608"/>
+  <rect x="252" y="376" width="90" height="22" rx="4" fill="url(#chairLeather)"/>
+  <!-- Chair base shadow on floor -->
+  <ellipse cx="372" cy="408" rx="100" ry="8" fill="rgba(0,0,0,0.3)"/>
+  <!-- Chair plywood back shell -->
+  <path d="M 302,402 C 302,390 296,370 298,338 C 300,312 306,285 312,272 L 436,272 C 442,285 448,312 450,338 C 452,370 446,390 446,402 Z" fill="url(#chairShell)"/>
+  <!-- Leather back cushion -->
+  <path d="M 310,398 C 310,386 305,368 307,338 C 309,314 314,290 318,278 L 430,278 C 434,290 439,314 441,338 C 443,368 438,386 438,398 Z" fill="url(#chairLeather)"/>
+  <!-- Leather sheen highlight -->
+  <path d="M 318,278 C 330,280 355,286 370,295 C 350,310 322,318 310,320 C 308,310 308,294 318,278 Z" fill="rgba(255,180,80,0.1)"/>
+  <!-- Plywood seat shell -->
+  <path d="M 296,396 C 296,388 298,380 300,374 L 448,374 C 450,380 452,388 452,396 L 448,402 L 300,402 Z" fill="url(#chairShell)"/>
+  <!-- Leather seat cushion -->
+  <rect x="304" y="376" width="140" height="24" rx="4" fill="url(#chairLeather)"/>
+  <!-- Seat highlight -->
+  <rect x="308" y="378" width="80" height="6" rx="2" fill="rgba(255,160,60,0.08)"/>
+  <!-- 5-star cast aluminum base -->
+  <line x1="374" y1="402" x2="318" y2="414" stroke="#B8B0A0" stroke-width="4" stroke-linecap="round"/>
+  <line x1="374" y1="402" x2="430" y2="414" stroke="#B8B0A0" stroke-width="4" stroke-linecap="round"/>
+  <line x1="374" y1="402" x2="374" y2="418" stroke="#B8B0A0" stroke-width="4" stroke-linecap="round"/>
+  <line x1="374" y1="402" x2="342" y2="418" stroke="#A8A090" stroke-width="4" stroke-linecap="round"/>
+  <line x1="374" y1="402" x2="406" y2="418" stroke="#A8A090" stroke-width="4" stroke-linecap="round"/>
+  <!-- Base center disk -->
+  <circle cx="374" cy="402" r="8" fill="#C8C0B0"/>
+  <circle cx="374" cy="402" r="5" fill="#A8A090"/>
+  <!-- Feet -->
+  <circle cx="318" cy="414" r="4" fill="#8A8278"/>
+  <circle cx="430" cy="414" r="4" fill="#8A8278"/>
+  <circle cx="374" cy="418" r="4" fill="#8A8278"/>
+  <circle cx="342" cy="418" r="4" fill="#8A8278"/>
+  <circle cx="406" cy="418" r="4" fill="#8A8278"/>
+
+  <!-- CREDENZA -->
+  <!-- Shadow beneath -->
+  <rect x="446" y="402" width="340" height="20" fill="rgba(0,0,0,0.3)"/>
+  <!-- Body -->
+  <rect x="448" y="348" width="328" height="52" rx="4" fill="url(#credGrad)"/>
+  <!-- Top surface highlight -->
+  <rect x="448" y="348" width="328" height="8" rx="4" fill="rgba(255,200,100,0.12)"/>
+  <!-- Panel divider lines -->
+  <line x1="514" y1="354" x2="514" y2="394" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+  <line x1="580" y1="354" x2="580" y2="394" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+  <line x1="646" y1="354" x2="646" y2="394" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+  <line x1="712" y1="354" x2="712" y2="394" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+  <!-- Legs (tapered) -->
+  <path d="M 466,400 L 470,400 L 468,422 L 462,422 Z" fill="#2A1208"/>
+  <path d="M 754,400 L 758,400 L 762,422 L 756,422 Z" fill="#2A1208"/>
+  <path d="M 500,400 L 504,400 L 503,418 L 497,418 Z" fill="#2A1208"/>
+  <path d="M 720,400 L 724,400 L 728,418 L 722,418 Z" fill="#2A1208"/>
+
+  <!-- TURNTABLE PLINTH (on credenza) -->
+  <!-- Shadow -->
+  <rect x="566" y="344" width="154" height="8" fill="rgba(0,0,0,0.3)"/>
+  <!-- Plinth body -->
+  <rect x="568" y="284" width="152" height="64" rx="8" fill="url(#plinthGrad)"/>
+  <!-- Plinth sheen -->
+  <rect x="568" y="284" width="152" height="12" rx="8" fill="rgba(255,200,100,0.14)"/>
+  <path d="M 568,284 L 620,284 L 620,296 C 590,298 572,295 568,292 Z" fill="rgba(255,255,255,0.08)"/>
+  <!-- Platter base (dark disc) -->
+  <circle cx="612" cy="317" r="46" fill="#222018"/>
+  <circle cx="612" cy="317" r="44" fill="#1A1812"/>
+  <!-- Platter mat (slightly lighter) -->
+  <circle cx="612" cy="317" r="40" fill="#282420"/>
+  <!-- Platter groove rings (subtle) -->
+  <circle cx="612" cy="317" r="35" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  <circle cx="612" cy="317" r="28" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  <circle cx="612" cy="317" r="20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  <!-- Spindle -->
+  <circle cx="612" cy="317" r="4" fill="#B0A898"/>
+  <circle cx="612" cy="317" r="2" fill="#888"/>
+
+  <!-- PLATTER RECORD (shown when playing, hidden by default) -->
+  <g id="platter-disc" class="platter-disc" style="display:none">
+    <!-- Cover art fills the disc -->
+    <image id="disc-art" x="574" y="279" width="76" height="76" clip-path="url(#platClip)" preserveAspectRatio="xMidYMid slice"/>
+    <!-- Fallback color ring (shown when no art) -->
+    <circle id="disc-fallback" cx="612" cy="317" r="38" fill="#2a4a2a" opacity="0"/>
+    <!-- Label ring -->
+    <circle cx="612" cy="317" r="14" fill="#E8E0D0"/>
+    <circle cx="612" cy="317" r="12" fill="#D8D0C0"/>
+    <!-- Center hole -->
+    <circle cx="612" cy="317" r="3" fill="#1C1812"/>
+  </g>
+
+  <!-- SOFA -->
+  <!-- Shadow on floor -->
+  <ellipse cx="988" cy="408" rx="196" ry="10" fill="rgba(0,0,0,0.32)"/>
+  <!-- Left armrest -->
+  <rect x="802" y="276" width="20" height="118" rx="4" fill="#3A1E08"/>
+  <rect x="804" y="278" width="16" height="12" rx="3" fill="#4A2810"/>
+  <!-- Right armrest -->
+  <rect x="1152" y="276" width="20" height="118" rx="4" fill="#3A1E08"/>
+  <rect x="1154" y="278" width="16" height="12" rx="3" fill="#4A2810"/>
+  <!-- Back cushions -->
+  <rect x="820" y="272" width="334" height="78" rx="5" fill="url(#sofaBack)"/>
+  <!-- Wood top rail -->
+  <rect x="820" y="272" width="334" height="10" rx="5" fill="#4A2A10"/>
+  <rect x="824" y="273" width="326" height="5" rx="3" fill="rgba(255,200,100,0.1)"/>
+  <!-- Cushion seam lines on back -->
+  <line x1="931" y1="282" x2="931" y2="346" stroke="rgba(80,40,10,0.15)" stroke-width="1.5"/>
+  <line x1="1042" y1="282" x2="1042" y2="346" stroke="rgba(80,40,10,0.15)" stroke-width="1.5"/>
+  <!-- Seat -->
+  <rect x="820" y="350" width="334" height="42" rx="2" fill="url(#sofaSeat)"/>
+  <!-- Seat seam lines -->
+  <line x1="931" y1="352" x2="931" y2="390" stroke="rgba(80,40,10,0.12)" stroke-width="1.5"/>
+  <line x1="1042" y1="352" x2="1042" y2="390" stroke="rgba(80,40,10,0.12)" stroke-width="1.5"/>
+  <!-- Sofa legs -->
+  <rect x="838" y="392" width="14" height="18" rx="3" fill="#3A1E08"/>
+  <rect x="882" y="392" width="14" height="14" rx="3" fill="#3A1E08"/>
+  <rect x="1078" y="392" width="14" height="14" rx="3" fill="#3A1E08"/>
+  <rect x="1122" y="392" width="14" height="18" rx="3" fill="#3A1E08"/>
+  <!-- Throw pillow -->
+  <rect x="1088" y="282" width="40" height="38" rx="5" fill="#8B3A1A"/>
+  <rect x="1090" y="284" width="36" height="34" rx="4" fill="#9C4420"/>
+  <line x1="1108" y1="284" x2="1108" y2="318" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+  <line x1="1090" y1="301" x2="1126" y2="301" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+
+</g>
+
+<!-- ═══ LAYER FG: plants, shelf contents ═══ -->
+<g id="layer-fg">
+
+  <!-- BOOKSHELF CONTENTS -->
+
+  <!-- Film sleeves (top shelf zone y=0 to y=134) -->
+  <!-- Film 0: Apocalypse Now — deep burgundy -->
+  <g id="film-0" style="cursor:pointer">
+    <rect id="fs0" x="15" y="22" width="28" height="112" rx="2" fill="#4A1515"/>
+    <rect x="15" y="22" width="4" height="112" fill="rgba(0,0,0,0.2)"/>
+    <text x="29" y="118" font-family="'Spline Sans Mono',monospace" font-size="6.5" fill="rgba(255,230,180,0.65)" writing-mode="tb" transform="rotate(180,29,68)" text-anchor="middle">APOCALYPSE NOW</text>
+  </g>
+  <!-- Film 1: Blade Runner — deep navy -->
+  <g id="film-1" style="cursor:pointer">
+    <rect id="fs1" x="49" y="16" width="28" height="118" rx="2" fill="#1A2A3A"/>
+    <rect x="49" y="16" width="4" height="118" fill="rgba(0,0,0,0.2)"/>
+    <text x="63" y="124" font-family="'Spline Sans Mono',monospace" font-size="6.5" fill="rgba(255,230,180,0.65)" writing-mode="tb" transform="rotate(180,63,65)" text-anchor="middle">BLADE RUNNER</text>
+  </g>
+  <!-- Film 2: La Haine — near black -->
+  <g id="film-2" style="cursor:pointer">
+    <rect id="fs2" x="83" y="26" width="28" height="108" rx="2" fill="#1A1A1A"/>
+    <rect x="83" y="26" width="4" height="108" fill="rgba(0,0,0,0.3)"/>
+    <text x="97" y="122" font-family="'Spline Sans Mono',monospace" font-size="6.5" fill="rgba(255,230,180,0.65)" writing-mode="tb" transform="rotate(180,97,66)" text-anchor="middle">LA HAINE</text>
+  </g>
+  <!-- Film 3: City of God — deep forest -->
+  <g id="film-3" style="cursor:pointer">
+    <rect id="fs3" x="117" y="19" width="28" height="115" rx="2" fill="#2A3A1A"/>
+    <rect x="117" y="19" width="4" height="115" fill="rgba(0,0,0,0.2)"/>
+    <text x="131" y="124" font-family="'Spline Sans Mono',monospace" font-size="6.5" fill="rgba(255,230,180,0.65)" writing-mode="tb" transform="rotate(180,131,66)" text-anchor="middle">CITY OF GOD</text>
+  </g>
+  <!-- Film 4: Mulholland Drive — deep plum -->
+  <g id="film-4" style="cursor:pointer">
+    <rect id="fs4" x="151" y="23" width="28" height="111" rx="2" fill="#2A1A3A"/>
+    <rect x="151" y="23" width="4" height="111" fill="rgba(0,0,0,0.2)"/>
+    <text x="165" y="122" font-family="'Spline Sans Mono',monospace" font-size="6.5" fill="rgba(255,230,180,0.65)" writing-mode="tb" transform="rotate(180,165,67)" text-anchor="middle">MULHOLLAND DR</text>
+  </g>
+
+  <!-- Vinyl records (middle shelf zone y=142 to y=274) -->
+  <!-- Record 0 -->
+  <g id="vinyl-0" style="cursor:grab">
+    <rect x="35" y="152" width="36" height="36" rx="3" fill="#2a4a2a"/>
+    <image id="vinyl-img-0" href="" x="35" y="152" width="36" height="36" clip-path="url(#vclip-0)" preserveAspectRatio="xMidYMid slice"/>
+    <rect x="35" y="152" width="36" height="36" rx="3" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+  </g>
+  <!-- Record 1 -->
+  <g id="vinyl-1" style="cursor:grab">
+    <rect x="77" y="152" width="36" height="36" rx="3" fill="#4a3a1a"/>
+    <image id="vinyl-img-1" href="" x="77" y="152" width="36" height="36" clip-path="url(#vclip-1)" preserveAspectRatio="xMidYMid slice"/>
+    <rect x="77" y="152" width="36" height="36" rx="3" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+  </g>
+  <!-- Record 2 -->
+  <g id="vinyl-2" style="cursor:grab">
+    <rect x="119" y="152" width="36" height="36" rx="3" fill="#4a2a1a"/>
+    <image id="vinyl-img-2" href="" x="119" y="152" width="36" height="36" clip-path="url(#vclip-2)" preserveAspectRatio="xMidYMid slice"/>
+    <rect x="119" y="152" width="36" height="36" rx="3" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+  </g>
+  <!-- Record 3 -->
+  <g id="vinyl-3" style="cursor:grab">
+    <rect x="161" y="152" width="36" height="36" rx="3" fill="#c85a20"/>
+    <image id="vinyl-img-3" href="" x="161" y="152" width="36" height="36" clip-path="url(#vclip-3)" preserveAspectRatio="xMidYMid slice"/>
+    <rect x="161" y="152" width="36" height="36" rx="3" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+  </g>
+  <!-- Record 4 — adjusted clipPath x -->
+  <g id="vinyl-4" style="cursor:grab">
+    <rect x="16" y="152" width="36" height="36" rx="3" fill="#6a4a7a"/>
+    <image id="vinyl-img-4" href="" x="16" y="152" width="36" height="36" preserveAspectRatio="xMidYMid slice"/>
+    <rect x="16" y="152" width="36" height="36" rx="3" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+  </g>
+
+  <!-- CAMERAS (bottom shelf zone y=282 to y=383) -->
+  <!-- Canon AE-1 -->
+  <g id="cam-0" style="cursor:pointer">
+    <!-- Body -->
+    <rect x="16" y="304" width="62" height="44" rx="3" fill="#1C1814"/>
+    <!-- Textured grip -->
+    <rect x="16" y="304" width="14" height="44" rx="2" fill="#181410"/>
+    <line x1="18" y1="308" x2="18" y2="344" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <line x1="21" y1="308" x2="21" y2="344" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <line x1="24" y1="308" x2="24" y2="344" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    <!-- Pentaprism hump on top -->
+    <path d="M 28,304 L 32,290 L 58,290 L 62,304 Z" fill="#181410"/>
+    <!-- Lens barrel -->
+    <circle cx="45" cy="326" r="14" fill="#0A0A08"/>
+    <circle cx="45" cy="326" r="12" fill="#121210"/>
+    <circle cx="45" cy="326" r="9" fill="#1A1818"/>
+    <circle cx="45" cy="326" r="5" fill="#0A0A08"/>
+    <!-- Lens glass highlight -->
+    <circle cx="40" cy="321" r="3" fill="rgba(100,120,160,0.25)"/>
+    <!-- Lens ring -->
+    <circle cx="45" cy="326" r="14" fill="none" stroke="#2A2820" stroke-width="1.5"/>
+    <!-- Shutter button -->
+    <circle cx="65" cy="298" r="4" fill="#C0B8B0"/>
+    <circle cx="65" cy="298" r="2.5" fill="#A8A098"/>
+    <!-- Hot shoe -->
+    <rect x="34" y="287" width="18" height="4" fill="#282420"/>
+    <!-- Camera shadow -->
+    <rect x="16" y="346" width="62" height="6" fill="rgba(0,0,0,0.4)" transform="skewX(-10)"/>
+  </g>
+
+  <!-- Olympus Mju II -->
+  <g id="cam-1" style="cursor:pointer">
+    <!-- Body (rounded compact) -->
+    <rect x="102" y="320" width="44" height="28" rx="6" fill="#C0B8B0"/>
+    <rect x="104" y="322" width="40" height="24" rx="5" fill="#C8C0B8"/>
+    <!-- Lens -->
+    <circle cx="114" cy="334" r="8" fill="#1A1818"/>
+    <circle cx="114" cy="334" r="6" fill="#0A0A08"/>
+    <circle cx="112" cy="332" r="2" fill="rgba(100,120,160,0.35)"/>
+    <circle cx="114" cy="334" r="8" fill="none" stroke="#A8A098" stroke-width="1"/>
+    <!-- Flash panel -->
+    <rect x="126" y="325" width="12" height="8" rx="2" fill="rgba(200,190,180,0.7)"/>
+    <rect x="127" y="326" width="10" height="6" rx="1" fill="rgba(220,215,210,0.6)"/>
+    <!-- Shutter button -->
+    <circle cx="140" cy="323" r="3" fill="#A8A098"/>
+    <!-- Shadow -->
+    <rect x="102" y="346" width="44" height="5" fill="rgba(0,0,0,0.3)" rx="2"/>
+  </g>
+
+  <!-- Small plant on credenza -->
+  <!-- Pot -->
+  <rect x="478" y="318" width="34" height="30" rx="3" fill="#B05A28"/>
+  <rect x="476" y="316" width="38" height="8" rx="2" fill="#C4682D"/>
+  <!-- Leaves -->
+  <path d="M 495,316 C 488,298 482,280 488,262 C 492,250 500,248 504,258 C 508,268 506,288 495,316 Z" fill="#3D7A25"/>
+  <path d="M 495,316 C 502,296 510,278 506,260 C 503,248 495,246 491,256 C 488,266 490,288 495,316 Z" fill="#4A8F2E"/>
+  <path d="M 495,314 C 484,298 474,282 478,266 C 481,255 490,253 494,262 Z" fill="#2D5A1B"/>
+  <path d="M 495,314 C 506,300 514,284 510,268 C 507,258 498,256 494,265 Z" fill="#5AAF3A"/>
+
+  <!-- FIDDLE LEAF FIG — far left corner -->
+  <g id="plant-left">
+    <!-- Pot -->
+    <path d="M 22,402 L 16,375 L 82,375 L 76,402 Z" fill="#B05028"/>
+    <rect x="12" y="368" width="74" height="12" rx="3" fill="#C4622D"/>
+    <!-- Pot soil hint -->
+    <rect x="18" y="370" width="62" height="6" rx="2" fill="#1A0A04"/>
+    <!-- Trunk -->
+    <line x1="49" y1="375" x2="49" y2="120" stroke="#2A1808" stroke-width="4"/>
+    <!-- Leaf 1 — lower right, large -->
+    <path d="M 49,368 C 58,348 72,326 68,294 C 65,272 55,266 46,278 C 38,290 40,325 49,368 Z" fill="#3D7A25"/>
+    <line x1="49" y1="368" x2="57" y2="278" stroke="#2A5518" stroke-width="0.8"/>
+    <!-- Leaf 2 — lower left, large -->
+    <path d="M 48,360 C 32,334 18,308 22,272 C 25,250 38,246 46,260 C 53,273 52,318 48,360 Z" fill="#4A8F2E"/>
+    <line x1="48" y1="360" x2="34" y2="260" stroke="#2A5518" stroke-width="0.8"/>
+    <!-- Leaf 3 — mid right -->
+    <path d="M 50,320 C 62,298 78,274 74,244 C 71,224 60,220 51,232 C 43,243 44,278 50,320 Z" fill="#2D5A1B"/>
+    <line x1="50" y1="320" x2="62" y2="232" stroke="#1E4212" stroke-width="0.7"/>
+    <!-- Leaf 4 — mid left -->
+    <path d="M 48,305 C 28,278 10,252 14,218 C 17,196 32,192 42,206 C 51,218 52,262 48,305 Z" fill="#5AAF3A"/>
+    <line x1="48" y1="305" x2="28" y2="206" stroke="#2A5518" stroke-width="0.7"/>
+    <!-- Leaf 5 — mid center -->
+    <path d="M 50,275 C 56,252 62,226 58,196 C 55,176 46,172 40,184 C 34,196 36,232 50,275 Z" fill="#3D7A25"/>
+    <line x1="50" y1="275" x2="49" y2="184" stroke="#2A5518" stroke-width="0.7"/>
+    <!-- Leaf 6 — upper right -->
+    <path d="M 50,230 C 64,208 76,182 72,152 C 69,132 58,128 50,140 C 42,151 44,188 50,230 Z" fill="#4A8F2E"/>
+    <line x1="50" y1="230" x2="61" y2="140" stroke="#2A5518" stroke-width="0.6"/>
+    <!-- Leaf 7 — upper left -->
+    <path d="M 49,214 C 30,188 14,162 18,130 C 21,108 36,104 46,118 C 55,130 56,172 49,214 Z" fill="#2D5A1B"/>
+    <line x1="49" y1="214" x2="32" y2="118" stroke="#1E4212" stroke-width="0.6"/>
+    <!-- Leaf 8 — top center -->
+    <path d="M 50,172 C 56,148 60,122 56,94 C 53,74 44,70 38,82 C 32,94 34,132 50,172 Z" fill="#5AAF3A"/>
+    <line x1="50" y1="172" x2="47" y2="82" stroke="#2A5518" stroke-width="0.6"/>
+    <!-- Leaf 9 — top right -->
+    <path d="M 50,148 C 62,124 70,98 66,70 C 63,52 53,48 46,60 C 40,72 42,108 50,148 Z" fill="#3D7A25"/>
+    <line x1="50" y1="148" x2="58" y2="60" stroke="#2A5518" stroke-width="0.5"/>
+  </g>
+
+  <!-- MONSTERA — far right corner -->
+  <g id="plant-right">
+    <!-- Pot -->
+    <path d="M 1388,402 L 1382,374 L 1438,374 L 1430,402 Z" fill="#B05028"/>
+    <rect x="1378" y="367" width="64" height="11" rx="3" fill="#C4622D"/>
+    <rect x="1384" y="369" width="52" height="5" rx="2" fill="#1A0A04"/>
+    <!-- Trunk -->
+    <line x1="1409" y1="374" x2="1409" y2="190" stroke="#2A1808" stroke-width="5"/>
+    <!-- Leaf 1 — large, center-right, with split cuts -->
+    <path fill-rule="evenodd" d="
+      M 1409,370 C 1362,340 1330,300 1348,258 C 1360,230 1386,226 1402,244 C 1418,262 1418,318 1409,370 Z
+      M 1380,290 C 1372,282 1368,272 1372,264 C 1375,270 1380,278 1386,282 Z
+      M 1375,320 C 1366,312 1362,300 1366,290 C 1370,296 1376,306 1382,310 Z
+    " fill="#4A8F2E"/>
+    <!-- Leaf 2 — wide right side -->
+    <path fill-rule="evenodd" d="
+      M 1410,368 C 1444,334 1470,292 1452,250 C 1440,222 1412,218 1398,236 C 1386,252 1388,314 1410,368 Z
+      M 1440,300 C 1448,292 1452,280 1448,270 C 1444,276 1440,286 1434,290 Z
+      M 1445,332 C 1454,322 1458,308 1454,296 C 1450,304 1445,316 1440,320 Z
+    " fill="#3D7A25"/>
+    <!-- Leaf 3 — upper left large -->
+    <path fill-rule="evenodd" d="
+      M 1408,310 C 1360,278 1326,238 1344,196 C 1356,168 1384,164 1400,182 C 1416,200 1416,256 1408,310 Z
+      M 1374,236 C 1365,228 1361,216 1365,206 C 1369,213 1375,222 1381,226 Z
+      M 1370,268 C 1360,260 1356,246 1360,234 C 1365,241 1372,252 1378,256 Z
+    " fill="#2D5A1B"/>
+    <!-- Leaf 4 — upper right -->
+    <path fill-rule="evenodd" d="
+      M 1410,298 C 1448,264 1472,222 1454,180 C 1442,152 1414,148 1400,166 C 1388,182 1390,242 1410,298 Z
+      M 1442,228 C 1451,218 1455,204 1451,192 C 1447,200 1443,212 1437,218 Z
+    " fill="#5AAF3A"/>
+    <!-- Leaf 5 — mid-upper left -->
+    <path d="M 1408,248 C 1362,216 1330,176 1348,136 C 1360,108 1384,104 1400,122 C 1416,140 1416,196 1408,248 Z" fill="#3D7A25"/>
+    <!-- Leaf 6 — upper center -->
+    <path d="M 1410,210 C 1390,178 1376,144 1388,108 C 1395,84 1412,80 1422,94 C 1432,108 1426,158 1410,210 Z" fill="#4A8F2E"/>
+  </g>
+
+</g>
+
+<!-- ═══ LAYER UI: tonearm ═══ -->
+<g id="layer-ui">
+  <!-- Tonearm (rotates around pivot at 692,296) -->
+  <g id="tonearm" transform="rotate(-15, 692, 296)" style="cursor:pointer">
+    <!-- Counterweight -->
+    <rect x="668" y="292" width="18" height="8" rx="2" fill="#9A9080"/>
+    <rect x="669" y="293" width="16" height="6" rx="1" fill="#8A8070"/>
+    <!-- Arm body -->
+    <line x1="686" y1="296" x2="782" y2="296" stroke="#C0B0A0" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Headshell -->
+    <path d="M 782,296 L 788,299 L 790,308" stroke="#A09080" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Stylus -->
+    <line x1="790" y1="308" x2="790" y2="316" stroke="#D0C8C0" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Pivot joint -->
+    <circle cx="692" cy="296" r="6" fill="url(#pivotGrad)"/>
+    <circle cx="692" cy="296" r="3" fill="#B0A898"/>
+  </g>
+  <!-- Flying record placeholder (created by JS) -->
+</g>
+
+<!-- ═══ LAYER ATMOSPHERE: light, vignette, grain ═══ -->
+<g id="layer-atmosphere" style="pointer-events:none">
+  <!-- Warm light pool -->
+  <rect x="0" y="0" width="1440" height="600" fill="url(#warmLight)"/>
+  <!-- Vignette -->
+  <rect x="0" y="0" width="1440" height="600" fill="url(#vignette)"/>
+  <!-- Film grain -->
+  <rect x="0" y="0" width="1440" height="600" filter="url(#grain)" opacity="1"/>
+</g>
+
+</svg>
+
+<!-- TOOLTIP OVERLAY -->
+<div class="tip-layer" id="tip-layer">
+
+  <!-- Film cards -->
+  <div class="r-tip" id="tip-f0">
+    <div class="r-tip-title">Apocalypse Now</div>
+    <div class="r-tip-year">1979</div>
+    <div class="r-tip-note">"The one that made me think cinema could be delirious and precise at the same time."</div>
+  </div>
+  <div class="r-tip" id="tip-f1">
+    <div class="r-tip-title">Blade Runner</div>
+    <div class="r-tip-year">1982</div>
+    <div class="r-tip-note">"I've watched the Final Cut more times than I can count."</div>
+  </div>
+  <div class="r-tip" id="tip-f2">
+    <div class="r-tip-title">La Haine</div>
+    <div class="r-tip-year">1995</div>
+    <div class="r-tip-note">"Shot in a day, feels like a lifetime."</div>
+  </div>
+  <div class="r-tip" id="tip-f3">
+    <div class="r-tip-title">City of God</div>
+    <div class="r-tip-year">2002</div>
+    <div class="r-tip-note">"Editing as storytelling. Changed how I think about sequence."</div>
+  </div>
+  <div class="r-tip" id="tip-f4">
+    <div class="r-tip-title">Mulholland Drive</div>
+    <div class="r-tip-year">2001</div>
+    <div class="r-tip-note">"Still not sure what it means. That's the point."</div>
+  </div>
+
+  <!-- Camera tips -->
+  <div class="r-tip-sm" id="tip-c0">My first film camera. Still use it.</div>
+  <div class="r-tip-sm" id="tip-c1">Pocket-sized. Goes everywhere with me.</div>
+
+  <!-- Frame captions -->
+  <div class="r-tip-sm" id="tip-fr0">surf trip, 2023</div>
+  <div class="r-tip-sm" id="tip-fr1">somewhere in Portugal</div>
+  <div class="r-tip-sm" id="tip-fr2">disposable</div>
+
+  <!-- Now playing -->
+  <div class="now-playing-wrap" id="now-playing-wrap" style="left:50%;top:420px">
+    <div class="np-title" id="np-title"></div>
+    <div class="np-artist" id="np-artist"></div>
+  </div>
+
+</div>
+</div><!-- /room-wrap -->
+
+<!-- DOCK -->
+<nav class="dock">
+  <div class="dock-inner">
+    <button class="dock-btn" onclick="void 0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <span class="dock-tip">Light Mode</span>
+    </button>
+    <button class="dock-btn" onclick="navigator.clipboard.writeText('mathieu.mestre@usercentrics.com')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <span class="dock-tip">Copy email</span>
+    </button>
+    <div class="dock-divider"></div>
+    <a class="dock-link" href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="dock-tip">Home</span></a>
+    <a class="dock-link" href="/work"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg><span class="dock-tip">Work</span></a>
+    <a class="dock-link active" href="/about"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h4M2 10h4M2 14h4M2 18h4"/><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M16 2v20"/></svg><span class="dock-tip">About</span></a>
+  </div>
+</nav>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+// ── Clock ──
+function tick(){document.getElementById('clock-time').textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true,timeZone:'Europe/Paris'})}
+tick();setInterval(tick,1000);
+
+// ── Photo slideshow ──
+const CDN='https://framerusercontent.com/images';
+const PHOTOS=[CDN+'/xj2ByBC3nJVc6F6HtI6nqcbnTw.jpg',CDN+'/60U0IdoPtBAMAmLmMKGolwQI.jpg',CDN+'/5zyj2mIYoYnGcqeSfIVOXwLoXt0.jpg'];
+const pc=document.getElementById('photo-container');
+PHOTOS.forEach((src,i)=>{const d=document.createElement('div');d.className='photo-slide';d.style.cssText='position:absolute;inset:0;transition:transform .8s cubic-bezier(.34,1.4,.64,1);z-index:'+(i===0?1:0);const img=document.createElement('img');img.src=src;d.appendChild(img);pc.appendChild(d);});
+let pi=0;const slides=pc.querySelectorAll('.photo-slide');
+setInterval(()=>{const p=pi;pi=(pi+1)%PHOTOS.length;slides[p].style.zIndex=2;slides[p].style.transform='translateY(-100%)';slides[pi].style.zIndex=1;slides[pi].style.transform='translateY(0)';setTimeout(()=>{slides[p].style.transition='none';slides[p].style.transform='translateY(0)';slides[p].style.zIndex=0;requestAnimationFrame(()=>requestAnimationFrame(()=>{slides[p].style.transition='transform .8s cubic-bezier(.34,1.4,.64,1)'}))},950)},3500);
+
+// ── Currently hover ──
+const lc=document.getElementById('left-card'),cb=document.getElementById('currently-box'),ts=document.getElementById('tagline-section'),cp=document.getElementById('currents-panel');
+cb.addEventListener('mouseenter',()=>{ts.style.opacity='0';cp.style.opacity='1'});
+lc.addEventListener('mouseleave',()=>{ts.style.opacity='1';cp.style.opacity='0'});
+
+// ════════════════════════════════════════
+// ROOM INTERACTIVITY
+// ════════════════════════════════════════
+
+const svg = document.getElementById('room-svg');
+const wrap = document.getElementById('room-wrap');
+const audio = document.getElementById('audio');
+
+// Albums
+const ALBUMS = [
+  {title:"What's Going On", artist:'Marvin Gaye',      url:'https://coverartarchive.org/release/3f974989-9b81-4a76-9869-0b9843d3fa29/front-250', fb:'#2a4a2a', src:'/music/whats-going-on.mp3' /* TODO */},
+  {title:'Still Bill',       artist:'Bill Withers',    url:'https://coverartarchive.org/release/de3fc9ac-4f6b-42a4-bbe6-f06b9ba7411c/front-250', fb:'#4a3a1a', src:'/music/still-bill.mp3'       /* TODO */},
+  {title:'Bebeto',           artist:'Bebeto',          url:null,                                                                                    fb:'#4a2a1a', src:'/music/bebeto.mp3'           /* TODO */},
+  {title:'Superfly',         artist:'Curtis Mayfield', url:'https://coverartarchive.org/release/2f951e55-a573-474d-af84-a4c8c4c13988/front-250', fb:'#c85a20', src:'/music/superfly.mp3'         /* TODO */},
+  {title:'Histoire de Melody Nelson', artist:'Serge Gainsbourg', url:'https://coverartarchive.org/release/c8eec09d-2097-4694-8985-76d05c44f95d/front-250', fb:'#6a4a7a', src:'/music/melody-nelson.mp3' /* TODO */},
+];
+
+// Load cover art into SVG image elements
+const coverLoaded = [false,false,false,false,false];
+ALBUMS.forEach((a,i)=>{
+  if(!a.url)return;
+  const img=new Image();img.crossOrigin='anonymous';
+  img.onload=()=>{
+    coverLoaded[i]=true;
+    const el=document.getElementById('vinyl-img-'+i);
+    if(el)el.setAttribute('href',a.url);
+    // Update disc if this record is playing
+    if(ST.playIdx===i){
+      const da=document.getElementById('disc-art');
+      if(da){da.setAttribute('href',a.url);document.getElementById('disc-fallback').setAttribute('opacity','0');}
+    }
+  };
+  img.src=a.url;
+});
+
+// Bebeto fetch
+(async()=>{
+  try{
+    const r=await fetch('https://musicbrainz.org/ws/2/release/?query=artist:bebeto&fmt=json&limit=5');
+    const d=await r.json();
+    const mbid=d.releases?.[0]?.id;if(!mbid)return;
+    const url=`https://coverartarchive.org/release/${mbid}/front-250`;
+    ALBUMS[2].url=url;
+    const img=new Image();img.crossOrigin='anonymous';
+    img.onload=()=>{
+      coverLoaded[2]=true;
+      document.getElementById('vinyl-img-2').setAttribute('href',url);
+      if(ST.playIdx===2){document.getElementById('disc-art').setAttribute('href',url);document.getElementById('disc-fallback').setAttribute('opacity','0');}
+    };
+    img.src=url;
+  }catch(e){}
+})();
+
+// ── State ──
+const ST = {
+  state:'idle',   // idle | flying | playing | transitioning
+  playIdx:-1,
+  taAngle:-15,    // tonearm current angle (degrees, rotates around 692,296)
+  taTarget:-15,   // tonearm target angle
+  pxFg:0, pxFgT:0,  // parallax fg
+  pxMid:0, pxMidT:0, // parallax mid
+  rafId:null,
+};
+
+// ── Easing ──
+function eio(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+
+// ── Helpers: SVG coords to wrapper CSS pixels ──
+function svgToCss(svgX, svgY){
+  const vw=1440, vh=600;
+  const cw=wrap.clientWidth;
+  const scale=cw/vw;
+  const ch=vh*scale;
+  const offsetY=(wrap.clientHeight-ch)/2;
+  return {x:svgX*scale, y:svgY*scale+Math.max(0,offsetY)};
+}
+
+// ── Main animation loop ──
+function startLoop(){if(!ST.rafId)ST.rafId=requestAnimationFrame(loop);}
+function loop(){
+  let live=false;
+
+  // Parallax
+  const dfg=ST.pxFgT-ST.pxFg; if(Math.abs(dfg)>0.05){ST.pxFg+=dfg*0.06;live=true;}
+  const dmd=ST.pxMidT-ST.pxMid; if(Math.abs(dmd)>0.05){ST.pxMid+=dmd*0.06;live=true;}
+  document.getElementById('layer-fg').setAttribute('transform',`translate(${ST.pxFg.toFixed(2)},0)`);
+  document.getElementById('layer-mid').setAttribute('transform',`translate(${ST.pxMid.toFixed(2)},0)`);
+
+  // Tonearm lerp (counterclockwise from -15 to -195)
+  const dta=ST.taTarget-ST.taAngle;
+  if(Math.abs(dta)>0.1){ST.taAngle+=dta*0.055;document.getElementById('tonearm').setAttribute('transform',`rotate(${ST.taAngle.toFixed(2)},692,296)`);live=true;}
+  else if(dta!==0){ST.taAngle=ST.taTarget;document.getElementById('tonearm').setAttribute('transform',`rotate(${ST.taAngle.toFixed(2)},692,296)`);}
+
+  if(live)ST.rafId=requestAnimationFrame(loop);
+  else ST.rafId=null;
+}
+
+// ── Parallax ──
+wrap.addEventListener('mousemove',e=>{
+  const r=wrap.getBoundingClientRect();
+  const norm=(e.clientX-r.left)/r.width*2-1;
+  ST.pxFgT=norm*-5; ST.pxMidT=norm*-2.5;
+  startLoop();
+});
+wrap.addEventListener('mouseleave',()=>{ST.pxFgT=0;ST.pxMidT=0;startLoop();});
+
+// ── Tooltip utility ──
+function showTip(el, anchorSvgX, anchorSvgY, above){
+  const pos=svgToCss(anchorSvgX, anchorSvgY);
+  const tw=el.offsetWidth||215, th=el.offsetHeight||80;
+  let left=pos.x-tw/2;
+  let top=above?pos.y-th-10:pos.y+10;
+  left=Math.max(6,Math.min(wrap.clientWidth-tw-6,left));
+  top=Math.max(4,Math.min(wrap.clientHeight-th-4,top));
+  el.style.left=left+'px'; el.style.top=top+'px';
+  el.classList.add('vis');
+}
+function hideTip(el){el.classList.remove('vis');}
+
+// ── Film sleeve hover ──
+const FILM_DATA=[
+  {cx:29,  yBot:134, tipId:'tip-f0'},
+  {cx:63,  yBot:134, tipId:'tip-f1'},
+  {cx:97,  yBot:134, tipId:'tip-f2'},
+  {cx:131, yBot:134, tipId:'tip-f3'},
+  {cx:165, yBot:134, tipId:'tip-f4'},
+];
+FILM_DATA.forEach((f,i)=>{
+  const g=document.getElementById('film-'+i);
+  const rect=document.getElementById('fs'+i);
+  const tip=document.getElementById(f.tipId);
+  g.addEventListener('mouseenter',()=>{
+    rect.setAttribute('transform',`rotate(-8,${f.cx},${f.yBot})`);
+    showTip(tip, f.cx, f.yBot-60, true);
+  });
+  g.addEventListener('mouseleave',()=>{
+    rect.setAttribute('transform','');
+    hideTip(tip);
+  });
+});
+
+// ── Camera hover ──
+[{id:'cam-0',cx:47,cy:325,tipId:'tip-c0'},{id:'cam-1',cx:124,cy:334,tipId:'tip-c1'}].forEach(c=>{
+  const g=document.getElementById(c.id);
+  const tip=document.getElementById(c.tipId);
+  g.addEventListener('mouseenter',()=>showTip(tip,c.cx,c.cy-30,true));
+  g.addEventListener('mouseleave',()=>hideTip(tip));
+});
+
+// ── Frame hover ──
+const FRAME_DATA=[
+  {id:'frame-0',cx:1213,cy:89, tipId:'tip-fr0'},
+  {id:'frame-1',cx:1108,cy:127,tipId:'tip-fr1'},
+  {id:'frame-2',cx:1202,cy:181,tipId:'tip-fr2'},
+];
+FRAME_DATA.forEach((f,i)=>{
+  const g=document.getElementById(f.id);
+  const tip=document.getElementById(f.tipId);
+  g.addEventListener('mouseenter',()=>{
+    g.setAttribute('filter','url(#frameGlow)');
+    showTip(tip,f.cx,f.cy+42,false);
+  });
+  g.addEventListener('mouseleave',()=>{
+    g.removeAttribute('filter');
+    hideTip(tip);
+  });
+});
+
+// ── Vinyl hover ──
+const VINYL_SVG_POS=[
+  {x:35,y:152,w:36},{x:77,y:152,w:36},{x:119,y:152,w:36},
+  {x:161,y:152,w:36},{x:16,y:152,w:36}
+];
+for(let i=0;i<5;i++){
+  (function(idx){
+    const g=document.getElementById('vinyl-'+idx);
+    g.addEventListener('mouseenter',()=>{
+      if(ST.playIdx!==idx&&ST.state==='idle'){
+        const pos=VINYL_SVG_POS[idx];
+        g.setAttribute('transform',`translate(0,-6)`);
+      }
+    });
+    g.addEventListener('mouseleave',()=>{g.removeAttribute('transform');});
+    g.addEventListener('click',()=>handleVinyl(idx));
+  })(i);
+}
+
+// ── Tonearm click ──
+document.getElementById('tonearm').addEventListener('click',()=>{
+  if(ST.state==='playing')ejectRecord(false);
+});
+
+// ── Vinyl state machine ──
+function handleVinyl(idx){
+  if(ST.state==='flying'||ST.state==='transitioning')return;
+  if(ST.playIdx===idx){ejectRecord(false);return;}
+  if(ST.playIdx>=0){ejectRecord(true);setTimeout(()=>flyRecord(idx),780);return;}
+  flyRecord(idx);
+}
+
+function flyRecord(idx){
+  if(ST.state!=='idle')return;
+  ST.state='flying';
+  document.getElementById('vinyl-'+idx).removeAttribute('transform');
+
+  const from=VINYL_SVG_POS[idx];
+  // Target: platter area — position record at platter, sized to fill platter
+  const to={x:612-38, y:317-38, w:76}; // platter cx/cy - r
+
+  const startTime=performance.now();
+  const dur=620;
+
+  // Create fly element in layer-ui
+  const ns='http://www.w3.org/2000/svg';
+  const flyG=document.createElementNS(ns,'g');
+  flyG.id='fly-record';
+
+  // Background rect (fallback color)
+  const fbRect=document.createElementNS(ns,'rect');
+  fbRect.setAttribute('width','36');fbRect.setAttribute('height','36');
+  fbRect.setAttribute('fill',ALBUMS[idx].fb);flyG.appendChild(fbRect);
+
+  // Cover image
+  const flyImg=document.createElementNS(ns,'image');
+  if(ALBUMS[idx].url){flyImg.setAttribute('href',ALBUMS[idx].url);}
+  flyImg.setAttribute('x','0');flyImg.setAttribute('y','0');
+  flyImg.setAttribute('width','36');flyImg.setAttribute('height','36');
+  flyImg.setAttribute('preserveAspectRatio','xMidYMid slice');
+  flyG.appendChild(flyImg);
+
+  // Clip circle (starts as square, rounds to circle)
+  const flyClip=document.createElementNS(ns,'clipPath');
+  flyClip.id='fly-clip';
+  const flyClipRect=document.createElementNS(ns,'rect');
+  flyClipRect.setAttribute('width','36');flyClipRect.setAttribute('height','36');flyClipRect.setAttribute('rx','3');
+  flyClip.appendChild(flyClipRect);
+  document.querySelector('defs').appendChild(flyClip);
+  flyImg.setAttribute('clip-path','url(#fly-clip)');
+  fbRect.setAttribute('clip-path','url(#fly-clip)');
+
+  document.getElementById('layer-ui').appendChild(flyG);
+
+  function animFly(now){
+    const t=Math.min(1,(now-startTime)/dur);
+    const et=eio(t);
+    const cx=from.x+(to.x-from.x)*et;
+    const cy=from.y+(to.y-from.y)*et;
+    const cw=from.w+(to.w-from.w)*et;
+    const scale=cw/36;
+    flyG.setAttribute('transform',`translate(${cx},${cy}) scale(${scale})`);
+    // Round corners as it approaches platter
+    const rx=3+(cw*0.5-3)*et;
+    flyClipRect.setAttribute('rx',rx.toFixed(1));
+    flyClipRect.setAttribute('width','36');flyClipRect.setAttribute('height','36');
+
+    if(t<1){requestAnimationFrame(animFly);}
+    else{flyG.remove();flyClip.remove();landRecord(idx);}
+  }
+  requestAnimationFrame(animFly);
+}
+
+function landRecord(idx){
+  ST.playIdx=idx;ST.state='playing';
+  ST.taTarget=-195; // play position (counterclockwise)
+
+  // Show disc on platter
+  const disc=document.getElementById('platter-disc');
+  disc.style.display='block';
+  disc.classList.add('spinning');
+
+  const da=document.getElementById('disc-art');
+  const fb=document.getElementById('disc-fallback');
+  if(ALBUMS[idx].url&&coverLoaded[idx]){
+    da.setAttribute('href',ALBUMS[idx].url);fb.setAttribute('opacity','0');
+  } else {
+    da.setAttribute('href','');
+    fb.setAttribute('fill',ALBUMS[idx].fb);fb.setAttribute('opacity','1');
+  }
+
+  // Now playing label
+  document.getElementById('np-title').textContent=ALBUMS[idx].title;
+  document.getElementById('np-artist').textContent=ALBUMS[idx].artist;
+  const npw=document.getElementById('now-playing-wrap');
+  const pos=svgToCss(612,380);
+  npw.style.left=pos.x+'px';npw.style.top=pos.y+'px';
+  npw.classList.add('vis');
+
+  // Audio — TODO: replace with real audio path
+  audio.src=ALBUMS[idx].src;audio.volume=0.8;audio.play().catch(()=>{});
+
+  startLoop();
+}
+
+function ejectRecord(silent){
+  ST.taTarget=-15; // rest position
+
+  const disc=document.getElementById('platter-disc');
+  // Stop spinning gradually
+  disc.classList.remove('spinning');
+  setTimeout(()=>{disc.style.display='none';},800);
+
+  document.getElementById('now-playing-wrap').classList.remove('vis');
+
+  if(!silent){
+    const step=setInterval(()=>{if(audio.volume>0.06)audio.volume=Math.max(0,audio.volume-0.06);else{clearInterval(step);audio.pause();audio.volume=1;}},50);
+  } else {
+    audio.pause();
+  }
+
+  const prev=ST.playIdx;
+  ST.playIdx=-1;
+  ST.state=silent?'transitioning':'idle';
+  if(silent)setTimeout(()=>ST.state='idle',120);
+
+  startLoop();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Navbar + Pill — Frosted Glass Preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #e8e8e8; }
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  padding: 28px 32px 20px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.page-header h1 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.page-header p  { font-size: 12px; color: #666; line-height: 1.7; max-width: 700px; }
+
+/* ─── SECTION LABEL ─── */
+.section-label {
+  padding: 18px 28px 14px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: #fff; border-bottom: 1px solid rgba(0,0,0,0.07);
+  color: #444;
+}
+.section-label.dark-label {
+  background: #0d0c13; color: rgba(255,255,255,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.variation-tag {
+  display: inline-block;
+  background: #FF5F33; color: #fff;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  padding: 2px 7px; border-radius: 4px;
+  margin-left: 8px; vertical-align: middle;
+}
+
+/* ─── 3-COLUMN VARIATION GRID ─── */
+.variation-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.var-col { position: relative; }
+.var-col + .var-col { border-left: 2px solid rgba(0,0,0,0.1); }
+.dark .var-col + .var-col { border-left-color: rgba(255,255,255,0.06); }
+
+/* ─── SCENE (simulates actual page) ─── */
+.scene {
+  position: relative;
+  height: 440px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+}
+
+/* ══ WORK PAGE BACKGROUND ══ */
+.scene-work {
+  background: rgb(252,252,252);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.048) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.048) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.scene-work::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 180px;
+  background: linear-gradient(180deg,
+    rgba(217,235,252,0.46) 0%,
+    rgba(255,235,242,0.32) 35%,
+    rgba(255,249,242,0.53) 70%,
+    rgba(252,252,252,0) 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ══ ART PAGE BACKGROUND ══ */
+.scene-art {
+  background: #100f17;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.scene-art::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(44,49,77,0.6) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── WORK PAGE CARDS ─── */
+.work-grid {
+  position: absolute;
+  top: 56px; left: 14px; right: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  z-index: 1;
+}
+.work-card {
+  aspect-ratio: 1.565;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+  position: relative;
+}
+.work-card-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end;
+  padding: 8px;
+}
+.work-chip {
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(6px);
+  border-radius: 100px;
+  padding: 3px 8px;
+  font-size: 9px; font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.04em;
+}
+/* Card color palettes matching real projects */
+.card-noto    { background: linear-gradient(135deg, #f0e6d3 0%, #e8d5c0 100%); }
+.card-omro    { background: linear-gradient(135deg, #dce8f5 0%, #c8dff0 100%); }
+.card-azure   { background: linear-gradient(135deg, #e8f0e0 0%, #d5e8d0 100%); }
+.card-motra   { background: linear-gradient(135deg, #f5e8d5 0%, #ecd9c0 100%); }
+.card-nucleus { background: linear-gradient(135deg, #ece8f5 0%, #ddd5f0 100%); }
+.card-flow    { background: linear-gradient(135deg, #f5ecea 0%, #f0ddd8 100%); }
+
+/* ─── ART PAGE MASONRY ─── */
+.masonry {
+  position: absolute;
+  top: 52px; left: 14px; right: 14px;
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+.masonry-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.masonry-img {
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.07);
+  width: 100%;
+}
+/* varied aspect ratios like real inspirations */
+.r-tall   { aspect-ratio: 0.72; }
+.r-wide   { aspect-ratio: 1.6;  }
+.r-sq     { aspect-ratio: 1.0;  }
+.r-port   { aspect-ratio: 0.8;  }
+.r-taller { aspect-ratio: 0.65; }
+
+/* Soft color tints for masonry placeholders */
+.t-blue   { background: linear-gradient(160deg, rgba(80,100,200,0.25), rgba(40,60,160,0.15)); }
+.t-warm   { background: linear-gradient(160deg, rgba(200,140,80,0.22), rgba(160,100,50,0.14)); }
+.t-green  { background: linear-gradient(160deg, rgba(60,160,100,0.20), rgba(40,120,70,0.12)); }
+.t-cream  { background: linear-gradient(160deg, rgba(220,200,160,0.25), rgba(180,160,120,0.15)); }
+.t-red    { background: linear-gradient(160deg, rgba(200,80,60,0.20), rgba(160,50,40,0.12)); }
+.t-purple { background: linear-gradient(160deg, rgba(140,80,200,0.20), rgba(100,50,160,0.12)); }
+
+/* page topbar label */
+.page-topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  z-index: 2;
+}
+.topbar-mono {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 9px; font-weight: 400;
+  color: rgba(0,0,0,0.35);
+}
+.topbar-mono.dark { color: rgba(255,255,255,0.3); }
+.topbar-clock {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,0,0,0.25);
+}
+.topbar-clock.dark { color: rgba(255,255,255,0.2); }
+
+/* ─── DOCK ─── */
+.dock-wrap {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center;
+  margin-bottom: 8px;
+}
+.dock {
+  display: inline-flex; align-items: center;
+  gap: 13px; height: 40px;
+  padding: 10px 14px;
+  border-radius: 1100px;
+  background: var(--el-bg);
+  border: 1px solid var(--el-border);
+  backdrop-filter: var(--el-blur);
+  -webkit-backdrop-filter: var(--el-blur);
+  box-shadow: var(--el-shadow);
+}
+.dock-divider {
+  width: 1px; height: 12px;
+  background: var(--el-divider);
+  flex-shrink: 0;
+}
+.dock-icon {
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--icon-color); opacity: 0.25;
+}
+.dock-icon.on { opacity: 1; }
+.dock-icon svg { width: 16px; height: 16px; }
+
+/* ─── MUSIC PILL ─── */
+.pill-wrap {
+  position: relative; z-index: 10;
+  display: flex; justify-content: flex-start;
+  padding: 0 14px;
+}
+.pill {
+  display: inline-flex; align-items: center;
+  gap: 0; height: 30px;
+  padding: 0 10px 0 7px;
+  border-radius: 100px;
+  background: var(--el-bg);
+  border: 1px solid var(--el-border);
+  backdrop-filter: var(--el-blur);
+  -webkit-backdrop-filter: var(--el-blur);
+  box-shadow: var(--el-shadow);
+  cursor: pointer;
+}
+.pill-dot-ring {
+  width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(255,95,51,0.12);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-right: 8px;
+}
+.pill-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF5F33; }
+.pill-status {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  color: var(--status-text);
+  flex-shrink: 0; min-width: 44px; margin-right: 8px;
+}
+.pill-sep { width: 1px; height: 12px; background: var(--el-divider); flex-shrink: 0; margin-right: 8px; }
+.pill-song {
+  font-size: 11px; font-weight: 500;
+  color: var(--song-text); white-space: nowrap;
+}
+.pill-song em { font-style: normal; font-weight: 400; opacity: 0.5; }
+
+/* ─── VARIATION LABEL ─── */
+.var-label {
+  position: absolute;
+  top: 10px; right: 12px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px;
+  z-index: 20;
+}
+.var-label.on-light { background: rgba(0,0,0,0.07); color: rgba(0,0,0,0.4); }
+.var-label.on-dark  { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35); }
+
+/* ─── CSS SPEC TABLE ─── */
+.spec-section {
+  padding: 28px 32px 36px;
+  background: #fff;
+  border-top: 2px solid rgba(0,0,0,0.08);
+}
+.spec-section h2 { font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+.spec-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.spec-card {
+  border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.spec-head {
+  background: #f7f7f7; padding: 10px 14px;
+  font-size: 11px; font-weight: 700;
+  color: #333; border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.spec-body { padding: 12px 14px; }
+pre {
+  font-size: 10.5px; line-height: 1.75;
+  color: #333; white-space: pre-wrap;
+  font-family: 'Spline Sans Mono', 'SF Mono', monospace;
+}
+.hl { color: #FF5F33; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="page-header">
+  <h1>Navbar + Music Pill — Frosted Glass Variations</h1>
+  <p>Three treatments tested in the two real contexts: <strong>Work page</strong> (light, card grid over warm-tinted grid background) and <strong>Art page</strong> (dark, masonry of portraits). Dock and pill always share the same bg / border / blur / shadow.</p>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     WORK PAGE — LIGHT MODE
+════════════════════════════════════════════════════════════ -->
+<div class="section-label">☀️ Work page — Light mode &nbsp;·&nbsp; 3 variations</div>
+
+<div class="variation-row">
+
+  <!-- ── VARIATION A: SUBTLE ── -->
+  <div class="var-col" style="
+    --el-bg:      rgba(255,255,255,0.48);
+    --el-border:  rgba(0,0,0,0.07);
+    --el-blur:    blur(10px);
+    --el-shadow:  0 1px 12px rgba(0,0,0,0.05);
+    --el-divider: rgba(0,0,0,0.08);
+    --icon-color: rgba(0,0,0,0.75);
+    --status-text: rgba(0,0,0,0.4);
+    --song-text:   rgba(0,0,0,0.8);
+  ">
+    <div class="scene scene-work">
+      <span class="var-label on-light">A — Subtle</span>
+      <div class="page-topbar">
+        <span class="topbar-mono">MATHIEU MESTRE</span>
+        <span class="topbar-clock">14:32</span>
+      </div>
+      <!-- Work cards -->
+      <div class="work-grid">
+        <div class="work-card card-noto"><div class="work-card-inner"><span class="work-chip">Noto</span></div></div>
+        <div class="work-card card-omro"><div class="work-card-inner"><span class="work-chip">Omro</span></div></div>
+        <div class="work-card card-azure"><div class="work-card-inner"><span class="work-chip">Azure IoT</span></div></div>
+        <div class="work-card card-motra"><div class="work-card-inner"><span class="work-chip">Motra</span></div></div>
+        <div class="work-card card-nucleus"><div class="work-card-inner"><span class="work-chip">Nucleus</span></div></div>
+        <div class="work-card card-flow"><div class="work-card-inner"><span class="work-chip">Flowdesk</span></div></div>
+      </div>
+      <!-- Dock -->
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <!-- Pill -->
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VARIATION B: MEDIUM ── -->
+  <div class="var-col" style="
+    --el-bg:      rgba(255,255,255,0.62);
+    --el-border:  rgba(0,0,0,0.09);
+    --el-blur:    blur(14px);
+    --el-shadow:  0 2px 20px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+    --el-divider: rgba(0,0,0,0.09);
+    --icon-color: rgba(0,0,0,0.75);
+    --status-text: rgba(0,0,0,0.4);
+    --song-text:   rgba(0,0,0,0.85);
+  ">
+    <div class="scene scene-work">
+      <span class="var-label on-light">B — Medium</span>
+      <div class="page-topbar">
+        <span class="topbar-mono">MATHIEU MESTRE</span>
+        <span class="topbar-clock">14:32</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card card-noto"><div class="work-card-inner"><span class="work-chip">Noto</span></div></div>
+        <div class="work-card card-omro"><div class="work-card-inner"><span class="work-chip">Omro</span></div></div>
+        <div class="work-card card-azure"><div class="work-card-inner"><span class="work-chip">Azure IoT</span></div></div>
+        <div class="work-card card-motra"><div class="work-card-inner"><span class="work-chip">Motra</span></div></div>
+        <div class="work-card card-nucleus"><div class="work-card-inner"><span class="work-chip">Nucleus</span></div></div>
+        <div class="work-card card-flow"><div class="work-card-inner"><span class="work-chip">Flowdesk</span></div></div>
+      </div>
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VARIATION C: VISIBLE ── -->
+  <div class="var-col" style="
+    --el-bg:      rgba(255,255,255,0.80);
+    --el-border:  rgba(0,0,0,0.11);
+    --el-blur:    blur(18px);
+    --el-shadow:  0 4px 28px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
+    --el-divider: rgba(0,0,0,0.10);
+    --icon-color: rgba(0,0,0,0.75);
+    --status-text: rgba(0,0,0,0.4);
+    --song-text:   rgba(0,0,0,0.85);
+  ">
+    <div class="scene scene-work">
+      <span class="var-label on-light">C — Visible</span>
+      <div class="page-topbar">
+        <span class="topbar-mono">MATHIEU MESTRE</span>
+        <span class="topbar-clock">14:32</span>
+      </div>
+      <div class="work-grid">
+        <div class="work-card card-noto"><div class="work-card-inner"><span class="work-chip">Noto</span></div></div>
+        <div class="work-card card-omro"><div class="work-card-inner"><span class="work-chip">Omro</span></div></div>
+        <div class="work-card card-azure"><div class="work-card-inner"><span class="work-chip">Azure IoT</span></div></div>
+        <div class="work-card card-motra"><div class="work-card-inner"><span class="work-chip">Motra</span></div></div>
+        <div class="work-card card-nucleus"><div class="work-card-inner"><span class="work-chip">Nucleus</span></div></div>
+        <div class="work-card card-flow"><div class="work-card-inner"><span class="work-chip">Flowdesk</span></div></div>
+      </div>
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /variation-row work -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     ART PAGE — DARK MODE
+════════════════════════════════════════════════════════════ -->
+<div class="section-label dark-label">🌙 Art page — Dark mode &nbsp;·&nbsp; 3 variations</div>
+
+<div class="variation-row dark">
+
+  <!-- ── VARIATION A: SUBTLE ── -->
+  <div class="var-col" style="
+    --el-bg:       rgba(255,255,255,0.05);
+    --el-border:   rgba(255,255,255,0.08);
+    --el-blur:     blur(10px);
+    --el-shadow:   0 1px 16px rgba(0,0,0,0.3);
+    --el-divider:  rgba(255,255,255,0.09);
+    --icon-color:  rgba(255,255,255,0.75);
+    --status-text: rgba(255,255,255,0.4);
+    --song-text:   rgba(255,255,255,0.85);
+  ">
+    <div class="scene scene-art">
+      <span class="var-label on-dark">A — Subtle</span>
+      <div class="page-topbar">
+        <span class="topbar-mono dark">MATHIEU MESTRE</span>
+        <span class="topbar-clock dark">14:32</span>
+      </div>
+      <!-- Masonry -->
+      <div class="masonry">
+        <div class="masonry-col">
+          <div class="masonry-img r-tall t-warm"></div>
+          <div class="masonry-img r-port t-blue"></div>
+          <div class="masonry-img r-taller t-cream"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-wide t-blue"></div>
+          <div class="masonry-img r-port t-red"></div>
+          <div class="masonry-img r-port t-green"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-port t-purple"></div>
+          <div class="masonry-img r-wide t-cream"></div>
+          <div class="masonry-img r-tall t-blue"></div>
+        </div>
+      </div>
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VARIATION B: MEDIUM ── -->
+  <div class="var-col" style="
+    --el-bg:       rgba(255,255,255,0.08);
+    --el-border:   rgba(255,255,255,0.11);
+    --el-blur:     blur(14px);
+    --el-shadow:   0 2px 20px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+    --el-divider:  rgba(255,255,255,0.12);
+    --icon-color:  rgba(255,255,255,0.75);
+    --status-text: rgba(255,255,255,0.4);
+    --song-text:   rgba(255,255,255,0.9);
+  ">
+    <div class="scene scene-art">
+      <span class="var-label on-dark">B — Medium</span>
+      <div class="page-topbar">
+        <span class="topbar-mono dark">MATHIEU MESTRE</span>
+        <span class="topbar-clock dark">14:32</span>
+      </div>
+      <div class="masonry">
+        <div class="masonry-col">
+          <div class="masonry-img r-tall t-warm"></div>
+          <div class="masonry-img r-port t-blue"></div>
+          <div class="masonry-img r-taller t-cream"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-wide t-blue"></div>
+          <div class="masonry-img r-port t-red"></div>
+          <div class="masonry-img r-port t-green"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-port t-purple"></div>
+          <div class="masonry-img r-wide t-cream"></div>
+          <div class="masonry-img r-tall t-blue"></div>
+        </div>
+      </div>
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VARIATION C: VISIBLE ── -->
+  <div class="var-col" style="
+    --el-bg:       rgba(255,255,255,0.13);
+    --el-border:   rgba(255,255,255,0.16);
+    --el-blur:     blur(18px);
+    --el-shadow:   0 4px 28px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3);
+    --el-divider:  rgba(255,255,255,0.16);
+    --icon-color:  rgba(255,255,255,0.75);
+    --status-text: rgba(255,255,255,0.45);
+    --song-text:   rgba(255,255,255,0.92);
+  ">
+    <div class="scene scene-art">
+      <span class="var-label on-dark">C — Visible</span>
+      <div class="page-topbar">
+        <span class="topbar-mono dark">MATHIEU MESTRE</span>
+        <span class="topbar-clock dark">14:32</span>
+      </div>
+      <div class="masonry">
+        <div class="masonry-col">
+          <div class="masonry-img r-tall t-warm"></div>
+          <div class="masonry-img r-port t-blue"></div>
+          <div class="masonry-img r-taller t-cream"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-wide t-blue"></div>
+          <div class="masonry-img r-port t-red"></div>
+          <div class="masonry-img r-port t-green"></div>
+        </div>
+        <div class="masonry-col">
+          <div class="masonry-img r-port t-purple"></div>
+          <div class="masonry-img r-wide t-cream"></div>
+          <div class="masonry-img r-tall t-blue"></div>
+        </div>
+      </div>
+      <div class="dock-wrap">
+        <div class="dock">
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
+          <div class="dock-divider"></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="dock-icon on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pill-wrap">
+        <div class="pill">
+          <div class="pill-dot-ring"><div class="pill-dot"></div></div>
+          <span class="pill-status">PLAYING</span>
+          <div class="pill-sep"></div>
+          <span class="pill-song">Manhã de Carnaval <em>by João Donato</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /variation-row art -->
+
+
+<!-- ── SPEC ── -->
+<div class="spec-section">
+  <h2>CSS values per variation</h2>
+  <div class="spec-grid">
+    <div class="spec-card">
+      <div class="spec-head">A — Subtle</div>
+      <div class="spec-body"><pre>/* Light */
+--el-bg:     <span class="hl">rgba(255,255,255,0.48)</span>
+--el-border: rgba(0,0,0,0.07)
+--el-blur:   blur(10px)
+--el-shadow: 0 1px 12px rgba(0,0,0,0.05)
+
+/* Dark */
+--el-bg:     <span class="hl">rgba(255,255,255,0.05)</span>
+--el-border: rgba(255,255,255,0.08)
+--el-blur:   blur(10px)
+--el-shadow: 0 1px 16px rgba(0,0,0,0.30)</pre></div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-head">B — Medium <span style="background:#FF5F33;color:#fff;font-size:9px;padding:1px 6px;border-radius:3px;margin-left:6px;">recommended</span></div>
+      <div class="spec-body"><pre>/* Light */
+--el-bg:     <span class="hl">rgba(255,255,255,0.62)</span>
+--el-border: rgba(0,0,0,0.09)
+--el-blur:   blur(14px)
+--el-shadow: 0 2px 20px rgba(0,0,0,0.07)
+             0 1px 4px rgba(0,0,0,0.04)
+
+/* Dark */
+--el-bg:     <span class="hl">rgba(255,255,255,0.08)</span>
+--el-border: rgba(255,255,255,0.11)
+--el-blur:   blur(14px)
+--el-shadow: 0 2px 20px rgba(0,0,0,0.40)
+             0 1px 4px rgba(0,0,0,0.20)</pre></div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-head">C — Visible</div>
+      <div class="spec-body"><pre>/* Light */
+--el-bg:     <span class="hl">rgba(255,255,255,0.80)</span>
+--el-border: rgba(0,0,0,0.11)
+--el-blur:   blur(18px)
+--el-shadow: 0 4px 28px rgba(0,0,0,0.10)
+             0 1px 6px rgba(0,0,0,0.06)
+
+/* Dark */
+--el-bg:     <span class="hl">rgba(255,255,255,0.13)</span>
+--el-border: rgba(255,255,255,0.16)
+--el-blur:   blur(18px)
+--el-shadow: 0 4px 28px rgba(0,0,0,0.50)
+             0 1px 6px rgba(0,0,0,0.30)</pre></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -441,7 +441,7 @@ export default function About() {
               <br /><br />
               I currently work at <span style={{ color: isDark ? '#ffffff8c' : '#00000073' }}>Usercentrics</span>, shaping privacy compliance products. As a designer, I enjoy untangling problems, refining until the complexity disappears, and obsessing over every detail until it feels right, especially alongside people who bring the same care and curiosity. More generally, I&apos;m drawn to things built with intention and soul: a vintage concert poster, the warmth of a 70s living room, a clean product that feels obvious in hindsight. I&apos;m also genuinely excited by what AI is unlocking in design today.
               <br /><br />
-              Outside of work, you&apos;ll find me surfing, shooting on film, hunting for vintage objects, or deep in whatever rabbit hole I&apos;ve fallen into lately... right now it&apos;s niche perfumes and MPB and Americana music.
+              Outside of work, you&apos;ll find me surfing, shooting on film, hunting for vintage objects, or deep in whatever rabbit hole I&apos;ve fallen into lately... right now it&apos;s niche perfumes and MPB &amp; Americana music.
             </p>
 
             <div style={{ display: 'flex', gap: 24 }}>

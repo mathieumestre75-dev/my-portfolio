@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Art page — masonry entrance animation variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Spline+Sans+Mono:wght@400&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --bg-shell:        #f5f4f2;
+    --bg-card:         #ffffff;
+    --ink:             #1a1a1a;
+    --ink-mute:        #6b6b6b;
+    --ink-faint:       #b5b5b5;
+    --rule:            rgba(0,0,0,0.08);
+    --page-bg:         rgb(252, 252, 252);
+    --tile-bg:         rgba(0,0,0,0.05);
+    --tile-bg-2:       rgba(0,0,0,0.07);
+    --serif: "Fraunces", "Georgia", serif;
+    --mono:  "Spline Sans Mono", "JetBrains Mono", ui-monospace, monospace;
+    --accent: rgb(255, 95, 51);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg-shell); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    padding: 48px 32px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* PAGE INTRO */
+  h1 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    text-align: center;
+  }
+  .intro {
+    text-align: center;
+    color: var(--ink-mute);
+    font-size: 14px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+  }
+  .global-actions {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .global-actions button {
+    font-family: var(--mono);
+    font-size: 11.2px;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 100px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  .global-actions button:hover { background: #333; }
+
+  /* SECTION */
+  section.variation {
+    max-width: 1280px;
+    margin: 0 auto 32px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 12px 32px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  section.variation > header {
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  section.variation .meta { display: flex; flex-direction: column; gap: 4px; }
+  section.variation .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+  }
+  section.variation h2 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  section.variation .desc {
+    color: var(--ink-mute);
+    font-size: 12.5px;
+    margin-top: 4px;
+    max-width: 520px;
+  }
+  section.variation .replay {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: transform 0.15s ease;
+  }
+  section.variation .replay:hover { transform: scale(1.04); }
+  section.variation .replay:active { transform: scale(0.96); }
+
+  /* CANVAS — mimics the portfolio's art page background + chrome */
+  .canvas {
+    background: var(--page-bg);
+    padding: 20px 20px 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .topbar {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 11.2px;
+    color: rgba(0,0,0,0.35);
+    padding-bottom: 16px;
+  }
+  .head { text-align: center; padding: 28px 0 18px; }
+  .head .title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.75);
+    margin: 0 0 6px;
+  }
+  .head .cap {
+    font-family: var(--mono);
+    font-size: 11.2px;
+    color: rgba(0,0,0,0.35);
+    margin: 0;
+  }
+  .toggle {
+    display: flex; justify-content: center; gap: 28px;
+    padding: 8px 0 28px;
+  }
+  .toggle span {
+    font-family: var(--mono); font-size: 11.2px;
+    padding: 4px 2px;
+    letter-spacing: 0.02em;
+  }
+  .toggle span.active {
+    color: rgba(0,0,0,0.75);
+    border-bottom: 1px solid rgba(0,0,0,0.75);
+  }
+  .toggle span:not(.active) { color: rgba(0,0,0,0.35); }
+
+  /* MASONRY — 12 mixed tiles */
+  .masonry { column-count: 3; column-gap: 10px; }
+  .tile {
+    width: 100%;
+    margin: 0 0 10px;
+    background: var(--tile-bg);
+    break-inside: avoid;
+    display: block;
+  }
+  .tile.alt { background: var(--tile-bg-2); }
+  .l  { aspect-ratio: 1.5;  }   /* landscape */
+  .p  { aspect-ratio: 0.67; }   /* portrait */
+  .s  { aspect-ratio: 1;    }   /* square-ish */
+  .lw { aspect-ratio: 1.78; }   /* wide */
+  .pt { aspect-ratio: 0.78; }   /* portrait-tall */
+
+  /* ──────────────────────────────────────────────────────────────────
+     Each variation defines its own keyframes and uses a `.playing`
+     class on the section to trigger. JS toggles `.playing` off and
+     back on to restart the animation on Replay.
+     ────────────────────────────────────────────────────────────────── */
+
+  /* A — current (subtle fade-up, 6px) */
+  section.var-a .masonry { opacity: 0; }
+  section.var-a.playing .masonry {
+    animation: a-anim 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;
+  }
+  @keyframes a-anim {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* B — stronger fade-up (18px, slower) */
+  section.var-b .masonry { opacity: 0; }
+  section.var-b.playing .masonry {
+    animation: b-anim 0.7s cubic-bezier(0.25,0.46,0.45,0.94) both;
+  }
+  @keyframes b-anim {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* C — pure fade (no movement) */
+  section.var-c .masonry { opacity: 0; }
+  section.var-c.playing .masonry {
+    animation: c-anim 0.6s ease-out both;
+  }
+  @keyframes c-anim {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* D — scale + fade (gentle zoom-in) */
+  section.var-d .masonry { opacity: 0; transform-origin: 50% 0; }
+  section.var-d.playing .masonry {
+    animation: d-anim 0.6s cubic-bezier(0.25,0.46,0.45,0.94) both;
+    transform-origin: 50% 0;
+  }
+  @keyframes d-anim {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1);    }
+  }
+
+  /* E — blur fade (cinematic / photo-developing feel) */
+  section.var-e .masonry { opacity: 0; }
+  section.var-e.playing .masonry {
+    animation: e-anim 0.75s ease-out both;
+  }
+  @keyframes e-anim {
+    from { opacity: 0; filter: blur(8px); }
+    to   { opacity: 1; filter: blur(0);   }
+  }
+
+  /* F — per-tile stagger (each photo cascades in) */
+  section.var-f .masonry .tile { opacity: 0; }
+  section.var-f.playing .masonry .tile {
+    animation: f-anim 0.6s cubic-bezier(0.25,0.46,0.45,0.94) both;
+  }
+  @keyframes f-anim {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  /* per-index delay */
+  section.var-f .tile:nth-child(1)  { animation-delay: 0.00s; }
+  section.var-f .tile:nth-child(2)  { animation-delay: 0.04s; }
+  section.var-f .tile:nth-child(3)  { animation-delay: 0.08s; }
+  section.var-f .tile:nth-child(4)  { animation-delay: 0.12s; }
+  section.var-f .tile:nth-child(5)  { animation-delay: 0.16s; }
+  section.var-f .tile:nth-child(6)  { animation-delay: 0.20s; }
+  section.var-f .tile:nth-child(7)  { animation-delay: 0.24s; }
+  section.var-f .tile:nth-child(8)  { animation-delay: 0.28s; }
+  section.var-f .tile:nth-child(9)  { animation-delay: 0.32s; }
+  section.var-f .tile:nth-child(10) { animation-delay: 0.36s; }
+  section.var-f .tile:nth-child(11) { animation-delay: 0.40s; }
+  section.var-f .tile:nth-child(12) { animation-delay: 0.44s; }
+
+</style>
+</head>
+<body>
+
+  <h1>Art page — entrance animation variations</h1>
+  <p class="intro">
+    Each preview is the masonry as it would appear on <code>/art</code>.
+    Click any "Replay" button to retrigger that variation, or use
+    "Play all" at the top to fire them all simultaneously and compare.
+  </p>
+  <div class="global-actions">
+    <button id="play-all">Play all</button>
+  </div>
+
+  <!-- A — current -->
+  <section class="variation var-a">
+    <header>
+      <div class="meta">
+        <span class="label">Variation A · current</span>
+        <h2>Subtle fade-up — 6px rise, 0.5s</h2>
+        <p class="desc">What the page does right now. The grid lifts 6px while fading in. Very quiet — easy to miss but feels polished.</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B — stronger -->
+  <section class="variation var-b">
+    <header>
+      <div class="meta">
+        <span class="label">Variation B</span>
+        <h2>Stronger fade-up — 18px rise, 0.7s</h2>
+        <p class="desc">Same direction as A but with more presence. The lift is visible without being theatrical. Probably the sweet spot for "subtle but noticeable".</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C — pure fade -->
+  <section class="variation var-c">
+    <header>
+      <div class="meta">
+        <span class="label">Variation C</span>
+        <h2>Pure fade — opacity only, 0.6s</h2>
+        <p class="desc">No movement at all. The grid just gently materializes. Quiet, almost editorial — feels like flipping a page rather than scrolling into one.</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D — scale + fade -->
+  <section class="variation var-d">
+    <header>
+      <div class="meta">
+        <span class="label">Variation D</span>
+        <h2>Scale + fade — 0.96 → 1, 0.6s</h2>
+        <p class="desc">The whole grid expands very slightly into place from the top. Subtle but more "physical" — the photos feel like they're settling into the frame.</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E — blur fade -->
+  <section class="variation var-e">
+    <header>
+      <div class="meta">
+        <span class="label">Variation E</span>
+        <h2>Blur fade — 8px blur → 0, 0.75s</h2>
+        <p class="desc">The grid comes into focus, like a photograph developing. The most "film-adjacent" of the set — fits the analog photography theme but is the most overt.</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- F — per-tile stagger -->
+  <section class="variation var-f">
+    <header>
+      <div class="meta">
+        <span class="label">Variation F</span>
+        <h2>Per-tile stagger — cascade, 0.6s each, 40ms apart</h2>
+        <p class="desc">Each photo lifts and fades in with a small delay after the previous. Feels like dealing cards onto a table — more deliberate, more "presented".</p>
+      </div>
+      <button class="replay">Replay</button>
+    </header>
+    <div class="canvas">
+      <div class="topbar"><span>MATHIEU MESTRE</span><span>7:31 PM · PARIS</span></div>
+      <div class="head">
+        <p class="title">Pictures I keep.</p>
+        <p class="cap">My film photos and things I like looking at.</p>
+      </div>
+      <div class="toggle"><span class="active">My Photos</span><span>Inspirations</span></div>
+      <div class="masonry">
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt s"></div>
+        <div class="tile pt"></div>
+        <div class="tile alt l"></div>
+        <div class="tile lw"></div>
+        <div class="tile alt p"></div>
+        <div class="tile l"></div>
+        <div class="tile alt pt"></div>
+        <div class="tile l"></div>
+        <div class="tile alt p"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function play(section) {
+      section.classList.remove('playing');
+      // force reflow so removing and re-adding the class restarts the animation
+      void section.offsetWidth;
+      section.classList.add('playing');
+    }
+    document.querySelectorAll('.variation .replay').forEach(btn => {
+      btn.addEventListener('click', () => play(btn.closest('.variation')));
+    });
+    document.getElementById('play-all').addEventListener('click', () => {
+      document.querySelectorAll('.variation').forEach(play);
+    });
+    // Auto-play once on load so the user sees all six immediately
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.variation').forEach(play);
+      }, 100);
+    });
+  </script>
+</body>
+</html>

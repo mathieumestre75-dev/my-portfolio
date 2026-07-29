@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Room — A Place</title>
+<style>
+  html, body { margin: 0; padding: 0; overflow: hidden; background: #1a0d08; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  // ────────────────────────────────────────────────────────────────────
+  //   SCENE / RENDERER
+  // ────────────────────────────────────────────────────────────────────
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0503);
+  scene.fog = new THREE.Fog(0x140803, 13, 28);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.5;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.setClearColor(0x1A0A04);
+  document.body.appendChild(renderer.domElement);
+
+  const camera = new THREE.PerspectiveCamera(33, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(13, 10, 13);
+  camera.lookAt(0, 2.2, 0);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   LIGHTING — single warm point light top-left + soft fill
+  // ────────────────────────────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x2a1612, 0.1));
+
+  const hemi = new THREE.HemisphereLight(0x4a2818, 0x080402, 0.08);
+  scene.add(hemi);
+
+  const mainLight = new THREE.PointLight(0xff8838, 200, 34, 1.5);
+  mainLight.position.set(-6, 9, -1);
+  mainLight.castShadow = true;
+  mainLight.shadow.mapSize.set(2048, 2048);
+  mainLight.shadow.bias = -0.0008;
+  mainLight.shadow.radius = 8;
+  mainLight.shadow.camera.near = 0.5;
+  mainLight.shadow.camera.far = 32;
+  scene.add(mainLight);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   MATERIALS — warm walnut palette, all matte
+  // ────────────────────────────────────────────────────────────────────
+  const M = {
+    floor:       new THREE.MeshStandardMaterial({ color: 0x3d2010, roughness: 0.88 }),
+    rug:         new THREE.MeshStandardMaterial({ color: 0xc97849, roughness: 0.98 }),
+    rugDark:     new THREE.MeshStandardMaterial({ color: 0x7a4028, roughness: 0.98 }),
+    wallBack:    new THREE.MeshStandardMaterial({ color: 0x2a1508, roughness: 1 }),
+    wallLeft:    new THREE.MeshStandardMaterial({ color: 0x1e0e05, roughness: 1 }),
+    walnut:      new THREE.MeshStandardMaterial({ color: 0x3a2410, roughness: 0.7 }),
+    walnutLight: new THREE.MeshStandardMaterial({ color: 0x5a3820, roughness: 0.7 }),
+    walnutDark:  new THREE.MeshStandardMaterial({ color: 0x1e1108, roughness: 0.6 }),
+    leather:     new THREE.MeshStandardMaterial({ color: 0x1a0d08, roughness: 0.55 }),
+    leatherSeat: new THREE.MeshStandardMaterial({ color: 0x2a1410, roughness: 0.62 }),
+    sofa:        new THREE.MeshStandardMaterial({ color: 0xa05030, roughness: 0.95 }),
+    sofaShadow:  new THREE.MeshStandardMaterial({ color: 0x6a3018, roughness: 0.95 }),
+    brass:       new THREE.MeshStandardMaterial({ color: 0xc9a35a, roughness: 0.32, metalness: 0.85 }),
+    cream:       new THREE.MeshStandardMaterial({ color: 0xefdcb4, roughness: 0.8 }),
+    black:       new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.55 }),
+    blackMatte:  new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.85 }),
+    plantA:      new THREE.MeshStandardMaterial({ color: 0x4f6f30, roughness: 0.95 }),
+    plantB:      new THREE.MeshStandardMaterial({ color: 0x6c8a3c, roughness: 0.95 }),
+    plantC:      new THREE.MeshStandardMaterial({ color: 0x3d5824, roughness: 0.95 }),
+    plantD:      new THREE.MeshStandardMaterial({ color: 0x5d7d2e, roughness: 0.95 }),
+    pot:         new THREE.MeshStandardMaterial({ color: 0x8a5236, roughness: 0.92 }),
+    potCream:    new THREE.MeshStandardMaterial({ color: 0xc9a878, roughness: 0.95 }),
+    soil:        new THREE.MeshStandardMaterial({ color: 0x2a1808, roughness: 1 }),
+    photo1:      new THREE.MeshStandardMaterial({ color: 0xc89065, roughness: 0.85 }),
+    photo2:      new THREE.MeshStandardMaterial({ color: 0x8a6a4a, roughness: 0.85 }),
+    photo3:      new THREE.MeshStandardMaterial({ color: 0xb88c5a, roughness: 0.85 }),
+  };
+
+  // ────────────────────────────────────────────────────────────────────
+  //   HELPERS
+  // ────────────────────────────────────────────────────────────────────
+  function box(w, h, d, mat, x, y, z, parent) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y, z);
+    m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m);
+    return m;
+  }
+  function cyl(rt, rb, h, mat, x, y, z, parent, seg = 14) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat);
+    m.position.set(x, y, z);
+    m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m);
+    return m;
+  }
+  function ico(r, mat, x, y, z, parent) {
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 0), mat);
+    m.position.set(x, y, z);
+    m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m);
+    return m;
+  }
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  // ────────────────────────────────────────────────────────────────────
+  //   ROOM SHELL
+  // ────────────────────────────────────────────────────────────────────
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(28, 28), M.floor);
+  floor.rotation.x = -Math.PI/2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  box(28, 12, 0.4, M.wallBack, 0, 6, -12);
+  box(0.4, 12, 28, M.wallLeft, -12, 6, 0);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   STATEMENT RUG — abstract painted pattern via CanvasTexture
+  // ────────────────────────────────────────────────────────────────────
+  function makeRugTexture() {
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 768;
+    const ctx = c.getContext('2d');
+
+    // Base — warm ochre cream
+    ctx.fillStyle = '#c39556';
+    ctx.fillRect(0, 0, 1024, 768);
+
+    // Soft tonal variation across the base
+    for (let i = 0; i < 60; i++) {
+      const x = Math.random() * 1024, y = Math.random() * 768;
+      const r = 120 + Math.random() * 280;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, 'rgba(210, 162, 96, 0.35)');
+      g.addColorStop(1, 'rgba(210, 162, 96, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 1024, 768);
+    }
+
+    function blob(cx, cy, baseR, color, freq1, freq2, squishY) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const pts = 48;
+      for (let j = 0; j <= pts; j++) {
+        const a = (j / pts) * Math.PI * 2;
+        const noise = 1
+          + 0.38 * Math.sin(a * freq1 + cx * 0.01)
+          + 0.22 * Math.sin(a * freq2 + cy * 0.013)
+          + 0.10 * Math.sin(a * (freq1 + freq2));
+        const r = baseR * noise;
+        const x = cx + Math.cos(a) * r;
+        const y = cy + Math.sin(a) * r * squishY;
+        if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Large rust swirls — anchored composition
+    const rust = ['#a04020', '#883818', '#b85c30', '#9c4828'];
+    blob(280, 220, 200, rust[0], 3, 7, 0.9);
+    blob(720, 360, 240, rust[2], 4, 9, 0.85);
+    blob(520, 580, 180, rust[1], 3, 11, 0.95);
+    blob(180, 540, 140, rust[3], 5, 9, 1.0);
+    blob(860, 130, 130, rust[0], 4, 13, 0.9);
+
+    // Deep ochre patches
+    const ochre = ['#7a4220', '#653818', '#8a5028'];
+    for (let i = 0; i < 9; i++) {
+      const x = 60 + Math.random() * 904;
+      const y = 60 + Math.random() * 648;
+      const r = 40 + Math.random() * 90;
+      blob(x, y, r, ochre[i % ochre.length], 4 + Math.floor(Math.random()*4), 9 + Math.floor(Math.random()*5), 0.85 + Math.random() * 0.3);
+    }
+
+    // Cream highlights
+    const cream = ['#e8d2a0', '#d9b896', '#efd8a8'];
+    for (let i = 0; i < 11; i++) {
+      const x = 60 + Math.random() * 904;
+      const y = 60 + Math.random() * 648;
+      const r = 25 + Math.random() * 55;
+      blob(x, y, r, cream[i % cream.length], 4 + Math.floor(Math.random()*5), 8 + Math.floor(Math.random()*6), 0.85 + Math.random() * 0.3);
+    }
+
+    // Loose swirling line work — organic motion through the field
+    ctx.strokeStyle = '#4a2010';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (let i = 0; i < 10; i++) {
+      ctx.beginPath();
+      let x = Math.random() * 1024, y = Math.random() * 768;
+      let dx = (Math.random() - 0.5) * 6, dy = (Math.random() - 0.5) * 6;
+      ctx.moveTo(x, y);
+      for (let j = 0; j < 80; j++) {
+        dx += (Math.random() - 0.5) * 3;
+        dy += (Math.random() - 0.5) * 3;
+        dx = Math.max(-8, Math.min(8, dx));
+        dy = Math.max(-8, Math.min(8, dy));
+        x += dx; y += dy;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // Soft darkening at the perimeter for a "rug edge" feel
+    const edge = ctx.createLinearGradient(0, 0, 0, 768);
+    edge.addColorStop(0, 'rgba(40, 20, 8, 0.55)');
+    edge.addColorStop(0.1, 'rgba(40, 20, 8, 0)');
+    edge.addColorStop(0.9, 'rgba(40, 20, 8, 0)');
+    edge.addColorStop(1, 'rgba(40, 20, 8, 0.55)');
+    ctx.fillStyle = edge;
+    ctx.fillRect(0, 0, 1024, 768);
+    const edge2 = ctx.createLinearGradient(0, 0, 1024, 0);
+    edge2.addColorStop(0, 'rgba(40, 20, 8, 0.55)');
+    edge2.addColorStop(0.07, 'rgba(40, 20, 8, 0)');
+    edge2.addColorStop(0.93, 'rgba(40, 20, 8, 0)');
+    edge2.addColorStop(1, 'rgba(40, 20, 8, 0.55)');
+    ctx.fillStyle = edge2;
+    ctx.fillRect(0, 0, 1024, 768);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.encoding = THREE.sRGBEncoding;
+    tex.wrapS = THREE.ClampToEdgeWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.anisotropy = 8;
+    return tex;
+  }
+  const rugMat = new THREE.MeshStandardMaterial({
+    map: makeRugTexture(),
+    roughness: 0.97
+  });
+  const rug = new THREE.Mesh(new THREE.PlaneGeometry(13, 9), rugMat);
+  rug.rotation.x = -Math.PI / 2;
+  rug.rotation.z = Math.PI;
+  rug.position.set(0.5, 0.04, 1.7);
+  rug.receiveShadow = true;
+  scene.add(rug);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   BOOKSHELF (left wall) — film sleeves, vinyl records, two cameras
+  // ────────────────────────────────────────────────────────────────────
+  const shelfGroup = new THREE.Group();
+  shelfGroup.position.set(-11.2, 0, -4.5);
+  scene.add(shelfGroup);
+
+  const sw = 1.5, sh = 7.6, sd = 4.8;
+  // back panel
+  box(0.08, sh, sd, M.walnutLight, -sw/2 + 0.04, sh/2, 0, shelfGroup);
+  // sides
+  box(sw, sh, 0.1, M.walnut, 0, sh/2, -sd/2 + 0.05, shelfGroup);
+  box(sw, sh, 0.1, M.walnut, 0, sh/2,  sd/2 - 0.05, shelfGroup);
+  // top + bottom
+  box(sw, 0.12, sd, M.walnut, 0, 0.06, 0, shelfGroup);
+  box(sw, 0.12, sd, M.walnut, 0, sh - 0.06, 0, shelfGroup);
+  // internal shelves
+  const shelves = 4;
+  const shelfYs = [];
+  for (let i = 1; i <= shelves; i++) {
+    const y = (sh / (shelves + 1)) * i;
+    shelfYs.push(y);
+    box(sw, 0.08, sd, M.walnut, 0, y, 0, shelfGroup);
+  }
+
+  // Vinyl records in compartment 0
+  const recordColors = [0x1a1a1a, 0xa86848, 0xd9b896, 0x5a3820, 0xc97849, 0x3a2210, 0x8a6a4a, 0x6a8a3c];
+  let zCursor = -sd/2 + 0.35;
+  while (zCursor < sd/2 - 0.35) {
+    const w = rand(0.055, 0.085);
+    const h = rand(1.1, 1.25);
+    const d = 1.0;
+    const mat = new THREE.MeshStandardMaterial({ color: pick(recordColors), roughness: 0.9 });
+    box(w, h, d, mat, rand(0.05, 0.2), 0.12 + h/2, zCursor + w/2, shelfGroup);
+    zCursor += w + 0.005;
+  }
+
+  // Film sleeves in compartments 1 + 3
+  const filmColors = [0x8a4828, 0x3a5824, 0x6a8a3c, 0xb6633c, 0xefdcb4, 0x141414, 0xa86848, 0xd9b48a, 0xc89065, 0x5d7d2e];
+  function fillFilm(yBase) {
+    let zc = -sd/2 + 0.35;
+    while (zc < sd/2 - 0.35) {
+      const w = rand(0.04, 0.06);
+      const h = rand(0.95, 1.18);
+      const d = 0.7;
+      const mat = new THREE.MeshStandardMaterial({ color: pick(filmColors), roughness: 0.92 });
+      box(w, h, d, mat, rand(0.1, 0.25), yBase + 0.04 + h/2, zc + w/2, shelfGroup);
+      zc += w + 0.008;
+    }
+  }
+  fillFilm(shelfYs[0]);
+  fillFilm(shelfYs[2]);
+
+  // Two cameras on shelf 1 (middle)
+  const camShelfY = shelfYs[1] + 0.04;
+  // SLR
+  const cam1 = new THREE.Group();
+  cam1.position.set(0.1, camShelfY + 0.28, -1.0);
+  cam1.rotation.y = 0.35;
+  shelfGroup.add(cam1);
+  box(0.8, 0.55, 0.45, M.black, 0, 0, 0, cam1);
+  cyl(0.2, 0.2, 0.35, M.blackMatte, 0, 0, 0.35, cam1);
+  cyl(0.15, 0.15, 0.06, M.brass, 0, 0, 0.55, cam1);
+  box(0.22, 0.2, 0.22, M.black, 0, 0.36, 0.02, cam1);
+  cyl(0.04, 0.04, 0.08, M.brass, 0.3, 0.32, 0.15, cam1);
+  // Rangefinder
+  const cam2 = new THREE.Group();
+  cam2.position.set(0.1, camShelfY + 0.24, 0.6);
+  cam2.rotation.y = -0.2;
+  shelfGroup.add(cam2);
+  box(0.95, 0.42, 0.36, M.leather, 0, 0, 0, cam2);
+  box(0.95, 0.1, 0.36, M.brass, 0, 0.25, 0, cam2);
+  cyl(0.14, 0.14, 0.22, M.black, 0.15, 0, 0.29, cam2);
+  cyl(0.1, 0.1, 0.04, M.brass, 0.15, 0, 0.42, cam2);
+  cyl(0.045, 0.045, 0.05, M.brass, -0.32, 0.32, 0, cam2);
+
+  // Books + small object on top shelf
+  let bookY = shelfYs[3] + 0.04;
+  for (let i = 0; i < 5; i++) {
+    const h = rand(0.16, 0.26);
+    const w = rand(0.85, 1.0);
+    const d = rand(0.65, 0.78);
+    const mat = new THREE.MeshStandardMaterial({ color: pick(filmColors), roughness: 0.9 });
+    box(w, h, d, mat, 0.15, bookY + h/2, -1.6, shelfGroup);
+    bookY += h;
+  }
+  // a small ceramic vase
+  cyl(0.18, 0.26, 0.5, M.potCream, 0.15, shelfYs[3] + 0.04 + 0.25, 0.3, shelfGroup);
+  // small leaning frame
+  const leanFrame = box(0.05, 0.7, 0.6, M.walnutDark, 0.18, shelfYs[3] + 0.04 + 0.42, 1.5, shelfGroup);
+  leanFrame.rotation.z = -0.12;
+  const leanPhoto = box(0.02, 0.55, 0.48, M.photo1, 0.22, shelfYs[3] + 0.04 + 0.42, 1.5, shelfGroup);
+  leanPhoto.rotation.z = -0.12;
+
+  // ────────────────────────────────────────────────────────────────────
+  //   CREDENZA (back wall) — record player + small plant + objects
+  // ────────────────────────────────────────────────────────────────────
+  const credGroup = new THREE.Group();
+  credGroup.position.set(2.5, 0, -11);
+  scene.add(credGroup);
+
+  const cw = 5.2, ch = 2.0, cd = 1.3;
+  // tapered legs
+  cyl(0.05, 0.04, 0.6, M.walnutDark, -cw/2 + 0.3, 0.3, -cd/2 + 0.2, credGroup);
+  cyl(0.05, 0.04, 0.6, M.walnutDark,  cw/2 - 0.3, 0.3, -cd/2 + 0.2, credGroup);
+  cyl(0.05, 0.04, 0.6, M.walnutDark, -cw/2 + 0.3, 0.3,  cd/2 - 0.2, credGroup);
+  cyl(0.05, 0.04, 0.6, M.walnutDark,  cw/2 - 0.3, 0.3,  cd/2 - 0.2, credGroup);
+  // body
+  box(cw, ch, cd, M.walnut, 0, 0.6 + ch/2, 0, credGroup);
+  // door insets
+  const doorY = 0.6 + ch/2;
+  box(cw/2 - 0.12, ch - 0.25, 0.02, M.walnutLight, -cw/4 + 0.06, doorY, cd/2 + 0.005, credGroup);
+  box(cw/2 - 0.12, ch - 0.25, 0.02, M.walnutLight,  cw/4 - 0.06, doorY, cd/2 + 0.005, credGroup);
+  // brass pulls
+  const h1 = cyl(0.035, 0.035, 0.2, M.brass, -0.18, doorY, cd/2 + 0.025, credGroup);
+  h1.rotation.z = Math.PI/2;
+  const h2 = cyl(0.035, 0.035, 0.2, M.brass,  0.18, doorY, cd/2 + 0.025, credGroup);
+  h2.rotation.z = Math.PI/2;
+  // top surface piece (slightly oversized)
+  box(cw + 0.05, 0.05, cd + 0.05, M.walnutLight, 0, 0.6 + ch + 0.02, 0, credGroup);
+
+  const credTopY = 0.6 + ch + 0.05;
+
+  // RECORD PLAYER
+  const rp = new THREE.Group();
+  rp.position.set(-0.9, credTopY, 0);
+  credGroup.add(rp);
+  box(1.6, 0.16, 1.15, M.walnutDark, 0, 0.08, 0, rp);
+  cyl(0.52, 0.52, 0.06, M.black, 0.18, 0.19, 0, rp);
+  cyl(0.5, 0.5, 0.012, M.blackMatte, 0.18, 0.23, 0, rp);
+  cyl(0.11, 0.11, 0.013, M.photo1, 0.18, 0.237, 0, rp);
+  cyl(0.018, 0.018, 0.04, M.brass, 0.18, 0.25, 0, rp);
+  // tonearm assembly
+  cyl(0.06, 0.06, 0.1, M.brass, -0.55, 0.22, -0.4, rp);
+  const tonearm = new THREE.Group();
+  tonearm.position.set(-0.55, 0.27, -0.4);
+  tonearm.rotation.y = -0.7;
+  rp.add(tonearm);
+  box(0.035, 0.035, 0.65, M.brass, 0, 0, 0.32, tonearm);
+  box(0.07, 0.06, 0.1, M.black, 0, -0.02, 0.62, tonearm);
+  // knobs
+  cyl(0.04, 0.04, 0.04, M.brass, -0.6, 0.18, 0.42, rp);
+  cyl(0.04, 0.04, 0.04, M.brass, -0.4, 0.18, 0.42, rp);
+  cyl(0.04, 0.04, 0.04, M.brass, -0.2, 0.18, 0.42, rp);
+
+  // Decanter + sculpture on credenza
+  const decanter = new THREE.Group();
+  decanter.position.set(-2.0, credTopY, -0.1);
+  credGroup.add(decanter);
+  cyl(0.16, 0.22, 0.4, M.brass, 0, 0.2, 0, decanter);
+  cyl(0.07, 0.08, 0.18, M.brass, 0, 0.49, 0, decanter);
+  cyl(0.04, 0.04, 0.08, M.walnutDark, 0, 0.62, 0, decanter);
+  // small ceramic block sculpture
+  box(0.45, 0.3, 0.35, M.cream, 2.0, credTopY + 0.15, -0.35, credGroup);
+  cyl(0.06, 0.06, 0.45, M.brass, 2.0, credTopY + 0.52, -0.35, credGroup);
+  // stack of magazines on credenza
+  box(0.55, 0.04, 0.7, M.photo2, 0.5, credTopY + 0.02, 0.4, credGroup);
+  box(0.5,  0.04, 0.65, M.photo3, 0.5, credTopY + 0.06, 0.42, credGroup);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   SMALL PLANT on credenza
+  // ────────────────────────────────────────────────────────────────────
+  function makeSmallPlant(parent, x, y, z, scale = 1) {
+    const g = new THREE.Group();
+    g.position.set(x, y, z);
+    parent.add(g);
+    cyl(0.3 * scale, 0.25 * scale, 0.42 * scale, M.potCream, 0, 0.21 * scale, 0, g);
+    cyl(0.27 * scale, 0.27 * scale, 0.04 * scale, M.soil, 0, 0.43 * scale, 0, g);
+    const mats = [M.plantA, M.plantB, M.plantC, M.plantD];
+    for (let i = 0; i < 22; i++) {
+      const r = rand(0.12, 0.2) * scale;
+      const angle = Math.random() * Math.PI * 2;
+      const rad = Math.random() * 0.22 * scale;
+      const hh = rand(0.5, 1.0) * scale;
+      const leaf = ico(r, pick(mats), Math.cos(angle)*rad, hh, Math.sin(angle)*rad, g);
+      leaf.scale.set(0.9 + Math.random()*0.4, 1.2 + Math.random()*0.6, 0.9 + Math.random()*0.4);
+      leaf.rotation.set(rand(-0.4, 0.4), Math.random()*Math.PI*2, rand(-0.4, 0.4));
+    }
+    return g;
+  }
+  makeSmallPlant(credGroup, 1.5, credTopY, 0.2, 1.05);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   FRAMED PHOTOS on back wall
+  // ────────────────────────────────────────────────────────────────────
+  function frame(x, y, w, h, photoMat) {
+    const g = new THREE.Group();
+    g.position.set(x, y, -11.79);
+    scene.add(g);
+    box(w, h, 0.08, M.walnutDark, 0, 0, 0, g);
+    box(w - 0.18, h - 0.18, 0.025, photoMat, 0, 0, 0.05, g);
+    return g;
+  }
+  frame(-4.6, 7.4, 1.5, 1.9, M.photo1);
+  frame(-0.2, 7.6, 2.2, 1.6, M.photo2);
+  frame( 4.0, 7.3, 1.4, 1.75, M.photo3);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   SOFA — wide low rust velvet
+  // ────────────────────────────────────────────────────────────────────
+  const sofaG = new THREE.Group();
+  sofaG.position.set(-1.2, 0, 0.6);
+  scene.add(sofaG);
+  // base
+  box(5.6, 0.5, 2.4, M.sofaShadow, 0, 0.3, 0, sofaG);
+  // seat cushions
+  box(1.78, 0.55, 2.0, M.sofa, -1.85, 0.8, 0.1, sofaG);
+  box(1.78, 0.55, 2.0, M.sofa,  0,    0.8, 0.1, sofaG);
+  box(1.78, 0.55, 2.0, M.sofa,  1.85, 0.8, 0.1, sofaG);
+  // backrest
+  box(5.6, 1.3, 0.55, M.sofa, 0, 1.35, -1.15, sofaG);
+  // back cushions
+  box(1.78, 1.05, 0.4, M.sofaShadow, -1.85, 1.3, -0.8, sofaG);
+  box(1.78, 1.05, 0.4, M.sofaShadow,  0,    1.3, -0.8, sofaG);
+  box(1.78, 1.05, 0.4, M.sofaShadow,  1.85, 1.3, -0.8, sofaG);
+  // arms
+  box(0.4, 1.0, 2.4, M.sofa, -2.9, 0.9, 0, sofaG);
+  box(0.4, 1.0, 2.4, M.sofa,  2.9, 0.9, 0, sofaG);
+  // feet
+  [-2.5, 2.5].forEach(fx => {
+    [-1.0, 1.0].forEach(fz => {
+      cyl(0.08, 0.07, 0.2, M.walnutDark, fx, 0.1, fz, sofaG);
+    });
+  });
+  // throw pillows
+  const p1 = box(0.7, 0.5, 0.5, M.photo2, -2.15, 1.1, 0.5, sofaG);
+  p1.rotation.z = 0.15;
+  const p2 = box(0.6, 0.5, 0.45, M.cream, 2.15, 1.1, 0.55, sofaG);
+  p2.rotation.z = -0.1;
+  // folded throw blanket
+  box(1.8, 0.1, 0.8, M.photo3, 0.4, 1.1, 0.6, sofaG);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   COFFEE TABLE — round walnut + objects
+  // ────────────────────────────────────────────────────────────────────
+  const ct = new THREE.Group();
+  ct.position.set(-0.6, 0, 3.8);
+  scene.add(ct);
+  cyl(1.35, 1.35, 0.1, M.walnut, 0, 0.45, 0, ct, 28);
+  for (let i = 0; i < 3; i++) {
+    const a = (i / 3) * Math.PI * 2 + 0.5;
+    const leg = cyl(0.05, 0.035, 0.45, M.walnutDark, Math.cos(a)*0.95, 0.22, Math.sin(a)*0.95, ct);
+    leg.rotation.z = Math.cos(a) * 0.1;
+    leg.rotation.x = -Math.sin(a) * 0.1;
+  }
+  // books
+  box(0.85, 0.06, 0.6, M.photo1, -0.3, 0.53, -0.2, ct);
+  box(0.78, 0.05, 0.55, M.photo3, -0.32, 0.59, -0.18, ct);
+  box(0.7, 0.04, 0.5, M.cream, -0.34, 0.64, -0.16, ct);
+  // ceramic cup
+  cyl(0.1, 0.08, 0.2, M.cream, 0.45, 0.6, 0.25, ct);
+  cyl(0.08, 0.08, 0.005, M.walnutDark, 0.45, 0.71, 0.25, ct);
+  // shallow brass bowl
+  cyl(0.22, 0.16, 0.07, M.brass, 0.3, 0.53, -0.4, ct);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   EAMES LOUNGE CHAIR + OTTOMAN (simplified)
+  // ────────────────────────────────────────────────────────────────────
+  const eames = new THREE.Group();
+  eames.position.set(4.5, 0, 3.5);
+  eames.rotation.y = -0.85;
+  scene.add(eames);
+  // central column
+  cyl(0.06, 0.06, 0.45, M.walnutDark, 0, 0.22, 0, eames);
+  // 5-star base feet
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const foot = box(0.55, 0.06, 0.08, M.walnutDark, Math.cos(a)*0.28, 0.06, Math.sin(a)*0.28, eames);
+    foot.rotation.y = a;
+  }
+  // seat shell wood
+  box(1.25, 0.1, 1.1, M.walnutDark, 0, 0.5, 0, eames);
+  // seat cushion
+  box(1.18, 0.32, 1.0, M.leatherSeat, 0, 0.7, 0, eames);
+  // backrest shell
+  const backRest = box(1.25, 1.25, 0.1, M.walnutDark, 0, 1.25, -0.5, eames);
+  backRest.rotation.x = -0.22;
+  // back cushion
+  const backCush = box(1.12, 1.0, 0.32, M.leatherSeat, 0, 1.25, -0.4, eames);
+  backCush.rotation.x = -0.22;
+  // headrest
+  const head = box(1.08, 0.55, 0.3, M.leatherSeat, 0, 1.95, -0.6, eames);
+  head.rotation.x = -0.34;
+  // arms
+  const armL = box(0.1, 0.2, 0.95, M.walnutDark, -0.6, 1.0, -0.05, eames);
+  armL.rotation.x = -0.1;
+  const armR = box(0.1, 0.2, 0.95, M.walnutDark, 0.6, 1.0, -0.05, eames);
+  armR.rotation.x = -0.1;
+
+  // ottoman in front of chair
+  const ott = new THREE.Group();
+  ott.position.set(0, 0, 1.3);
+  eames.add(ott);
+  cyl(0.05, 0.05, 0.32, M.walnutDark, 0, 0.16, 0, ott);
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
+    const foot = box(0.4, 0.05, 0.07, M.walnutDark, Math.cos(a)*0.18, 0.05, Math.sin(a)*0.18, ott);
+    foot.rotation.y = a;
+  }
+  box(0.95, 0.08, 0.7, M.walnutDark, 0, 0.36, 0, ott);
+  box(0.9, 0.22, 0.65, M.leatherSeat, 0, 0.51, 0, ott);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   FLOOR LAMP near credenza
+  // ────────────────────────────────────────────────────────────────────
+  const lamp = new THREE.Group();
+  lamp.position.set(-5.5, 0, -9);
+  scene.add(lamp);
+  cyl(0.32, 0.32, 0.08, M.walnutDark, 0, 0.04, 0, lamp);
+  cyl(0.028, 0.028, 4.6, M.brass, 0, 2.35, 0, lamp);
+  const shade = cyl(0.55, 0.78, 0.85, M.cream, 0.18, 4.75, 0, lamp);
+  shade.rotation.z = -0.18;
+  // a small subtle warm bulb glow
+  const bulb = new THREE.PointLight(0xffae65, 6, 6, 2);
+  bulb.position.set(-5.5 + 0.18, 4.4, 0);
+  scene.add(bulb);
+
+  // ────────────────────────────────────────────────────────────────────
+  //   BIG CORNER PLANTS — lush, organic
+  // ────────────────────────────────────────────────────────────────────
+  function makeBigPlant(x, z, opts = {}) {
+    const {
+      leafCount = 70,
+      spread    = 1.6,
+      height    = 3.2,
+      potR      = 0.78,
+      potH      = 1.25,
+      potMat    = M.pot,
+      trunkH    = 0.45,
+      droopy    = 0.5,    // how many drooping outer leaves (0..1)
+    } = opts;
+
+    const g = new THREE.Group();
+    g.position.set(x, 0, z);
+    scene.add(g);
+
+    // pot
+    cyl(potR, potR * 0.78, potH, potMat, 0, potH/2, 0, g, 18);
+    cyl(potR * 0.95, potR * 0.95, 0.04, M.soil, 0, potH - 0.01, 0, g, 18);
+
+    // trunk
+    const trunkBaseY = potH;
+    cyl(0.1, 0.14, trunkH, M.walnutDark, 0, trunkBaseY + trunkH/2, 0, g, 8);
+    // secondary stems
+    for (let s = 0; s < 3; s++) {
+      const a = Math.random() * Math.PI * 2;
+      const tlt = rand(0.1, 0.35);
+      const stem = cyl(0.05, 0.07, rand(1.0, 1.7), M.walnutDark, Math.cos(a)*0.18, trunkBaseY + 0.6, Math.sin(a)*0.18, g, 6);
+      stem.rotation.z = Math.cos(a) * tlt;
+      stem.rotation.x = -Math.sin(a) * tlt;
+    }
+
+    // leaf cluster — full cone-ish shape
+    const mats = [M.plantA, M.plantB, M.plantC, M.plantD];
+    const baseY = potH + trunkH * 0.8;
+
+    for (let i = 0; i < leafCount; i++) {
+      const t = i / leafCount;
+      const angle = Math.random() * Math.PI * 2;
+      // bias toward upper outer
+      const rNorm = Math.pow(Math.random(), 0.55);
+      const radius = rNorm * spread;
+      const hh = baseY + Math.pow(Math.random(), 0.7) * height;
+
+      const leafR = rand(0.22, 0.46);
+      const m = pick(mats);
+      const leaf = ico(leafR, m, Math.cos(angle) * radius, hh, Math.sin(angle) * radius, g);
+      // elongated leaf shape
+      leaf.scale.set(rand(0.85, 1.15), rand(1.3, 2.0), rand(0.85, 1.15));
+      leaf.rotation.set(rand(-0.5, 0.5), Math.random() * Math.PI * 2, rand(-0.5, 0.5));
+    }
+
+    // a few drooping outer fronds (longer, angled down)
+    const droopCount = Math.floor(leafCount * droopy * 0.18);
+    for (let i = 0; i < droopCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const r = spread * rand(0.85, 1.15);
+      const y = baseY + height * rand(0.15, 0.6);
+      const frond = ico(rand(0.3, 0.5), pick(mats), Math.cos(angle) * r, y, Math.sin(angle) * r, g);
+      frond.scale.set(0.6, 2.4, 0.6);
+      frond.rotation.set(rand(0.4, 0.9) * Math.sign(Math.sin(angle)), angle, rand(0.4, 0.9) * Math.sign(Math.cos(angle)));
+    }
+
+    return g;
+  }
+
+  // Back-right corner — large lush
+  makeBigPlant(8.5, -9, {
+    leafCount: 80, spread: 1.85, height: 3.6,
+    potR: 0.9, potH: 1.4, potMat: M.pot, trunkH: 0.5, droopy: 0.7
+  });
+  // Front-left corner — taller slim
+  makeBigPlant(-9, 7, {
+    leafCount: 70, spread: 1.45, height: 4.0,
+    potR: 0.75, potH: 1.55, potMat: M.potCream, trunkH: 0.7, droopy: 0.5
+  });
+  // mid-right secondary plant near eames
+  makeBigPlant(8.5, 5.5, {
+    leafCount: 50, spread: 1.2, height: 2.6,
+    potR: 0.65, potH: 1.0, potMat: M.pot, trunkH: 0.3, droopy: 0.8
+  });
+
+  // ────────────────────────────────────────────────────────────────────
+  //   2D OVERLAY — vignette + animated film grain (DOM canvas on top)
+  // ────────────────────────────────────────────────────────────────────
+  const overlay = document.createElement('canvas');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+  document.body.appendChild(overlay);
+  const octx = overlay.getContext('2d');
+
+  // Smaller internal buffer — grain reads chunkier (more film-like) and is cheap to refresh each frame
+  const OW = 640, OH = 360;
+  overlay.width = OW;
+  overlay.height = OH;
+  const grainImg = octx.createImageData(OW, OH);
+
+  function drawOverlay() {
+    // FRESH GRAIN — write directly to canvas pixels (replaces, ignores compositing)
+    const d = grainImg.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = Math.random() * 255;
+      d[i]     = n;
+      d[i + 1] = n * 0.96;
+      d[i + 2] = n * 0.88;  // very slight warm tint to grain
+      d[i + 3] = 30;          // ~12% alpha — subtle film grain
+    }
+    octx.putImageData(grainImg, 0, 0);
+
+    // VIGNETTE — soft warm-black radial gradient, source-over on top of grain
+    const cx = OW * 0.5, cy = OH * 0.46;
+    const innerR = Math.min(OW, OH) * 0.10;
+    const outerR = Math.max(OW, OH) * 0.78;
+    const grad = octx.createRadialGradient(cx, cy, innerR, cx, cy, outerR);
+    grad.addColorStop(0,    'rgba(18, 8, 2, 0)');
+    grad.addColorStop(0.55, 'rgba(18, 8, 2, 0.40)');
+    grad.addColorStop(1,    'rgba(6, 2, 0, 0.88)');
+    octx.fillStyle = grad;
+    octx.fillRect(0, 0, OW, OH);
+  }
+
+  drawOverlay();
+
+  // ────────────────────────────────────────────────────────────────────
+  //   MOUSE PARALLAX — subtle
+  // ────────────────────────────────────────────────────────────────────
+  let mx = 0, my = 0;
+  let camX = 13, camY = 10;
+  const camZ = 13;
+  window.addEventListener('mousemove', (e) => {
+    mx = (e.clientX / window.innerWidth  - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  // ────────────────────────────────────────────────────────────────────
+  //   ANIMATE
+  // ────────────────────────────────────────────────────────────────────
+  function animate() {
+    requestAnimationFrame(animate);
+
+    camX += ((13 + mx * 1.1) - camX) * 0.045;
+    camY += ((10 - my * 0.7) - camY) * 0.045;
+    camera.position.set(camX, camY, camZ + mx * 0.4);
+    camera.lookAt(0, 2.2, 0);
+
+    renderer.render(scene, camera);
+    drawOverlay();
+  }
+  animate();
+
+  // ────────────────────────────────────────────────────────────────────
+  //   RESIZE
+  // ────────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // overlay CSS sizing is 100%/100% — internal OW/OH buffer stays fixed for cheap grain
+    drawOverlay();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Signature variations — Mathieu M.</title>
+<style>
+  html, body { background: #f4f4f2; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    color: #333;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: center;
+  }
+  h1 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #888;
+    margin: 0 0 8px;
+    text-align: center;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.06);
+    width: 560px;
+    padding: 56px 64px 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #b5b5b5;
+  }
+  svg { display: block; overflow: visible; }
+  .ink {
+    fill: none;
+    stroke: #111;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+  <h1>Signature variations — based on your real signature</h1>
+
+  <!--
+       Grammar (matches the reference photo):
+         • Compact, intentionally abstract cursive — letters aren't
+           individually legible, the whole thing reads as one gesture.
+         • A bold near-horizontal STRIKE LINE slashes across the
+           middle of the writing from left to right (the visual anchor).
+         • A descender LOOP hangs below the lower-left area.
+         • A small trailing flick at the right end of the strike.
+  -->
+
+  <!-- ─── VARIATION 1: Tight ────────────────────────────────────────── -->
+  <div class="card">
+    <span class="label">01 — Tight (matches your scale)</span>
+    <svg viewBox="0 0 280 80" width="360" height="103">
+      <!-- Compact cursive scribble at mid-height. Tight bumps, a
+           couple of taller risers, no clearly readable letters. -->
+      <path class="ink" stroke-width="2.4"
+        d="
+          M 28 42
+          C 22 28, 30 16, 38 18
+          C 44 20, 44 32, 40 38
+          C 38 40, 36 40, 38 44
+          C 42 46, 48 38, 50 32
+          C 52 28, 54 26, 56 30
+          C 58 36, 56 44, 60 44
+          C 64 42, 66 28, 70 28
+          C 74 30, 72 44, 76 42
+          C 82 38, 84 30, 88 30
+          C 92 32, 90 44, 94 42
+          C 100 38, 100 30, 104 30
+          C 108 32, 106 44, 110 42
+          C 116 36, 116 30, 120 30
+          C 124 32, 122 44, 126 42
+          C 132 38, 134 28, 138 30
+          C 142 34, 138 44, 142 44
+          C 148 40, 150 30, 154 30
+          C 158 32, 156 44, 160 42
+          C 166 36, 166 28, 170 28
+          C 174 30, 174 44, 180 42
+          C 186 38, 192 32, 198 36
+          C 204 40, 206 46, 212 44
+          C 218 42, 222 38, 226 42
+        " />
+      <!-- Descender loop (lower-left, like in your signature) -->
+      <path class="ink" stroke-width="2.4"
+        d="
+          M 36 38
+          C 32 50, 24 64, 28 66
+          C 36 68, 50 56, 56 48
+        " />
+      <!-- BOLD STRIKE LINE through the middle -->
+      <path class="ink" stroke-width="2.8"
+        d="
+          M 12 40
+          C 60 36, 140 34, 220 34
+          C 232 34, 240 34, 246 36
+        " />
+      <!-- Trailing flick at the right end of the strike -->
+      <path class="ink" stroke-width="2.4"
+        d="M 246 36 C 252 34, 256 36, 254 42" />
+    </svg>
+  </div>
+
+  <!-- ─── VARIATION 2: Wider ────────────────────────────────────────── -->
+  <div class="card">
+    <span class="label">02 — Wider, more relaxed</span>
+    <svg viewBox="0 0 360 90" width="430" height="108">
+      <!-- More spread out, same grammar -->
+      <path class="ink" stroke-width="2.6"
+        d="
+          M 32 50
+          C 24 30, 36 14, 46 16
+          C 54 18, 54 34, 48 44
+          C 46 46, 44 48, 48 52
+          C 54 54, 62 44, 64 36
+          C 66 32, 70 30, 72 34
+          C 74 42, 72 54, 78 52
+          C 86 48, 88 32, 94 32
+          C 100 34, 98 54, 104 50
+          C 112 44, 114 32, 120 34
+          C 126 36, 124 52, 130 50
+          C 138 44, 140 32, 146 34
+          C 152 36, 150 52, 156 50
+          C 164 44, 166 32, 172 32
+          C 178 34, 176 52, 184 50
+          C 192 46, 196 34, 202 36
+          C 208 38, 206 52, 214 50
+          C 222 46, 226 36, 234 38
+          C 242 40, 246 48, 254 48
+          C 264 46, 272 38, 280 42
+          C 288 46, 290 52, 298 50
+        " />
+      <!-- Descender loop -->
+      <path class="ink" stroke-width="2.6"
+        d="
+          M 44 46
+          C 36 60, 26 76, 34 78
+          C 46 80, 64 66, 72 56
+        " />
+      <!-- STRIKE LINE -->
+      <path class="ink" stroke-width="3"
+        d="
+          M 14 46
+          C 70 40, 180 38, 290 38
+          C 308 38, 318 38, 326 42
+        " />
+      <!-- Trailing flick -->
+      <path class="ink" stroke-width="2.6"
+        d="M 326 42 C 334 40, 340 42, 338 50" />
+    </svg>
+  </div>
+
+  <!-- ─── VARIATION 3: Pronounced descender + longer flick ──────────── -->
+  <div class="card">
+    <span class="label">03 — Bolder descender + flourish</span>
+    <svg viewBox="0 0 380 100" width="440" height="116">
+      <!-- Slightly taller risers in the scribble for more rhythm,
+           a bigger looping descender, and the strike line extends
+           well past the writing into a tail. -->
+      <path class="ink" stroke-width="2.8"
+        d="
+          M 36 56
+          C 24 32, 38 12, 50 14
+          C 60 16, 60 36, 52 50
+          C 48 54, 46 56, 52 60
+          C 60 62, 70 50, 74 40
+          C 76 34, 80 32, 82 38
+          C 84 48, 82 60, 90 58
+          C 100 54, 104 36, 112 36
+          C 120 38, 116 60, 124 56
+          C 134 50, 136 36, 144 38
+          C 152 40, 148 60, 156 56
+          C 166 50, 168 36, 176 38
+          C 184 40, 180 60, 188 56
+          C 198 50, 200 36, 208 36
+          C 216 38, 212 60, 220 56
+          C 230 50, 234 40, 244 42
+          C 254 44, 256 56, 268 56
+          C 280 56, 290 48, 300 52
+          C 308 56, 312 64, 320 60
+        " />
+      <!-- Bigger descender loop -->
+      <path class="ink" stroke-width="2.8"
+        d="
+          M 50 52
+          C 42 70, 30 88, 40 90
+          C 56 92, 80 76, 88 64
+        " />
+      <!-- STRIKE LINE with extended tail -->
+      <path class="ink" stroke-width="3.2"
+        d="
+          M 16 52
+          C 80 44, 200 42, 320 42
+          C 340 42, 354 42, 364 46
+        " />
+      <!-- Trailing flourish flick -->
+      <path class="ink" stroke-width="2.8"
+        d="M 364 46 C 372 42, 378 46, 374 54 C 372 58, 366 58, 360 56" />
+    </svg>
+  </div>
+</body>
+</html>
