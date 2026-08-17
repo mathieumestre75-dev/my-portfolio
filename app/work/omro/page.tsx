@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -155,7 +155,7 @@ const flowHeading: React.CSSProperties = {
 }
 
 // ─── Arrow bullet SVG ────────────────────────────────────────────────────────
-function ArrowBullet() {
+function ArrowBullet({ color }: { color?: string } = {}) {
   return (
     <svg
       viewBox="0 0 6 10" width={6} height={10}
@@ -164,7 +164,7 @@ function ArrowBullet() {
     >
       <path
         d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552"
-        strokeWidth="1.26" style={{ stroke: 'var(--noto-bullet-arrow)' }}
+        strokeWidth="1.26" style={{ stroke: color ?? 'var(--noto-bullet-arrow)' }}
       />
     </svg>
   )
@@ -206,10 +206,17 @@ export default function OmroPage() {
   const [hoveredWallet, setHoveredWallet] = useState<number | null>(null)
   const [contactVisible, setContactVisible] = useState(false)
   const [themeToggleHover, setThemeToggleHover] = useState(false)
+  const [decidedCardHeight, setDecidedCardHeight] = useState<number | undefined>(undefined)
+  const decidedCardRefs = useRef<(HTMLDivElement | null)[]>([])
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
   const isDark = mounted && resolvedTheme === 'dark'
+
+  useEffect(() => {
+    const heights = decidedCardRefs.current.filter(Boolean).map(el => el!.offsetHeight)
+    if (heights.length) setDecidedCardHeight(Math.max(...heights))
+  }, [])
 
   useEffect(() => {
     const html = document.documentElement
@@ -365,6 +372,16 @@ export default function OmroPage() {
         }
         .noto-email-link { transition: color 0.15s ease; }
         .noto-email-link:hover { color: rgba(255, 119, 0, 0.97) !important; }
+        @keyframes coin-tilt-l {
+          0%, 48% { transform: rotate(0deg); }
+          50%, 98% { transform: rotate(-8deg); }
+          100% { transform: rotate(0deg); }
+        }
+        @keyframes coin-tilt-r {
+          0%, 48% { transform: rotate(0deg); }
+          50%, 98% { transform: rotate(8deg); }
+          100% { transform: rotate(0deg); }
+        }
         :root { --color-omro-subtitle: rgba(0, 0, 0, 0.75); }
         .dark { --color-omro-subtitle: rgba(255, 255, 255, 0.749); }
       `}</style>
@@ -566,7 +583,7 @@ export default function OmroPage() {
               <p style={sectionLabel}>The Problem</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <h2 style={sectionH2}>
-                  Crypto presales live on excitement. They also involve real money.
+                  Crypto presales live on excitement and involve real money.
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <h4 style={sectionH4}>Two challenges: making it worth joining, and safe to trust</h4>
@@ -686,7 +703,7 @@ export default function OmroPage() {
                   {
                     num: '01', title: 'PAYMENT CHAIN MISMATCH',
                     heading: 'Staking requires Ethereum. Other chains don\'t qualify.',
-                    body: 'If you try to pay with a non-Ethereum token, staking gets grayed out with a warning explaining why. You can still buy, just without the stake. No dead end.',
+                    body: 'Staking locks your tokens for a period in exchange for extra rewards. If you pay with a non-Ethereum token, it gets grayed out with a warning explaining why. You can still buy, just without the stake. No dead end.',
                   },
                   {
                     num: '02', title: 'NOT ENOUGH GAS',
@@ -800,7 +817,7 @@ export default function OmroPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <h4 style={sectionH4}>The token card is designed to prompt action without overselling</h4>
               <p style={bodyText}>
-                I wanted the card focused, not overloaded. I added tags like &ldquo;Hot,&rdquo; &ldquo;New,&rdquo; and &ldquo;Ending Soon&rdquo; for scanability and momentum, and a countdown to the next price increase to give a concrete reason to act. With Geri, the UX researcher, I looked at competitor cards to understand what information users are usually seeking: their balance in tokens, the next price rise, and enough visual difference to tell presales apart. The most common caveat I saw was competitors making this card too dense and possibly overwhelming for users.
+                I wanted the card focused, not overloaded. I added tags like &ldquo;Hot,&rdquo; &ldquo;New,&rdquo; and &ldquo;Ending Soon&rdquo; for scanability and momentum, and a countdown to the next price increase to give a concrete reason to act. With Geri, the UX researcher, I looked at competitor cards to understand what information users are usually seeking: i.e their balance in tokens, the next price rise, and enough visual difference to tell presales apart. The most common caveat I saw was competitors making this card too dense and possibly overwhelming for users.
               </p>
             </div>
 
@@ -819,40 +836,48 @@ export default function OmroPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <h2 style={sectionH2}>Making the buy flow clear.</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <h4 style={sectionH4}>By the time you reach the widget, the work is clarity, not persuasion</h4>
+                  <h4 style={sectionH4}>By the time you reach the widget, the goal is clarity, not persuasion</h4>
                   <p style={bodyText}>
-                    The three things I optimized for: how many tokens you&apos;re buying, at what rate, and what it costs in real dollars. Competitive analysis at this stage was specifically about clarity — what to display, what to simplify, and where the common failure points were.
+                    I optimized for three things: how many tokens you&apos;re buying, at what rate, and what it costs in real dollars. My competitive analysis at this stage was about clarity: what to display, what to simplify, and where apps commonly fail.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <p style={bodyText}>
-                Most apps I looked at required selecting a payment token before showing an amount — a decision point that most users would never change, since ETH is what nearly every presale requires. I defaulted to ETH and removed that step for the common case. If you need to change it, you still can. But you don&apos;t have to start there.
-              </p>
-              <p style={{ ...bodyText, marginTop: '1.65em' }}>
-                Several apps also only showed the token receive count after a confirmation step — you&apos;d type an amount, tap a button, then see how many tokens you&apos;d get. I wanted that number live, updating as you type, so the answer to &ldquo;how many tokens am I actually getting?&rdquo; is always visible without an extra tap.
-              </p>
+            {/* Key insights */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <h5 style={flowLabel}>KEY INSIGHTS</h5>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {[
+                  {
+                    title: 'Most apps required selecting a payment token before showing an amount.',
+                    body: "That’s a decision point almost no user changes, since ETH is what nearly every presale requires. So I defaulted to ETH and removed the step. You can still switch, you just don’t have to start there.",
+                  },
+                  {
+                    title: 'Several apps also hid the token receive count behind a confirmation step.',
+                    body: 'You’d type an amount, tap a button, then see what you’d get. I wanted that number live, updating as you type, so “how many tokens am I actually getting?” never needs an extra tap to answer.',
+                  },
+                ].map((insight, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                    <ArrowBullet color="var(--color-text-secondary)" />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <p style={flowHeading}>{insight.title}</p>
+                      <p style={{ ...bodyText, color: 'var(--color-status-text)' }}>{insight.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Widget visual */}
-            <Placeholder
-              label={'WIDGET\nAmount filled, fiat equivalent, Buy & Stake primary'}
-              aspectRatio={0.65}
-              caption="The widget: amount in ETH, fiat equivalent right-aligned, Buy & Stake primary."
-            />
 
             {/* ─── Making the Transaction Reviewable ───────────────────────── */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <h2 style={sectionH2}>Making the transaction reviewable.</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <h4 style={sectionH4}>The review screen is the last moment before real money moves. It needs to make you feel confident, not rushed</h4>
-                  <p style={bodyText}>
-                    I benchmarked six wallet apps specifically at this screen. The findings were consistent. Trust Wallet and Coinbase Wallet showed the purchase amount prominently — but neither included fiat equivalents, so you had no idea what the numbers meant in actual dollars. Rainbow, 1inch, and Uniswap showed both the amount and the gas fee, but no total at all, leaving you to do the addition yourself. None of the six apps showed fiat equivalents alongside every figure. Best Wallet&apos;s own existing screen was the weakest: no purchase amount at the top, no fiat equivalents, and gas fees with no tooltip or explanation.
-                  </p>
-                </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <h2 style={sectionH2}>Making the transaction reviewable.</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h4 style={sectionH4}>The review screen needs to make users feel confident before their money moves</h4>
+                <p style={bodyText}>
+                  I benchmarked the same wallet apps again, specifically for this screen. The pattern was consistent: Trust Wallet, Coinbase Wallet, Rainbow, 1inch, and Uniswap all put the purchase amount up top with the network fee below. However, Rainbow, 1inch, and Uniswap never gave you the total in dollars (leaving users to do the math), and several screens crowded the decision with information users do not need at that moment (like the source code, function name, contract creation date, etc.).
+                </p>
               </div>
             </div>
 
@@ -954,42 +979,34 @@ export default function OmroPage() {
               </div>
             </div>
 
-            <Placeholder
-              label={'COMPETITOR REVIEW SCREENS\nScreenshots of competitor review screens to be added in a later pass.'}
-              aspectRatio={1.8}
-              caption="Competitor screenshots at the Confirm step — to be added in a later pass."
-            />
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <h4 style={sectionH4}>Most apps handle too much information by leaving parts of it out</h4>
-              <p style={bodyText}>
-                That wasn&apos;t something I wanted to do here. A presale transaction review has at minimum six numbers: token amount received, ETH spent, gas fee in ETH, cost in USD, gas in USD, and a total. I didn&apos;t add new information — I just showed everything that was already there in a way that someone without a crypto background could actually read. That turned out to be enough to go further than any of the six apps.
-              </p>
-            </div>
-
-            {/* Key design decisions — 2×2 card grid */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <h5 style={flowLabel}>KEY DESIGN DECISIONS</h5>
               <div style={{ height: 1, background: 'var(--color-border)' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {/* Row 1 */}
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   {[
                     {
-                      label: 'Token and price anchored at the top of every screen',
-                      body: 'Every screen opens with the token icon and current presale price, so you always know what you\'re buying and at what rate before you read anything else.',
+                      label: 'Keeping users in context',
+                      body: 'Like Coinbase and Rainbow, I made it so that the review opens over your purchase as a bottom sheet instead of taking you to a separate screen to keep the users in context with their purchase.',
                     },
                     {
-                      label: 'Fiat as the primary unit, crypto as secondary',
-                      body: 'USD equivalents sit alongside token amounts throughout. The crypto figures are still there for confident confirmation, but they\'re not the first thing you see.',
+                      label: 'Making crypto legible',
+                      body: 'I added for each crypto amount its USD value beside it to make it less confusing. I also wrapped the total in its own container at the bottom, and added tooltips for both the total and the gas fee to give users more context.',
+                    },
+                    {
+                      label: 'Adding trust signals',
+                      body: "I added the token's website and its smart contract one tap away, so users can get reassurance and check where their money is going right at the moment they commit.",
+                    },
+                    {
+                      label: 'Keeping the screen minimal',
+                      body: "Some benchmarked screens surfaced elements like source code, function names, and contract creation dates. I cut everything that didn't help users decide, so nothing competes for attention.",
                     },
                   ].map((item, i) => (
-                    <div key={i} style={{
-                      flex: '1 0 0',
+                    <div key={i} ref={(el) => { decidedCardRefs.current[i] = el }} style={{
                       background: 'var(--color-card-bg)',
                       border: '1px solid var(--color-border)',
                       borderRadius: 8, padding: 20,
                       display: 'flex', flexDirection: 'column', gap: 8,
+                      height: decidedCardHeight,
                     }}>
                       <h6 style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.4em', color: 'var(--color-text-primary)', margin: 0 }}>
                         {item.label}
@@ -999,64 +1016,6 @@ export default function OmroPage() {
                       </p>
                     </div>
                   ))}
-                </div>
-                {/* Row 2 */}
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
-                  {[
-                    {
-                      label: 'Gas fee isolated and explicitly explained',
-                      body: 'Gas is its own line, separate from cost, with a tooltip explaining that these are network fees, not collected by Best Wallet.',
-                    },
-                    {
-                      label: 'Total highlighted and interactive',
-                      body: 'I made the total the most prominent number, with a tooltip showing exactly how it\'s calculated. Every app in the benchmark either left it out or showed it with no context.',
-                    },
-                  ].map((item, i) => (
-                    <div key={i} style={{
-                      flex: '1 0 0',
-                      background: 'var(--color-card-bg)',
-                      border: '1px solid var(--color-border)',
-                      borderRadius: 8, padding: 20,
-                      display: 'flex', flexDirection: 'column', gap: 8,
-                    }}>
-                      <h6 style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.4em', color: 'var(--color-text-primary)', margin: 0 }}>
-                        {item.label}
-                      </h6>
-                      <p style={{ fontFamily: SANS, fontSize: 13.44, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.6em', color: 'var(--color-status-text)', margin: 0 }}>
-                        {item.body}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Designed version checklist + review screen visual */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div style={{
-                padding: '30px',
-                background: 'var(--color-card-bg)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 8,
-                display: 'flex', flexDirection: 'column', gap: 16,
-              }}>
-                <h5 style={flowLabel}>TRANSACTION REVIEW — DESIGNED VERSION</h5>
-                <div style={{ height: 1, background: 'var(--color-border)' }} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {[
-                    'Purchase amount on top + presale token label',
-                    'Destination shown (smart contract link + website)',
-                    'Cost: ETH amount + fiat equivalent',
-                    'Gas Fee: ETH amount + fiat equivalent + tooltip',
-                    'Fiat equivalents on every figure',
-                    'Total: highlighted, with tooltip explaining the calculation',
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                      <ArrowBullet />
-                      <p style={bulletText}>{item}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -1067,12 +1026,16 @@ export default function OmroPage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
               <p style={sectionLabel}>Next Steps</p>
-              <h2 style={sectionH2}>Where this was heading.</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <h2 style={sectionH2}>Handover to the engineering team.</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <h4 style={sectionH4}>Specs, annotations, and every state in between</h4>
+                  <p style={bodyText}>
+                    I handed the designs over with component annotations and interaction specs ready for engineering, including every edge case. Besides the main ones presented in this case study, I worked on the smaller ones where the work goes unseen but decides whether the flow holds up: i.e insufficient balance behavior, skeleton and loading states, empty and error states, character limits on the input fields (since presale token amounts can run long). We ended up shipping this as the first presale flow in the wallet, and it became a new source of engagement and revenue for Best Wallet.
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <p style={bodyText}>
-              I handed the designs over with component annotations and interaction specs ready for engineering. If I could do it differently, I&apos;d have pushed for a quick round of usability testing on the transaction review screen before handoff. I designed it to reduce hesitation at the point of confirmation, but I never actually had data on whether it was working.
-            </p>
 
             <Placeholder
               label={'SPEC DETAIL\nComponent behavior annotations from Prep for Handover to DEV section'}
@@ -1085,17 +1048,60 @@ export default function OmroPage() {
           {/* ════ WHAT I LEARNED ═════════════════════════════════════════════ */}
           <div id="what-i-learned" style={{ display: 'flex', flexDirection: 'column', gap: 52, marginTop: 100 }}>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
-              <p style={sectionLabel}>Looking back</p>
-              <h2 style={sectionH2}>What I learned from Best Wallet.</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+                <p style={sectionLabel}>Looking back</p>
+                <h2 style={sectionH2}>What I learned from Best Wallet.</h2>
+              </div>
+
+              <Placeholder
+                label={'APP SCREENSHOT\nTo be replaced with a screenshot of the shipped app'}
+                aspectRatio={1.6}
+              />
             </div>
 
             {/* Pull quote */}
             <div style={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <div style={{ width: 3, alignSelf: 'stretch', background: 'var(--color-noto-accent)', flexShrink: 0 }} />
               <h2 style={{ fontFamily: SERIFM, fontSize: 19.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.04em', color: 'var(--color-status-text)', margin: 0 }}>
-                The edge cases weren&apos;t additions to the product. Designing them revealed what the product actually was.
+                Every design detail carries weight in a financial app where users are spending real money.
               </h2>
+            </div>
+
+            {/* Coin illustration */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: -10, marginBottom: -10 }}>
+              <svg width={180} height={80} viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9 }}>
+                {/* Coin 1 — left, leaning -15deg */}
+                <g style={{ animation: 'coin-tilt-l 1.4s linear infinite', transformBox: 'fill-box', transformOrigin: 'center' }}>
+                  <g transform="rotate(-15, 38, 38)">
+                    <path d="M 39 28 C 51 27 61 32 61 38 C 61 44 51 48 38 47 C 25 46 15 43 15 38 C 15 32 26 28 39 28 Z" />
+                    <path d="M 15 38 C 15 41 15 43 15 46" />
+                    <path d="M 61 38 C 61 41 61 43 61 46" />
+                    <path d="M 15 46 C 25 55 51 55 61 46" />
+                    <path d="M 25 38 C 30 34 46 42 51 38" />
+                  </g>
+                </g>
+                {/* Coin 2 — centre, slightly larger */}
+                <g style={{ animation: 'coin-tilt-r 1.4s linear infinite', transformBox: 'fill-box', transformOrigin: 'center' }}>
+                  <g transform="rotate(4, 90, 35)">
+                    <path d="M 91 24 C 105 23 116 29 116 35 C 116 41 105 46 90 45 C 75 44 64 40 64 35 C 64 29 77 24 91 24 Z" />
+                    <path d="M 64 35 C 64 38 64 41 64 45" />
+                    <path d="M 116 35 C 116 38 116 41 116 45" />
+                    <path d="M 64 45 C 75 55 105 55 116 45" />
+                    <path d="M 77 35 C 82 31 98 39 103 35" />
+                  </g>
+                </g>
+                {/* Coin 3 — right, leaning +18deg */}
+                <g style={{ animation: 'coin-tilt-l 1.4s linear infinite', transformBox: 'fill-box', transformOrigin: 'center' }}>
+                  <g transform="rotate(18, 142, 38)">
+                    <path d="M 143 28 C 155 27 165 32 165 38 C 165 44 155 48 142 47 C 129 46 119 43 119 38 C 119 32 130 28 143 28 Z" />
+                    <path d="M 119 38 C 119 41 119 43 119 46" />
+                    <path d="M 165 38 C 165 41 165 43 165 46" />
+                    <path d="M 119 46 C 129 55 155 55 165 46" />
+                    <path d="M 129 38 C 134 34 150 42 155 38" />
+                  </g>
+                </g>
+              </svg>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
@@ -1113,7 +1119,7 @@ export default function OmroPage() {
                 </div>
                 <div style={{ flex: '1 0 0' }}>
                   <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
-                    Usually you finish the happy path first and handle edge cases near the end. Here, I was designing them at the same time, and the edge cases kept changing how I thought about the main screens themselves.
+                    The edge cases mattered as much as the happy path here. In a financial app, it&apos;s important to map situations where things can go wrong. When something fails, people need to know where their money went and why it didn&apos;t work.
                   </p>
                 </div>
               </div>
@@ -1123,12 +1129,12 @@ export default function OmroPage() {
               <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
                 <div style={{ width: '28%', flexShrink: 0 }}>
                   <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'var(--color-text-primary)', margin: 0 }}>
-                    Competitors hiding information isn&apos;t a signal to do the same.
+                    A pattern everyone follows isn&apos;t a pattern that works.
                   </h3>
                 </div>
                 <div style={{ flex: '1 0 0' }}>
                   <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
-                    Most wallet apps in the benchmark were leaving out pieces of the transaction review. In a presale context, that omission doesn&apos;t feel minimal, it feels evasive. The benchmark made the gap obvious, and once I saw what everyone else was leaving out, the direction was clear.
+                    Most wallet apps in the benchmark lacked clarity: technical jargon with no explanation, missing conversions, numbers you had to add up yourself. Nothing was hidden, but in a presale it reads as confusing, and confusing reads as untrustworthy. Benchmarking showed me the convention and pushed me to display information transparently.
                   </p>
                 </div>
               </div>
@@ -1138,12 +1144,12 @@ export default function OmroPage() {
               <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
                 <div style={{ width: '28%', flexShrink: 0 }}>
                   <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'var(--color-text-primary)', margin: 0 }}>
-                    Designing for retry means designing for state change, not screen states.
+                    On working in an unfamiliar domain.
                   </h3>
                 </div>
                 <div style={{ flex: '1 0 0' }}>
                   <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
-                    Edge Case 5 looks like a simple loop: the transaction fails, you retry. But the retry screen has to re-evaluate conditions that may have changed since the first attempt, gas price especially. Once I worked through that, I stopped thinking about edge cases as screen states and started thinking about them as system states.
+                    Designing for crypto meant learning it first. I came in without deep crypto knowledge, and a lot of the early work was just understanding what a presale actually is and why people join one. You can&apos;t simplify something you don&apos;t understand yourself.
                   </p>
                 </div>
               </div>
