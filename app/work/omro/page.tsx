@@ -708,12 +708,12 @@ export default function OmroPage() {
                   {
                     num: '02', title: 'NOT ENOUGH GAS',
                     heading: 'Tokens to spend, but nothing to move them with.',
-                    body: 'If you have tokens but not enough ETH to cover the network fee, an inline warning appears with a quick way to buy more ETH. Your amount and balance stay visible so you can see exactly how close you are.',
+                    body: 'If you have tokens but not enough ETH to cover the network fee, an inline warning appears with a quick way to buy more ETH. Clicking on buy takes you to the purchase flow with the right amount pre filled.',
                   },
                   {
                     num: '03', title: 'INSUFFICIENT PURCHASE TOKENS',
                     heading: 'Amount entered exceeds balance.',
-                    body: 'If you enter more than your balance allows, the warning appears right away, with your balance and a Max button there to fix it.',
+                    body: 'If you enter more than your balance allows, the warning appears right away, with your balance and a Buy token CTA to top up. This behavior is the same whether or not you&apos;re paying with a native token.',
                   },
                   {
                     num: '04', title: 'ZERO BALANCE, NO GAS',
@@ -723,7 +723,7 @@ export default function OmroPage() {
                   {
                     num: '05', title: 'TRANSACTION FAILS POST-SUBMISSION',
                     heading: 'Network error or gas spike after confirmation.',
-                    body: 'If the transaction fails, the screen makes it clear: nothing was deducted, and you can try again. On retry, the gas fee is checked fresh, so if it changed, you\'ll see the updated warning before confirming.',
+                    body: 'If the transaction fails, the screen makes it clear: nothing was deducted, and you can try again. Gas prices move with network demand, so on retry the fee is checked fresh, and if it changed you&apos;ll see the updated warning before confirming.',
                   },
                 ] as const).map(flow => (
                   <div key={flow.num} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -1031,7 +1031,7 @@ export default function OmroPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <h4 style={sectionH4}>Specs, annotations, and every state in between</h4>
                   <p style={bodyText}>
-                    I handed the designs over with component annotations and interaction specs ready for engineering, including every edge case. Besides the main ones presented in this case study, I worked on the smaller ones where the work goes unseen but decides whether the flow holds up: i.e insufficient balance behavior, skeleton and loading states, empty and error states, character limits on the input fields (since presale token amounts can run long). We ended up shipping this as the first presale flow in the wallet, and it became a new source of engagement and revenue for Best Wallet.
+                    I handed the designs over with component annotations and interaction specs ready for engineering, including every edge case. Besides the main ones presented in this case study, I worked on the smaller ones where the work goes unseen but decides whether the flow holds up: i.e Payment method list behaviour, scroll behaviour in payment methods, search and filter chain behaviour, input states, button behaviours, skeleton and loading states, empty and error states, character limits on the input fields (since presale token amounts can run long), etc. We ended up shipping this as the first presale flow in the wallet, and it became a new source of engagement and revenue for Best Wallet.
                   </p>
                 </div>
               </div>
