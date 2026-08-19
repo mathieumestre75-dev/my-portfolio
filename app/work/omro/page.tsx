@@ -221,55 +221,53 @@ type Segment = {
 // Cuts are instantaneous: cam.set() snaps to camFrom, then cam.start() begins the linear zoom.
 // Every cut coincides with a screen change. No mid-shot screen changes.
 const SEGMENTS: Segment[] = [
-  // SHOT 1 — Home screen, ZOOM IN (10s)
-  // Opens wide. Cursor moves to the FIRST upcoming token (AIDOGE) and taps it.
+  // SHOT 1 — Home screen, ZOOM IN (9s, ~10% faster)
   { screen: 'home',
-    camFrom: { scale: 0.46, x:  2, y:  4 },
+    camFrom: { scale: 0.60, x:  2, y:  4 },
     camTo:   { scale: 1.10, x: -8, y: -40 },
-    duration: 10000,
+    duration: 9000,
     cursors: [
       { x: 50, y: 45, ms:     0 },
-      { x: 50, y: 72, ms:  6000 },  // AIDOGE — first token card (higher in list)
-      { x: 50, y: 72, tap: true, ms: 3200 },
+      { x: 50, y: 72, ms:  5500 },  // AIDOGE — first token card
+      { x: 50, y: 72, tap: true, ms: 2800 },
     ] },
-  // SHOT 2 — Token info page, ZOOM OUT (12s)
-  // Opens on TOP: top bezel visible, device cropped at bottom. Drifts downward while pulling back.
-  // Pull-back stops earlier so device stays prominent. Cursor scrolls then taps Buy CTA.
+  // SHOT 2 — Token info page, ZOOM OUT (10.5s, ~12% faster). Camera unchanged.
+  // Interaction quicker: scroll and Buy tap happen sooner within the shot.
   { screen: 'token',
     scrollTo: 480, scrollDelay: 1500,
     camFrom: { scale: 1.15, x:  5, y: 148 },
-    camTo:   { scale: 0.60, x: -5, y:  12 },  // less wide: device stays prominent
-    duration: 12000,
+    camTo:   { scale: 0.60, x: -5, y:  12 },
+    duration: 10500,
     cursors: [
       { x: 50, y: 40, ms:     0 },
-      { x: 50, y: 26, ms:  2000 },
-      { x: 82, y: 92, ms:  4500 },
-      { x: 82, y: 92, tap: true, ms: 4000 },
+      { x: 50, y: 26, ms:  1200 },  // scroll gesture (quicker)
+      { x: 82, y: 92, ms:  2800 },  // move to Buy CTA (quicker)
+      { x: 82, y: 92, tap: true, ms: 2000 },
     ] },
-  // SHOT 3 — Amount entry, ZOOM IN (10s)
-  // Opens wide (different framing from Shot 2 end). Zooms in much closer than before so
-  // the amount fields and keyboard read clearly. Cursor taps digits then Done.
+  // SHOT 3 — Amount entry, ZOOM IN (9s, ~10% faster).
+  // Cut lands already close: camFrom is tight on the amount fields + keyboard.
+  // Small further zoom in across the shot.
   { screen: 'buy-typing',
-    camFrom: { scale: 0.48, x: 12, y: -8 },
-    camTo:   { scale: 1.40, x:  6, y: -100 },  // much closer: keyboard + amount fill frame
-    duration: 10000,
+    camFrom: { scale: 1.15, x: 10, y: -82 },  // both amount fields + keyboard visible
+    camTo:   { scale: 1.28, x:  6, y:  -90 },
+    duration: 9000,
     cursors: [
       { x: 50, y: 38, ms:     0 },
       { x: 38, y: 65, tap: true, ms: 3500 },
       { x: 55, y: 65, tap: true, ms:  700 },
       { x: 45, y: 65, tap: true, ms:  600 },
-      { x: 85, y: 55, ms:  1200 },              // move to Done
+      { x: 85, y: 55, ms:  1200 },
       { x: 85, y: 55, tap: true, ms:  800 },
     ] },
-  // SHOT 4 — Transaction review, ZOOM OUT (12s) — final shot
-  // Opens close on the lower portion, review sheet prominent. Pulls back less than before.
+  // SHOT 4 — Transaction review, ZOOM OUT (10.5s, ~12% faster). Camera unchanged.
+  // Interaction quicker: cursor moves sooner within the shot.
   { screen: 'review',
     camFrom: { scale: 1.10, x:  8, y: -129 },
-    camTo:   { scale: 0.60, x: -4, y:  -12 },  // less wide: review stays readable
-    duration: 12000,
+    camTo:   { scale: 0.65, x: -4, y:   -8 },  // less zoom out: sheet stays prominent
+    duration: 10500,
     cursors: [
       { x: 50, y: 70, ms:     0 },
-      { x: 50, y: 88, ms:  8500 },
+      { x: 50, y: 88, ms:  2000 },  // faster action
     ] },
 ]
 
@@ -368,7 +366,7 @@ function PhoneFlowDemo() {
               <div style={{ width: '100%', height: '100%', borderRadius: 46, overflow: 'hidden', position: 'relative', background: '#f5f5f7' }}>
                 <AnimatePresence mode="sync">
                   {screen === 'token' ? (
-                    <motion.div key="token" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.7 }} style={{ position: 'absolute', inset: 0 }}>
+                    <motion.div key="token" initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0 } }} style={{ position: 'absolute', inset: 0 }}>
                       <motion.img
                         src={SCREEN_SRC['token']} alt="Token info"
                         animate={{ y: -scrollY }}
@@ -384,8 +382,7 @@ function PhoneFlowDemo() {
                   ) : (
                     <motion.img
                       key={screen} src={SCREEN_SRC[screen]} alt={screen}
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      transition={{ duration: 0.7 }}
+                      initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0 } }}
                       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                     />
                   )}
@@ -402,10 +399,10 @@ function PhoneFlowDemo() {
                   style={{ position: 'absolute', marginLeft: -22, marginTop: -22, pointerEvents: 'none', zIndex: 30 }}
                 >
                   <motion.div
-                    animate={{ x: [0, 1.5, 0.5, -1, 0.5, 0], y: [0, -0.5, 1.5, 0.5, -1, 0] }}
+                    animate={{ x: [0, 3, 1, -2, 2.5, -1, 0], y: [0, -1.5, 2.5, -0.5, 2, -1, 0] }}
                     transition={{
-                      x: { duration: 7,  ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
-                      y: { duration: 9,  ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
+                      x: { duration: 8,  ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
+                      y: { duration: 11, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
                     }}
                     style={{ width: 44, height: 44, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,0,0,0.20) 30%, rgba(0,0,0,0) 100%)' }}
                   />
