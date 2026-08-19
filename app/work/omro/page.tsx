@@ -3,7 +3,7 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useAnimation } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { Sun, Moon } from 'lucide-react'
 
@@ -25,69 +25,63 @@ const NAV = [
 
 // ─── Benchmark wallet data ────────────────────────────────────────────────────
 type WalletCheck = { label: string; pass: boolean; detail?: string }
-type WalletEntry = { initials: string; name: string; note: string; checks: WalletCheck[] }
+type WalletEntry = { logo: string; name: string; note: string; checks: WalletCheck[] }
 
 const WALLETS: WalletEntry[] = [
   {
-    initials: 'BW', name: 'Best Wallet (existing)',
-    note: "Best Wallet's own screen was the weakest: no purchase amount at the top, no fiat equivalents anywhere, and gas fees had no tooltip or explanation.",
-    checks: [
-      { label: 'Max Total shown', pass: true, detail: 'no tooltip' },
-      { label: 'Network fee shown', pass: true, detail: 'no tooltip' },
-      { label: 'Purchase amount on top', pass: false },
-      { label: 'Fiat equivalents', pass: false },
-      { label: 'Gas fee explanation', pass: false },
-    ],
-  },
-  {
-    initials: 'TW', name: 'Trust Wallet',
-    note: 'Purchase amount is prominent and the fee has a tooltip, but fiat equivalents and the destination contract are both missing.',
+    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/32/cd/36/32cd36ec-0c1f-969c-8854-953efc675d2a/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg',
+    name: 'Trust',
+    note: 'Purchase amount is prominent and the fee has a tooltip, but USD equivalents and the destination contract are both missing.',
     checks: [
       { label: 'Purchase amount on top', pass: true, detail: 'with tooltip' },
       { label: 'Max Total', pass: true },
-      { label: 'Fiat equivalents', pass: false },
+      { label: 'USD equivalents', pass: false },
       { label: 'Destination smart contract', pass: false },
     ],
   },
   {
-    initials: 'CB', name: 'Coinbase Wallet',
-    note: 'Clear on the main amount with a tooltip, but the total has no explanation and fiat equivalents are absent.',
+    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a9/04/33/a90433cb-cf04-ee55-7931-7e68422a6010/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg',
+    name: 'Coinbase',
+    note: 'Opens the review as a bottom sheet, keeping you in context. Clear on the main amount with a tooltip, but the total has no explanation and USD equivalents are absent.',
     checks: [
       { label: 'Purchase amount on top', pass: true },
       { label: 'Network fee', pass: true, detail: 'with tooltip' },
       { label: 'Max Total', pass: true },
-      { label: 'Fiat equivalents', pass: false },
+      { label: 'USD equivalents', pass: false },
       { label: 'Destination smart contract', pass: false },
     ],
   },
   {
-    initials: 'RB', name: 'Rainbow',
-    note: 'Amount and gas are both visible, but there\'s no total, so the user has to do the addition themselves.',
+    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/97/34/e3/9734e3fd-3e32-2069-c667-e16686d9a9a7/AppIcon-0-0-1x_U007emarketing-0-6-0-P3-85-220.png/512x512bb.jpg',
+    name: 'Rainbow',
+    note: "Opens the review as a bottom sheet, keeping you in context. Amount and gas are both visible, but there's no total, so the user has to do the addition themselves.",
     checks: [
       { label: 'Purchase amount', pass: true, detail: 'no tooltip' },
       { label: 'Network fee', pass: true, detail: 'with tooltip' },
       { label: 'Total shown', pass: false },
-      { label: 'Fiat equivalents', pass: false },
+      { label: 'USD equivalents', pass: false },
     ],
   },
   {
-    initials: '1I', name: '1Inch',
+    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/27/02/4a/27024ae3-c8bd-4da0-8346-1fd2c3bb5df4/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg',
+    name: '1inch',
     note: 'Same pattern as Rainbow: amount and gas visible, no total.',
     checks: [
       { label: 'Purchase amount', pass: true, detail: 'no tooltip' },
       { label: 'Network fee', pass: true, detail: 'with tooltip' },
       { label: 'Total shown', pass: false },
-      { label: 'Fiat equivalents', pass: false },
+      { label: 'USD equivalents', pass: false },
     ],
   },
   {
-    initials: 'UNI', name: 'Uniswap',
-    note: 'Same pattern: no total, no fiat equivalents, no explanation.',
+    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e2/9e/30/e29e30da-2260-2045-2506-de680a3d6bd7/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/512x512bb.jpg',
+    name: 'Uniswap',
+    note: 'Same pattern: no total, no USD equivalents, no explanation.',
     checks: [
       { label: 'Purchase amount', pass: true, detail: 'no tooltip' },
       { label: 'Network fee', pass: true, detail: 'with tooltip' },
       { label: 'Total shown', pass: false },
-      { label: 'Fiat equivalents', pass: false },
+      { label: 'USD equivalents', pass: false },
     ],
   },
 ]
@@ -196,6 +190,231 @@ function Placeholder({ label, caption, aspectRatio = 1.6 }: {
           {caption}
         </p>
       )}
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── Phone Flow Demo ─────────────────────────────────────────────────────────
+// All motion comes from image assets — no UI is recreated in markup.
+// A single soft grey presentation cursor travels between tap targets.
+// Camera continuously drifts on the whole composition.
+
+const CURSOR_EASE = [0.45, 0, 0.55, 1] as [number, number, number, number]
+
+type ScreenName = 'home' | 'token' | 'buy-empty' | 'buy-typing' | 'review' | 'processing' | 'success'
+
+type SegmentCursor = { x: number; y: number; tap?: boolean; ms: number }
+
+type Segment = {
+  screen: ScreenName
+  scrollTo?: number     // token screen: animate scroll to this offset
+  scrollDelay?: number  // ms from segment start before scroll begins
+  camFrom: { scale: number; x: number; y: number }
+  camTo:   { scale: number; x: number; y: number }
+  duration: number
+  cursors: SegmentCursor[]
+}
+
+// Scale range: 0.46–1.15. Wide = full device ~65% frame height; close = ~60% visible.
+// y negative = phone shifts up (shows bottom); y positive = phone shifts down (shows top).
+// Cuts are instantaneous: cam.set() snaps to camFrom, then cam.start() begins the linear zoom.
+// Every cut coincides with a screen change. No mid-shot screen changes.
+const SEGMENTS: Segment[] = [
+  // SHOT 1 — Home screen, ZOOM IN (10s)
+  // Opens wide. Cursor moves to the FIRST upcoming token (AIDOGE) and taps it.
+  { screen: 'home',
+    camFrom: { scale: 0.46, x:  2, y:  4 },
+    camTo:   { scale: 1.10, x: -8, y: -40 },
+    duration: 10000,
+    cursors: [
+      { x: 50, y: 45, ms:     0 },
+      { x: 50, y: 72, ms:  6000 },  // AIDOGE — first token card (higher in list)
+      { x: 50, y: 72, tap: true, ms: 3200 },
+    ] },
+  // SHOT 2 — Token info page, ZOOM OUT (12s)
+  // Opens on TOP: top bezel visible, device cropped at bottom. Drifts downward while pulling back.
+  // Pull-back stops earlier so device stays prominent. Cursor scrolls then taps Buy CTA.
+  { screen: 'token',
+    scrollTo: 480, scrollDelay: 1500,
+    camFrom: { scale: 1.15, x:  5, y: 148 },
+    camTo:   { scale: 0.60, x: -5, y:  12 },  // less wide: device stays prominent
+    duration: 12000,
+    cursors: [
+      { x: 50, y: 40, ms:     0 },
+      { x: 50, y: 26, ms:  2000 },
+      { x: 82, y: 92, ms:  4500 },
+      { x: 82, y: 92, tap: true, ms: 4000 },
+    ] },
+  // SHOT 3 — Amount entry, ZOOM IN (10s)
+  // Opens wide (different framing from Shot 2 end). Zooms in much closer than before so
+  // the amount fields and keyboard read clearly. Cursor taps digits then Done.
+  { screen: 'buy-typing',
+    camFrom: { scale: 0.48, x: 12, y: -8 },
+    camTo:   { scale: 1.40, x:  6, y: -100 },  // much closer: keyboard + amount fill frame
+    duration: 10000,
+    cursors: [
+      { x: 50, y: 38, ms:     0 },
+      { x: 38, y: 65, tap: true, ms: 3500 },
+      { x: 55, y: 65, tap: true, ms:  700 },
+      { x: 45, y: 65, tap: true, ms:  600 },
+      { x: 85, y: 55, ms:  1200 },              // move to Done
+      { x: 85, y: 55, tap: true, ms:  800 },
+    ] },
+  // SHOT 4 — Transaction review, ZOOM OUT (12s) — final shot
+  // Opens close on the lower portion, review sheet prominent. Pulls back less than before.
+  { screen: 'review',
+    camFrom: { scale: 1.10, x:  8, y: -129 },
+    camTo:   { scale: 0.60, x: -4, y:  -12 },  // less wide: review stays readable
+    duration: 12000,
+    cursors: [
+      { x: 50, y: 70, ms:     0 },
+      { x: 50, y: 88, ms:  8500 },
+    ] },
+]
+
+const SCREEN_SRC: Record<ScreenName, string> = {
+  'home':        '/screens/omro/home.png',
+  'token':       '/screens/omro/token-info-full.png',
+  'buy-empty':   '/screens/omro/buy-empty.png',
+  'buy-typing':  '/screens/omro/buy-typing.png',
+  'review':      '/screens/omro/review.png',
+  'processing':  '/screens/omro/processing.png',
+  'success':     '/screens/omro/success.png',
+}
+
+function PhoneFlowDemo() {
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(wrapperRef, { amount: 0.3 })
+  const cam = useAnimation()
+  const [screen, setScreen] = useState<ScreenName>('home')
+  const [scrollY, setScrollY] = useState(0)
+  const [cursor, setCursor] = useState({ x: 50, y: 50, tap: false })
+
+  useEffect(() => {
+    if (!isInView) return
+    let cancelled = false
+
+    const runNext = (segIdx: number) => {
+      if (cancelled) return
+      const seg = SEGMENTS[segIdx % SEGMENTS.length]
+
+      // Hard cut — instant camera snap + screen change, same frame
+      cam.set({ scale: seg.camFrom.scale, x: seg.camFrom.x, y: seg.camFrom.y })
+      setScreen(seg.screen)
+      setScrollY(0)
+      const first = seg.cursors[0]
+      if (first) setCursor({ x: first.x, y: first.y, tap: false })
+
+      // Continuous linear zoom across the segment — still moving at the instant of the next cut
+      cam.start({ scale: seg.camTo.scale, x: seg.camTo.x, y: seg.camTo.y,
+        transition: { duration: seg.duration / 1000, ease: 'linear' } })
+
+      // Scroll animation (token screen)
+      if (seg.scrollTo !== undefined) {
+        const d = seg.scrollDelay ?? 0
+        setTimeout(() => { if (!cancelled) setScrollY(seg.scrollTo!) }, d)
+      }
+
+      // Cursor sub-beats
+      let elapsed = 0
+      for (let i = 1; i < seg.cursors.length; i++) {
+        elapsed += seg.cursors[i].ms
+        const c = seg.cursors[i], t = elapsed
+        setTimeout(() => { if (!cancelled) setCursor({ x: c.x, y: c.y, tap: c.tap ?? false }) }, t)
+      }
+
+      setTimeout(() => runNext(segIdx + 1), seg.duration)
+    }
+
+    runNext(0)
+    return () => { cancelled = true; cam.stop() }
+  }, [isInView, cam])
+
+  return (
+    <div ref={wrapperRef} style={{ width: '100%' }}>
+      <div style={{
+        width: '100%',
+        aspectRatio: '1.51053',
+        background: '#ffffff',
+        border: '1px solid rgba(0,0,0,0.05)',
+        borderRadius: 8,
+        overflow: 'hidden',
+        position: 'relative',
+        colorScheme: 'light',
+      }}>
+        <div style={{
+          position: 'absolute', left: '50%', top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 272, height: 578,
+        }}>
+          {/* Camera — scale + translate only, no rotation */}
+          <motion.div animate={cam} style={{ width: 272, height: 578, position: 'relative' }}>
+            <div style={{
+              position: 'relative',
+              width: 272, height: 578,
+              borderRadius: 54,
+              background: 'linear-gradient(155deg, #2c2c30 0%, #1c1c1f 55%, #101012 100%)',
+              boxShadow: '0 0 0 0.5px rgba(255,255,255,0.1), inset 0 0 0 0.5px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.15), 0 6px 16px rgba(0,0,0,0.08)',
+              padding: 9,
+            }}>
+              <div style={{ position: 'absolute', left: -3, top: 104, width: 3, height: 30, background: '#28282c', borderRadius: '2px 0 0 2px' }} />
+              <div style={{ position: 'absolute', left: -3, top: 146, width: 3, height: 60, background: '#28282c', borderRadius: '2px 0 0 2px' }} />
+              <div style={{ position: 'absolute', left: -3, top: 218, width: 3, height: 60, background: '#28282c', borderRadius: '2px 0 0 2px' }} />
+              <div style={{ position: 'absolute', right: -3, top: 148, width: 3, height: 80, background: '#28282c', borderRadius: '0 2px 2px 0' }} />
+              <div style={{ position: 'absolute', top: 0, left: 24, right: 24, height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', borderRadius: 54 }} />
+              <div style={{ position: 'absolute', top: 18, left: '50%', transform: 'translateX(-50%)', width: 112, height: 32, background: '#000', borderRadius: 16, zIndex: 10 }} />
+
+              <div style={{ width: '100%', height: '100%', borderRadius: 46, overflow: 'hidden', position: 'relative', background: '#f5f5f7' }}>
+                <AnimatePresence mode="sync">
+                  {screen === 'token' ? (
+                    <motion.div key="token" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.7 }} style={{ position: 'absolute', inset: 0 }}>
+                      <motion.img
+                        src={SCREEN_SRC['token']} alt="Token info"
+                        animate={{ y: -scrollY }}
+                        transition={{ duration: 3.2, ease: 'easeInOut' }}
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'auto', display: 'block' }}
+                      />
+                      {/* Status bar — pinned above the scroll, mirrors the bottom banner pattern */}
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 44, overflow: 'hidden', zIndex: 3, pointerEvents: 'none' }}>
+                        <img src={SCREEN_SRC['token']} alt="" aria-hidden={true} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'auto', display: 'block' }} />
+                      </div>
+                      <img src="/screens/omro/token-info-banner.png" alt="Buy banner" style={{ position: 'absolute', left: 8, right: 8, bottom: 8, width: 'calc(100% - 16px)', height: 'auto', display: 'block', filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.10))' }} />
+                    </motion.div>
+                  ) : (
+                    <motion.img
+                      key={screen} src={SCREEN_SRC[screen]} alt={screen}
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                      transition={{ duration: 0.7 }}
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* Cursor — outer handles position + scale, inner handles continuous micro-drift */}
+                <motion.div
+                  animate={{ left: `${cursor.x}%`, top: `${cursor.y}%`, scale: cursor.tap ? 0.72 : 1 }}
+                  transition={{
+                    left:  { duration: 2.0, ease: CURSOR_EASE },
+                    top:   { duration: 2.8, ease: CURSOR_EASE },
+                    scale: { duration: 0.22, ease: 'easeOut', delay: cursor.tap ? 0.15 : 0 },
+                  }}
+                  style={{ position: 'absolute', marginLeft: -22, marginTop: -22, pointerEvents: 'none', zIndex: 30 }}
+                >
+                  <motion.div
+                    animate={{ x: [0, 1.5, 0.5, -1, 0.5, 0], y: [0, -0.5, 1.5, 0.5, -1, 0] }}
+                    transition={{
+                      x: { duration: 7,  ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
+                      y: { duration: 9,  ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' as const },
+                    }}
+                    style={{ width: 44, height: 44, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,0,0,0.20) 30%, rgba(0,0,0,0) 100%)' }}
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -372,6 +591,24 @@ export default function OmroPage() {
         }
         .noto-email-link { transition: color 0.15s ease; }
         .noto-email-link:hover { color: rgba(255, 119, 0, 0.97) !important; }
+        @keyframes demo-pulse {
+          0% { transform: scale(0.6); opacity: 0.8; }
+          100% { transform: scale(2.8); opacity: 0; }
+        }
+        @keyframes demo-sparkle {
+          0% { transform: scale(0) translateY(0px); opacity: 1; }
+          60% { opacity: 1; }
+          100% { transform: scale(1) translateY(-55px); opacity: 0; }
+        }
+        @keyframes demo-ping {
+          0% { transform: scale(1); opacity: 0.6; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+        @keyframes demo-tap {
+          0% { transform: scale(0.5); opacity: 0; }
+          40% { opacity: 1; }
+          100% { transform: scale(1); opacity: 0.85; }
+        }
         @keyframes coin-tilt-l {
           0%, 48% { transform: rotate(0deg); }
           50%, 98% { transform: rotate(-8deg); }
@@ -537,7 +774,7 @@ export default function OmroPage() {
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <p style={metaLabel}>Skills</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {['UX/UI Design', 'Mobile Design', 'Web3', 'Fintech', 'Edge Case Design'].map(s => (
+                    {['UX/UI Design', 'Mobile Design', 'Web3', 'Fintech', 'Crypto', 'Edge Case Design'].map(s => (
                       <span key={s} style={skillTag}>{s}</span>
                     ))}
                   </div>
@@ -545,11 +782,7 @@ export default function OmroPage() {
               </div>
             </div>
 
-            {/* Hero visual */}
-            <Placeholder
-              label={'ANIMATED FLOW PREVIEW\nToken discovery → widget → transaction review → success\n(looping, to be replaced with exported Figma motion)'}
-              aspectRatio={1.51053}
-            />
+            <PhoneFlowDemo />
 
           </section>
 
@@ -775,23 +1008,35 @@ export default function OmroPage() {
                   </p>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{
+                display: 'flex', flexDirection: 'row', gap: 20, flexWrap: 'wrap',
+                alignItems: 'center', justifyContent: 'center',
+                background: 'var(--color-card-bg)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 8, padding: '20px 24px',
+              }}>
                 {[
-                  { initials: 'RB', name: 'Rainbow' },
-                  { initials: 'TW', name: 'Trust' },
-                  { initials: 'CB', name: 'Coinbase' },
-                  { initials: 'UNI', name: 'Uniswap' },
-                  { initials: 'EX', name: 'Exodus' },
-                  { initials: 'PH', name: 'Phantom' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/97/34/e3/9734e3fd-3e32-2069-c667-e16686d9a9a7/AppIcon-0-0-1x_U007emarketing-0-6-0-P3-85-220.png/512x512bb.jpg', name: 'Rainbow' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/32/cd/36/32cd36ec-0c1f-969c-8854-953efc675d2a/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg', name: 'Trust' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a9/04/33/a90433cb-cf04-ee55-7931-7e68422a6010/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg', name: 'Coinbase' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e2/9e/30/e29e30da-2260-2045-2506-de680a3d6bd7/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/512x512bb.jpg', name: 'Uniswap' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/40/cc/8d/40cc8d60-630b-33f7-69d5-fd01be6bdb88/AppIcon-0-0-1x_U007emarketing-0-11-0-85-220.png/512x512bb.jpg', name: 'Exodus' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e1/63/4c/e1634cbd-c8f0-475c-f8a8-7672a5bcb50a/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg', name: 'Phantom' },
+                  { logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/27/02/4a/27024ae3-c8bd-4da0-8346-1fd2c3bb5df4/AppIcon-0-0-1x_U007ephone-0-1-0-85-220.png/512x512bb.jpg', name: '1inch' },
                 ].map((w) => (
-                  <div key={w.initials} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                  <div key={w.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                     <div style={{
                       width: 44, height: 44, borderRadius: 10,
-                      background: 'var(--color-noto-tag-bg)',
                       border: '1px solid var(--color-border)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      overflow: 'hidden', flexShrink: 0,
                     }}>
-                      <p style={{ ...flowLabel, fontSize: 9.5 }}>{w.initials}</p>
+                      <img
+                        src={w.logo}
+                        alt={w.name}
+                        width={44}
+                        height={44}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
                     </div>
                     <p style={{ ...flowLabel, fontSize: 9.5, textAlign: 'center', width: 50, whiteSpace: 'normal', wordBreak: 'break-word' }}>
                       {w.name}
@@ -817,7 +1062,7 @@ export default function OmroPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <h4 style={sectionH4}>The token card is designed to prompt action without overselling</h4>
               <p style={bodyText}>
-                I wanted the card focused, not overloaded. I added tags like &ldquo;Hot,&rdquo; &ldquo;New,&rdquo; and &ldquo;Ending Soon&rdquo; for scanability and momentum, and a countdown to the next price increase to give a concrete reason to act. With Geri, the UX researcher, I looked at competitor cards to understand what information users are usually seeking: i.e their balance in tokens, the next price rise, and enough visual difference to tell presales apart. The most common caveat I saw was competitors making this card too dense and possibly overwhelming for users.
+                I wanted the card focused, not overloaded. I added tags like &ldquo;Hot,&rdquo; &ldquo;New,&rdquo; and &ldquo;Ending Soon&rdquo; for scanability and momentum, and a countdown to the next price increase to give a concrete reason to act. With Geri, the UX researcher, I looked at competitor cards to understand what information users are usually seeking: i.e their balance in tokens, the next price rise, and enough visual difference to tell presales apart. A common caveat I saw was competitors making this card too dense and possibly overwhelming for users.
               </p>
             </div>
 
@@ -884,9 +1129,9 @@ export default function OmroPage() {
             {/* Benchmark card with hoverable wallet badges */}
             <div style={{
               position: 'relative', overflow: 'visible',
-              display: 'flex', flexDirection: 'row', gap: 20,
-              padding: '40px 30px',
-              background: 'var(--color-noto-card-blue)',
+              display: 'flex', flexDirection: 'row', gap: 20, flexWrap: 'wrap',
+              padding: '24px 24px',
+              background: 'var(--color-card-bg)',
               border: '1px solid var(--color-border)',
               borderRadius: 8,
               alignItems: 'center',
@@ -895,60 +1140,58 @@ export default function OmroPage() {
               {WALLETS.map((wallet, i) => (
                 <div
                   key={i}
-                  style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative', overflow: 'visible' }}
+                  style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative', overflow: 'visible' }}
                   onMouseEnter={() => setHoveredWallet(i)}
                   onMouseLeave={() => setHoveredWallet(null)}
                 >
-                  {/* Avatar + popup anchor */}
-                  <div style={{ position: 'relative', width: 50, height: 50, overflow: 'visible', flexShrink: 0 }}>
+                  {/* Logo + popup anchor */}
+                  <div style={{ position: 'relative', width: 44, height: 44, overflow: 'visible', flexShrink: 0 }}>
                     <div style={{
-                      width: 50, height: 50, borderRadius: 11,
-                      background: 'var(--color-noto-tag-bg)',
+                      width: 44, height: 44, borderRadius: 10,
                       border: '1px solid var(--color-border)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'default',
+                      overflow: 'hidden', cursor: 'default',
                     }}>
-                      <p style={{ ...flowLabel, fontSize: 10 }}>{wallet.initials}</p>
+                      <img src={wallet.logo} alt={wallet.name} width={44} height={44} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                     </div>
 
-                    {/* Checklist popup */}
+                    {/* Checklist popup — dark background */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: hoveredWallet === i ? 1 : 0 }}
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
                       style={{
-                        position: 'absolute', top: 65, left: i < 3 ? 0 : undefined, right: i >= 3 ? 0 : undefined,
+                        position: 'absolute', top: 58, left: i < 3 ? 0 : undefined, right: i >= 3 ? 0 : undefined,
                         zIndex: 3, pointerEvents: 'none', width: 230,
-                        background: 'var(--color-card-bg)',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: 8, padding: '12px 14px',
+                        background: '#111111',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: 10, padding: '12px 14px',
                       }}
                     >
-                      <p style={{ ...flowLabel, marginBottom: 6 }}>{wallet.name.toUpperCase()}</p>
+                      <p style={{ ...flowLabel, marginBottom: 6, color: 'rgba(255,255,255,0.5)' }}>{wallet.name.toUpperCase()}</p>
                       <p style={{
                         fontFamily: SANS, fontSize: 11.68, fontWeight: 500,
                         letterSpacing: '0.008em', lineHeight: '1.5em',
-                        color: 'var(--color-status-text)', margin: '0 0 8px',
+                        color: 'rgba(255,255,255,0.6)', margin: '0 0 8px',
                       }}>
                         {wallet.note}
                       </p>
-                      <div style={{ height: 1, background: 'var(--color-border)', margin: '6px 0 8px' }} />
+                      <div style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '6px 0 8px' }} />
                       {wallet.checks.map((check, j) => (
                         <div key={j} style={{ display: 'flex', gap: 6, alignItems: 'flex-start', marginTop: j === 0 ? 0 : 4 }}>
                           <span style={{
                             fontFamily: MONO, fontSize: 10, lineHeight: '1.6em', flexShrink: 0,
-                            color: check.pass ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                            color: check.pass ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
                           }}>
                             {check.pass ? '✓' : '✗'}
                           </span>
                           <p style={{
                             fontFamily: SANS, fontSize: 11.68, fontWeight: 500,
                             letterSpacing: '0.008em', lineHeight: '1.5em',
-                            color: 'var(--color-text-primary)', margin: 0,
+                            color: 'rgba(255,255,255,0.85)', margin: 0,
                           }}>
                             {check.label}
                             {check.detail && (
-                              <span style={{ color: 'var(--color-text-secondary)' }}> ({check.detail})</span>
+                              <span style={{ color: 'rgba(255,255,255,0.4)' }}> ({check.detail})</span>
                             )}
                           </p>
                         </div>
@@ -956,9 +1199,9 @@ export default function OmroPage() {
                     </motion.div>
                   </div>
 
-                  {/* Wallet name label below avatar */}
-                  <p style={{ ...flowLabel, fontSize: 9.5, textAlign: 'center', width: 54, whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                    {wallet.name.replace(' (existing)', '')}
+                  {/* Wallet name label below logo */}
+                  <p style={{ ...flowLabel, fontSize: 9.5, textAlign: 'center', width: 50, whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                    {wallet.name}
                   </p>
                 </div>
               ))}
