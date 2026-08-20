@@ -223,9 +223,9 @@ type Segment = {
 const SEGMENTS: Segment[] = [
   // SHOT 1 — Home screen, ZOOM IN
   { screen: 'home',
-    camFrom: { scale: 0.60, x:  2, y:  4 },
-    camTo:   { scale: 1.10, x: -8, y: -40 },
-    duration: 1700,
+    camFrom: { scale: 0.74, x:  2, y:  4 },
+    camTo:   { scale: 0.96, x: -8, y: -40 },
+    duration: 2900,
     cursors: [
       { x: 50, y: 45, ms:   0 },
       { x: 50, y: 72, ms: 800 },
@@ -234,9 +234,9 @@ const SEGMENTS: Segment[] = [
   // SHOT 2 — Token info page, ZOOM OUT
   { screen: 'token',
     scrollTo: 480, scrollDelay: 300,
-    camFrom: { scale: 1.15, x:  5, y: 148 },
-    camTo:   { scale: 0.60, x: -5, y:  12 },
-    duration: 2600,
+    camFrom: { scale: 1.00, x:  5, y: 148 },
+    camTo:   { scale: 0.75, x: -5, y:  12 },
+    duration: 3800,
     cursors: [
       { x: 50, y: 40, ms:   0 },
       { x: 50, y: 26, ms: 300 },
@@ -258,9 +258,9 @@ const SEGMENTS: Segment[] = [
     ] },
   // SHOT 4 — Transaction review, ZOOM OUT
   { screen: 'review',
-    camFrom: { scale: 1.10, x:  8, y: -129 },
-    camTo:   { scale: 0.65, x: -4, y:   -8 },
-    duration: 1600,
+    camFrom: { scale: 0.99, x:  8, y: -129 },
+    camTo:   { scale: 0.79, x: -4, y:   -8 },
+    duration: 2850,
     cursors: [
       { x: 50, y: 70, ms:   0 },
       { x: 50, y: 88, ms: 700 },
