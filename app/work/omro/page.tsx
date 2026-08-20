@@ -221,53 +221,49 @@ type Segment = {
 // Cuts are instantaneous: cam.set() snaps to camFrom, then cam.start() begins the linear zoom.
 // Every cut coincides with a screen change. No mid-shot screen changes.
 const SEGMENTS: Segment[] = [
-  // SHOT 1 — Home screen, ZOOM IN (9s, ~10% faster)
+  // SHOT 1 — Home screen, ZOOM IN
   { screen: 'home',
     camFrom: { scale: 0.60, x:  2, y:  4 },
     camTo:   { scale: 1.10, x: -8, y: -40 },
-    duration: 9000,
+    duration: 1700,
     cursors: [
-      { x: 50, y: 45, ms:     0 },
-      { x: 50, y: 72, ms:  5500 },  // AIDOGE — first token card
-      { x: 50, y: 72, tap: true, ms: 2800 },
+      { x: 50, y: 45, ms:   0 },
+      { x: 50, y: 72, ms: 800 },
+      { x: 50, y: 72, tap: true, ms: 600 },
     ] },
-  // SHOT 2 — Token info page, ZOOM OUT (10.5s, ~12% faster). Camera unchanged.
-  // Interaction quicker: scroll and Buy tap happen sooner within the shot.
+  // SHOT 2 — Token info page, ZOOM OUT
   { screen: 'token',
-    scrollTo: 480, scrollDelay: 1500,
+    scrollTo: 480, scrollDelay: 300,
     camFrom: { scale: 1.15, x:  5, y: 148 },
     camTo:   { scale: 0.60, x: -5, y:  12 },
-    duration: 10500,
+    duration: 2600,
     cursors: [
-      { x: 50, y: 40, ms:     0 },
-      { x: 50, y: 26, ms:  1200 },  // scroll gesture (quicker)
-      { x: 82, y: 92, ms:  2800 },  // move to Buy CTA (quicker)
-      { x: 82, y: 92, tap: true, ms: 2000 },
+      { x: 50, y: 40, ms:   0 },
+      { x: 50, y: 26, ms: 300 },
+      { x: 82, y: 92, ms: 1400 },
+      { x: 82, y: 92, tap: true, ms: 600 },
     ] },
-  // SHOT 3 — Amount entry, ZOOM IN (9s, ~10% faster).
-  // Cut lands already close: camFrom is tight on the amount fields + keyboard.
-  // Small further zoom in across the shot.
+  // SHOT 3 — Amount entry, ZOOM IN
   { screen: 'buy-typing',
-    camFrom: { scale: 1.15, x: 10, y: -82 },  // both amount fields + keyboard visible
-    camTo:   { scale: 1.28, x:  6, y:  -90 },
-    duration: 9000,
+    camFrom: { scale: 1.15, x: 10, y: -82 },
+    camTo:   { scale: 1.28, x:  6, y: -90 },
+    duration: 2600,
     cursors: [
-      { x: 50, y: 38, ms:     0 },
-      { x: 38, y: 65, tap: true, ms: 3500 },
-      { x: 55, y: 65, tap: true, ms:  700 },
-      { x: 45, y: 65, tap: true, ms:  600 },
-      { x: 85, y: 55, ms:  1200 },
-      { x: 85, y: 55, tap: true, ms:  800 },
+      { x: 50, y: 38, ms:   0 },
+      { x: 38, y: 65, tap: true, ms: 600 },
+      { x: 55, y: 65, tap: true, ms: 350 },
+      { x: 45, y: 65, tap: true, ms: 300 },
+      { x: 85, y: 55, ms: 500 },
+      { x: 85, y: 55, tap: true, ms: 500 },
     ] },
-  // SHOT 4 — Transaction review, ZOOM OUT (10.5s, ~12% faster). Camera unchanged.
-  // Interaction quicker: cursor moves sooner within the shot.
+  // SHOT 4 — Transaction review, ZOOM OUT
   { screen: 'review',
     camFrom: { scale: 1.10, x:  8, y: -129 },
-    camTo:   { scale: 0.65, x: -4, y:   -8 },  // less zoom out: sheet stays prominent
-    duration: 10500,
+    camTo:   { scale: 0.65, x: -4, y:   -8 },
+    duration: 1600,
     cursors: [
-      { x: 50, y: 70, ms:     0 },
-      { x: 50, y: 88, ms:  2000 },  // faster action
+      { x: 50, y: 70, ms:   0 },
+      { x: 50, y: 88, ms: 700 },
     ] },
 ]
 
@@ -370,7 +366,7 @@ function PhoneFlowDemo() {
                       <motion.img
                         src={SCREEN_SRC['token']} alt="Token info"
                         animate={{ y: -scrollY }}
-                        transition={{ duration: 3.2, ease: 'easeInOut' }}
+                        transition={{ duration: 1.0, ease: 'easeInOut' }}
                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'auto', display: 'block' }}
                       />
                       {/* Status bar — pinned above the scroll, mirrors the bottom banner pattern */}
@@ -392,9 +388,9 @@ function PhoneFlowDemo() {
                 <motion.div
                   animate={{ left: `${cursor.x}%`, top: `${cursor.y}%`, scale: cursor.tap ? 0.72 : 1 }}
                   transition={{
-                    left:  { duration: 2.0, ease: CURSOR_EASE },
-                    top:   { duration: 2.8, ease: CURSOR_EASE },
-                    scale: { duration: 0.22, ease: 'easeOut', delay: cursor.tap ? 0.15 : 0 },
+                    left:  { duration: 0.4, ease: CURSOR_EASE },
+                    top:   { duration: 0.5, ease: CURSOR_EASE },
+                    scale: { duration: 0.15, ease: 'easeOut', delay: cursor.tap ? 0.08 : 0 },
                   }}
                   style={{ position: 'absolute', marginLeft: -22, marginTop: -22, pointerEvents: 'none', zIndex: 30 }}
                 >
