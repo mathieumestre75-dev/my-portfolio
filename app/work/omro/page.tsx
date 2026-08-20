@@ -284,6 +284,8 @@ function PhoneFlowDemo() {
   const [screen, setScreen] = useState<ScreenName>('home')
   const [scrollY, setScrollY] = useState(0)
   const [cursor, setCursor] = useState({ x: 50, y: 50, tap: false })
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
 
   useEffect(() => {
     if (!isInView) return
@@ -330,8 +332,8 @@ function PhoneFlowDemo() {
       <div style={{
         width: '100%',
         aspectRatio: '1.51053',
-        background: '#ffffff',
-        border: '1px solid rgba(0,0,0,0.05)',
+        background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+        border: '1px solid var(--color-border)',
         borderRadius: 8,
         overflow: 'hidden',
         position: 'relative',
@@ -789,13 +791,13 @@ export default function OmroPage() {
                 An end-to-end presale experience for a crypto wallet.
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <h4 style={sectionH4}>Quick context: in crypto, a presale lets you buy into a new token before it launches publicly, usually at a lower price than it&apos;ll trade at after launch</h4>
+                <h4 style={sectionH4}>A new flow, built from scratch</h4>
                 <div>
                   <p style={bodyText}>
-                    I worked on this at Tech Alchemy, a studio that builds web3 products, for the client Best Wallet. Best Wallet is a mobile app where you can buy, store, and swap crypto. My role was to design the presale feature from scratch: the page that introduces a token and makes the case for buying in, the purchase flow, and all the edge cases where that purchase can go wrong.
+                    Quick context: in crypto, a presale lets you buy into a new token before it launches publicly, usually at a lower price than it&apos;ll trade at later. I worked on this at Tech Alchemy, a web3 studio, for the client Best Wallet: a mobile app where you buy, store, and swap crypto. My role was to design the presale feature from scratch: the page that introduces a token and makes the case for buying in, the purchase flow, and every edge case.
                   </p>
                   <p style={{ ...bodyText, marginTop: '1.65em' }}>
-                    Without a presale feature, users looking to buy early were leaving the app to do it on other platforms. Building it meant keeping those users inside the app while opening up a new source of engagement and revenue for Best Wallet.
+                    Without it, people wanting to buy early tokens were leaving the app to do it elsewhere. Building it kept them inside while opening a new source of engagement and revenue for Best Wallet.
                   </p>
                 </div>
               </div>
