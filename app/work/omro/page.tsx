@@ -259,7 +259,7 @@ const SEGMENTS: Segment[] = [
   // SHOT 4 — Transaction review, ZOOM OUT
   { screen: 'review',
     camFrom: { scale: 0.99, x:  8, y: -129 },
-    camTo:   { scale: 0.79, x: -4, y:   -8 },
+    camTo:   { scale: 0.79, x:  8, y: -129 },
     duration: 2850,
     cursors: [
       { x: 50, y: 70, ms:   0 },
