@@ -284,8 +284,10 @@ function PhoneFlowDemo() {
   const [screen, setScreen] = useState<ScreenName>('home')
   const [scrollY, setScrollY] = useState(0)
   const [cursor, setCursor] = useState({ x: 50, y: 50, tap: false })
+  const [mounted, setMounted] = useState(false)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = mounted && resolvedTheme === 'dark'
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     if (!isInView) return
@@ -333,7 +335,7 @@ function PhoneFlowDemo() {
         width: '100%',
         aspectRatio: '1.51053',
         background: isDark ? '#ffffff' : 'var(--color-card-bg)',
-        border: '1px solid var(--color-border)',
+        border: isDark ? 'none' : '1px solid var(--color-border)',
         borderRadius: 8,
         overflow: 'hidden',
         position: 'relative',
@@ -413,6 +415,7 @@ function PhoneFlowDemo() {
     </div>
   )
 }
+
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function OmroPage() {
@@ -586,6 +589,8 @@ export default function OmroPage() {
         }
         .noto-email-link { transition: color 0.15s ease; }
         .noto-email-link:hover { color: rgba(255, 119, 0, 0.97) !important; }
+        .omro-try-btn { transition: color 0.15s ease; }
+        .omro-try-btn:hover { color: #ffffff !important; }
         @keyframes demo-pulse {
           0% { transform: scale(0.6); opacity: 0.8; }
           100% { transform: scale(2.8); opacity: 0; }
@@ -866,12 +871,28 @@ export default function OmroPage() {
               </div>
             </div>
 
-            {/* Task flow visual */}
-            <Placeholder
-              label={'TASK FLOW OVERVIEW\nThe complete system: five edge cases alongside the happy path,\nmapped before a screen was built.'}
-              aspectRatio={2.1}
-              caption="The complete system, five edge cases alongside the happy path, mapped before a screen was built."
-            />
+            {/* Task flow — FigJam embed */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{
+                width: '100%', aspectRatio: '1.51053',
+                background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+                border: isDark ? 'none' : '1px solid var(--color-border)',
+                borderRadius: 8, overflow: 'hidden',
+              }}>
+                <iframe
+                  src="https://embed.figma.com/board/zgq9ACG46tTQltonItcIFq/Task-Flow--happy-path---edge-cases-?node-id=0-1&p=f&t=jDiqm6STn7zNZShV-0&embed-host=share"
+                  style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                  allowFullScreen
+                />
+              </div>
+              <p style={{
+                fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
+                letterSpacing: '0.008em', lineHeight: '1.6em',
+                color: 'var(--color-text-secondary)', textAlign: 'center', margin: 0,
+              }}>
+                The flow logic I mapped before designing. Drag to explore.
+              </p>
+            </div>
 
           </section>
 
@@ -888,6 +909,28 @@ export default function OmroPage() {
                     With these stakes in mind, I designed the full presale flow, from discovering the token to purchase and confirmation. Alongside that, I mapped and designed every edge case where the transaction could fall short.
                   </p>
                 </div>
+                <a
+                  href="https://apps.apple.com/fr/app/best-bitcoin-crypto-wallet/id6451312105"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="omro-try-btn"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    padding: '6px 8px 6px 12px',
+                    background: 'var(--color-card-bg)',
+                    borderRadius: 100,
+                    textDecoration: 'none',
+                    fontFamily: MONO, fontSize: 11.68, fontWeight: 500,
+                    lineHeight: '1.4em', letterSpacing: 0,
+                    color: 'var(--color-status-text)',
+                    whiteSpace: 'nowrap', width: 'min-content',
+                  }}
+                >
+                  TRY PRODUCT
+                  <svg width="10" height="10" viewBox="0 0 13 13" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M2 11L11 2M11 2H5.5M11 2V7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </a>
               </div>
             </div>
 
@@ -1254,6 +1297,25 @@ export default function OmroPage() {
                       </p>
                     </div>
                   ))}
+              </div>
+
+              {/* Review screen — phone cropped from top, full bottom sheet visible */}
+              <div style={{
+                width: '100%', aspectRatio: '1.51053',
+                background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+                border: isDark ? 'none' : '1px solid var(--color-border)',
+                borderRadius: 8, overflow: 'hidden', position: 'relative',
+              }}>
+                <img
+                  src="/screens/omro/review-sheet.png"
+                  alt="Review Purchase bottom sheet"
+                  style={{
+                    position: 'absolute',
+                    bottom: '9%', left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '37%', height: 'auto', display: 'block',
+                  }}
+                />
               </div>
             </div>
 
