@@ -550,7 +550,7 @@ export default function OmroPage() {
       {portalNode && createPortal(
         <div aria-hidden style={{
           position: 'absolute', inset: 0, minHeight: '100%', pointerEvents: 'none',
-          background: 'linear-gradient(180deg, rgb(10, 10, 10) 0%, rgb(44, 49, 77) 8%, rgb(81, 81, 112) 75%, rgb(81, 81, 112) 100%)',
+          background: 'linear-gradient(180deg, rgb(10, 10, 10) 0%, rgb(44, 49, 77) 8%, rgb(44, 49, 77) 96%, rgb(81, 81, 112) 100%)',
         }}>
           <div style={{
             position: 'absolute', top: '75%', left: 0, right: 0, bottom: 0,
