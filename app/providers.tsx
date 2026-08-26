@@ -31,7 +31,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ViewContext.Provider value={{ view, setView }}>
         <DarkBackgroundLayer />
         {children}
-        <MusicBar showHint={pathname === '/work/noto'} />
+        <MusicBar showHint={pathname === '/work/noto' || pathname === '/work/omro'} />
         {!isCaseStudy && (
           <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: 80, zIndex: 20, pointerEvents: 'none' }}>
             <DockNavigation />

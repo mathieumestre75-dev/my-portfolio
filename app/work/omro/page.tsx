@@ -417,6 +417,100 @@ function PhoneFlowDemo() {
 }
 
 
+// ─── Spec Slideshow ──────────────────────────────────────────────────────────
+// 5 slides in order: Specs×2, Character limits×2, Components
+// Titles read directly from Figma parent frame names (235:131888)
+// Frame 239:134194 — 4 panels. Order: char limits ×2, specs, components last.
+const SPEC_SLIDES = [
+  { title: 'Character limits',          lightSrc: '/screens/omro/spec-c1-light.png',   darkSrc: '/screens/omro/spec-c1-dark.png'   },
+  { title: 'Character limits',          lightSrc: '/screens/omro/spec-c2-light.png',   darkSrc: '/screens/omro/spec-c2-dark.png'   },
+  { title: 'Specs & system behaviour',  lightSrc: '/screens/omro/spec-s1-light.png',   darkSrc: '/screens/omro/spec-s1-dark.png'   },
+  { title: 'Components',                lightSrc: '/screens/omro/spec-comp-light.png', darkSrc: '/screens/omro/spec-comp-dark.png' },
+]
+
+function SpecSlideshow({ isDark }: { isDark: boolean }) {
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [reduced, setReduced] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduced(mq.matches)
+    const h = (e: MediaQueryListEvent) => setReduced(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [])
+
+  useEffect(() => {
+    if (paused || reduced) return
+    const id = setInterval(() => setCurrent(c => (c + 1) % SPEC_SLIDES.length), 3500)
+    return () => clearInterval(id)
+  }, [paused, reduced])
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* Container — matches KEY DESIGN DECISIONS image container exactly */}
+      <div
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        style={{
+          width: '100%', aspectRatio: '6350/4204',
+          background: 'transparent',
+          border: isDark ? '1px solid transparent' : '1px solid var(--color-border)',
+          borderRadius: 8, overflow: 'hidden', position: 'relative',
+        }}
+      >
+        {SPEC_SLIDES.map((slide, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute', inset: 0,
+              opacity: i === current ? 1 : 0,
+              transition: 'opacity 0.8s ease-in-out',
+              pointerEvents: i === current ? 'auto' : 'none',
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={isDark ? slide.darkSrc : slide.lightSrc} alt={slide.title} loading="eager"
+              style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+            />
+            {/* Title — exact same style as "05 TRANSACTION FAILS POST-SUBMISSION" edge case label */}
+            <h5 style={{ ...flowLabel, position: 'absolute', top: 20, left: 20, zIndex: 1, pointerEvents: 'none', textTransform: 'uppercase', color: isDark ? 'rgba(0,0,0,0.45)' : 'var(--color-text-secondary)' }}>
+              {slide.title}
+            </h5>
+          </div>
+        ))}
+      </div>
+
+      {/* Dots */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, alignItems: 'center' }}>
+        {SPEC_SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            aria-label={`Slide ${i + 1}`}
+            style={{
+              width: i === current ? 16 : 6, height: 6, borderRadius: 3,
+              background: i === current ? 'var(--color-text-secondary)' : 'var(--color-border)',
+              border: 'none', padding: 0, cursor: 'pointer',
+              transition: 'width 0.3s ease, background 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
+
+      <p style={{
+        fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
+        letterSpacing: '0.008em', lineHeight: '1.6em',
+        color: 'var(--color-text-secondary)', textAlign: 'center', margin: 0,
+      }}>
+        Specs and annotations from the handover section.
+      </p>
+    </div>
+  )
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function OmroPage() {
   const [activeSection, setActiveSection] = useState('')
@@ -589,8 +683,8 @@ export default function OmroPage() {
         }
         .noto-email-link { transition: color 0.15s ease; }
         .noto-email-link:hover { color: rgba(255, 119, 0, 0.97) !important; }
-        .omro-try-btn { transition: color 0.15s ease; }
-        .omro-try-btn:hover { color: #ffffff !important; }
+        .omro-try-btn { transition: background 0.15s ease; }
+        .omro-try-btn:hover { background: var(--color-border) !important; }
         @keyframes demo-pulse {
           0% { transform: scale(0.6); opacity: 0.8; }
           100% { transform: scale(2.8); opacity: 0; }
@@ -618,6 +712,14 @@ export default function OmroPage() {
           0%, 48% { transform: rotate(0deg); }
           50%, 98% { transform: rotate(8deg); }
           100% { transform: rotate(0deg); }
+        }
+        @keyframes omro-spec-ticker {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-2080px); }
+        }
+        @keyframes omro-ticker {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-951px); }
         }
         :root { --color-omro-subtitle: rgba(0, 0, 0, 0.75); }
         .dark { --color-omro-subtitle: rgba(255, 255, 255, 0.749); }
@@ -1337,11 +1439,7 @@ export default function OmroPage() {
               </div>
             </div>
 
-            <Placeholder
-              label={'SPEC DETAIL\nComponent behavior annotations from Prep for Handover to DEV section'}
-              aspectRatio={1.8}
-              caption="Component behavior annotations from the handover section."
-            />
+            <SpecSlideshow isDark={isDark} />
 
           </div>
 
@@ -1354,10 +1452,29 @@ export default function OmroPage() {
                 <h2 style={sectionH2}>What I learned from Best Wallet.</h2>
               </div>
 
-              <Placeholder
-                label={'APP SCREENSHOT\nTo be replaced with a screenshot of the shipped app'}
-                aspectRatio={1.6}
-              />
+              {/* 3-photo auto-scroll ticker — portrait 307×374, gap:10 */}
+              {/* set=3×307+2×10=941; +1gap=951; translate -951px for seamless loop */}
+              <div style={{ height: 374, borderRadius: 10, overflow: 'hidden', width: '100%' }}>
+                <div style={{
+                  display: 'flex', flexDirection: 'row', alignItems: 'center',
+                  gap: 10, height: '100%', width: 'max-content',
+                  animation: 'omro-ticker 35s linear infinite',
+                }}>
+                  {([
+                    '/screens/omro/bw-2.avif',
+                    '/screens/omro/bw-3.avif',
+                    '/screens/omro/bw-4.avif',
+                    '/screens/omro/bw-2.avif',
+                    '/screens/omro/bw-3.avif',
+                    '/screens/omro/bw-4.avif',
+                  ]).map((src, i) => (
+                    <div key={i} style={{ width: 307, height: '100%', flexShrink: 0, borderRadius: 8, overflow: 'hidden', backgroundImage: "url('/screens/omro/bw-1.avif')", backgroundSize: 'cover', backgroundPosition: 'left' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt="" loading="eager" decoding="sync" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Pull quote */}
@@ -1370,7 +1487,7 @@ export default function OmroPage() {
 
             {/* Coin illustration */}
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: -10, marginBottom: -10 }}>
-              <svg width={180} height={80} viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="white" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9 }}>
+              <svg width={180} height={80} viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: isDark ? 0.9 : 1, stroke: isDark ? 'white' : '#a0a0a0' }}>
                 {/* Coin 1 — left, leaning -15deg */}
                 <g style={{ animation: 'coin-tilt-l 1.4s linear infinite', transformBox: 'fill-box', transformOrigin: 'center' }}>
                   <g transform="rotate(-15, 38, 38)">
