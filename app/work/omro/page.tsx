@@ -505,7 +505,7 @@ function SpecSlideshow({ isDark }: { isDark: boolean }) {
         letterSpacing: '0.008em', lineHeight: '1.6em',
         color: 'var(--color-text-secondary)', textAlign: 'center', margin: 0,
       }}>
-        Specs and annotations from the handover section.
+        Some specs and annotations from the handover.
       </p>
     </div>
   )
@@ -1040,10 +1040,23 @@ export default function OmroPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <h5 style={flowLabel}>HAPPY PATH</h5>
               <div style={{ height: 1, background: 'var(--color-border)' }} />
-              <Placeholder
-                label={'HAPPY PATH\nHome → Token info → Widget → Review → Success'}
-                aspectRatio={2.4}
-              />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{
+                  width: '100%', aspectRatio: '1.51053',
+                  background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+                  border: isDark ? 'none' : '1px solid var(--color-border)',
+                  borderRadius: 8, overflow: 'hidden', position: 'relative',
+                }}>
+                  <video
+                    autoPlay muted loop playsInline
+                    style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }}
+                  >
+                    <source src="/screens/omro/happy-path.webm" type='video/webm; codecs="av01"' />
+                    <source src="/screens/omro/happy-path-hevc.mp4" type='video/mp4; codecs="hvc1"' />
+                    <source src="/screens/omro/happy-path.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
                   { num: '01', title: 'Home', caption: 'Browse upcoming presale tokens from the home screen.' },
@@ -1112,13 +1125,23 @@ export default function OmroPage() {
                       </h5>
                       <div style={{
                         width: '100%', aspectRatio: '1.30455',
-                        background: 'var(--color-noto-card-image)',
+                        background: isDark ? '#ffffff' : 'var(--color-card-bg)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         overflow: 'hidden',
                       }}>
-                        <p style={{ ...flowLabel, textAlign: 'center', padding: '0 20px', opacity: 0.45 }}>
-                          ANIMATED FLOW PREVIEW{'\n'}(state transition, to be replaced)
-                        </p>
+                        {flow.num === '01' ? (
+                          <video
+                            autoPlay muted loop playsInline
+                            style={{ display: 'block', width: '80%', height: '80%', objectFit: 'contain' }}
+                          >
+                            <source src="/screens/omro/edge-case-1.webm" type='video/webm; codecs="av01"' />
+                            <source src="/screens/omro/edge-case-1.mp4" type="video/mp4" />
+                          </video>
+                        ) : (
+                          <p style={{ ...flowLabel, textAlign: 'center', padding: '0 20px', opacity: 0.45 }}>
+                            ANIMATED FLOW PREVIEW{'\n'}(state transition, to be replaced)
+                          </p>
+                        )}
                       </div>
                       <div style={{ height: 1, width: '100%', background: 'var(--color-border)' }} />
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: 24 }}>
