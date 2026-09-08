@@ -6,6 +6,10 @@ export interface HomeProject {
   description: string
   gradient: string
   video?: string
+  videoPoster?: string
+  cardImage?: string
+  cardLogo?: string
+  animatedGradient?: boolean
   titleOverlay?: string
   tags: string[]
   highlights: string[]
@@ -49,8 +53,9 @@ export const homeProjects: HomeProject[] = [
     client: 'Omro',
     tagline: 'Designing a modern digital banking experience from the ground up.',
     description: 'Mobile and brand design',
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
+    gradient: '#2e26a6',
+    video: '/videos/omro-card.mp4',
+    videoPoster: '/images/omro-card-poster.jpg',
     tags: ['Mobile Design', 'Brand Design'],
     // Temporary — case-study videos from elishajeon.com/omro, spaced across
     // the page (skipping kxDBV... which is the card video). Bottom-to-middle

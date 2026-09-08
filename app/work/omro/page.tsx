@@ -443,7 +443,7 @@ function SpecSlideshow({ isDark }: { isDark: boolean }) {
 
   useEffect(() => {
     if (paused || reduced) return
-    const id = setInterval(() => setCurrent(c => (c + 1) % SPEC_SLIDES.length), 3500)
+    const id = setInterval(() => setCurrent(c => (c + 1) % SPEC_SLIDES.length), 3000)
     return () => clearInterval(id)
   }, [paused, reduced])
 
@@ -1038,18 +1038,18 @@ export default function OmroPage() {
 
             {/* Happy path sequence */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-              <h5 style={flowLabel}>HAPPY PATH</h5>
+              <h5 style={{ ...flowLabel, color: isDark ? 'var(--color-text-secondary)' : '#00000059' }}>HAPPY PATH</h5>
               <div style={{ height: 1, background: 'var(--color-border)' }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{
-                  width: '100%', aspectRatio: '1.51053',
+                  width: '100%', aspectRatio: '2880/2160',
                   background: isDark ? '#ffffff' : 'var(--color-card-bg)',
                   border: isDark ? 'none' : '1px solid var(--color-border)',
                   borderRadius: 8, overflow: 'hidden', position: 'relative',
                 }}>
                   <video
                     autoPlay muted loop playsInline
-                    style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }}
+                    style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.3)' }}
                   >
                     <source src="/screens/omro/happy-path.webm" type='video/webm; codecs="av01"' />
                     <source src="/screens/omro/happy-path-hevc.mp4" type='video/mp4; codecs="hvc1"' />
@@ -1097,45 +1097,77 @@ export default function OmroPage() {
                     body: 'If you have tokens but not enough ETH to cover the network fee, an inline warning appears with a quick way to buy more ETH. Clicking on buy takes you to the purchase flow with the right amount pre filled.',
                   },
                   {
-                    num: '03', title: 'INSUFFICIENT PURCHASE TOKENS',
+                    num: '03', title: 'INSUFFICIENT TOKENS',
                     heading: 'Amount entered exceeds balance.',
-                    body: 'If you enter more than your balance allows, the warning appears right away, with your balance and a Buy token CTA to top up. This behavior is the same whether or not you&apos;re paying with a native token.',
+                    body: 'If you enter more than your balance allows, the warning appears right away, with your balance and a Buy token CTA to top up. This behavior is the same whether or not you\'re paying with a native token.',
                   },
                   {
-                    num: '04', title: 'ZERO BALANCE, NO GAS',
+                    num: '04', title: 'ZERO BALANCE & GAS',
                     heading: 'Neither tokens to spend nor gas to send them.',
                     body: 'If you have no tokens and no gas, you get two ways out: connect a different wallet, or pay with card. The card route uses a third-party flow but lands back at the same success state.',
                   },
                   {
-                    num: '05', title: 'TRANSACTION FAILS POST-SUBMISSION',
+                    num: '05', title: 'TRANSACTION FAILS',
                     heading: 'Network error or gas spike after confirmation.',
-                    body: 'If the transaction fails, the screen makes it clear: nothing was deducted, and you can try again. Gas prices move with network demand, so on retry the fee is checked fresh, and if it changed you&apos;ll see the updated warning before confirming.',
+                    body: 'If the transaction fails, the screen makes it clear: nothing was deducted, and you can try again. Gas prices move with network demand, so on retry the fee is checked fresh, and if it changed you\'ll see the updated warning before confirming.',
                   },
                 ] as const).map(flow => (
                   <div key={flow.num} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                     <div style={{
                       position: 'relative',
-                      background: 'var(--color-card-bg)',
+                      background: (flow.num === '01' || flow.num === '02' || flow.num === '03' || flow.num === '04' || flow.num === '05') && !isDark ? '#f6f6f6' : 'var(--color-card-bg)',
                       border: '1px solid var(--color-border)',
                       borderRadius: 8,
                       overflow: 'hidden',
                     }}>
-                      <h5 style={{ ...flowLabel, position: 'absolute', top: 20, left: 20, zIndex: 1 }}>
+                      <h5 style={{ ...flowLabel, position: 'absolute', top: 20, left: 20, zIndex: 1, color: isDark ? ((flow.num === '01' || flow.num === '02' || flow.num === '03' || flow.num === '04' || flow.num === '05') ? 'rgba(0,0,0,0.45)' : 'var(--color-text-secondary)') : '#00000059' }}>
                         {flow.num} {flow.title}
                       </h5>
                       <div style={{
-                        width: '100%', aspectRatio: '1.30455',
-                        background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+                        width: '100%', aspectRatio: flow.num === '01' || flow.num === '02' || flow.num === '04' || flow.num === '05' ? '2880/2160' : flow.num === '03' ? '2876/2160' : '1.30455',
+                        background: 'var(--color-noto-card-image)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         overflow: 'hidden',
                       }}>
                         {flow.num === '01' ? (
                           <video
                             autoPlay muted loop playsInline
-                            style={{ display: 'block', width: '80%', height: '80%', objectFit: 'contain' }}
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', transform: 'scale(1.2)' }}
                           >
                             <source src="/screens/omro/edge-case-1.webm" type='video/webm; codecs="av01"' />
                             <source src="/screens/omro/edge-case-1.mp4" type="video/mp4" />
+                          </video>
+                        ) : flow.num === '02' ? (
+                          <video
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }}
+                          >
+                            <source src="/screens/omro/edge-case-2.webm" type='video/webm; codecs="av01"' />
+                            <source src="/screens/omro/edge-case-2.mp4" type="video/mp4" />
+                          </video>
+                        ) : flow.num === '03' ? (
+                          <video
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }}
+                          >
+                            <source src="/screens/omro/edge-case-3.webm" type='video/webm; codecs="av01"' />
+                            <source src="/screens/omro/edge-case-3.mp4" type="video/mp4" />
+                          </video>
+                        ) : flow.num === '04' ? (
+                          <video
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain', transform: 'scale(1.3)' }}
+                          >
+                            <source src="/screens/omro/edge-case-4.webm" type='video/webm; codecs="av01"' />
+                            <source src="/screens/omro/edge-case-4.mp4" type="video/mp4" />
+                          </video>
+                        ) : flow.num === '05' ? (
+                          <video
+                            autoPlay muted loop playsInline
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain', transform: 'scale(1.3)' }}
+                          >
+                            <source src="/screens/omro/edge-case-5.webm" type='video/webm; codecs="av01"' />
+                            <source src="/screens/omro/edge-case-5.mp4" type="video/mp4" />
                           </video>
                         ) : (
                           <p style={{ ...flowLabel, textAlign: 'center', padding: '0 20px', opacity: 0.45 }}>
@@ -1222,11 +1254,35 @@ export default function OmroPage() {
               </div>
             </div>
 
+            <div style={{
+              width: '100%', aspectRatio: '601/398',
+              background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+              border: isDark ? 'none' : '1px solid var(--color-border)',
+              borderRadius: 8, overflow: 'hidden',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/screens/omro/token-home-1.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <h4 style={sectionH4}>The token card is designed to prompt action without overselling</h4>
               <p style={bodyText}>
                 I wanted the card focused, not overloaded. I added tags like &ldquo;Hot,&rdquo; &ldquo;New,&rdquo; and &ldquo;Ending Soon&rdquo; for scanability and momentum, and a countdown to the next price increase to give a concrete reason to act. With Geri, the UX researcher, I looked at competitor cards to understand what information users are usually seeking: i.e their balance in tokens, the next price rise, and enough visual difference to tell presales apart. A common caveat I saw was competitors making this card too dense and possibly overwhelming for users.
               </p>
+            </div>
+
+            <div style={{
+              width: '100%', aspectRatio: '601/398',
+              background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+              border: isDark ? 'none' : '1px solid var(--color-border)',
+              borderRadius: 8, overflow: 'hidden',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/screens/omro/token-card-design.png"
+                alt="Upcoming Tokens card design"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
             </div>
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1237,6 +1293,20 @@ export default function OmroPage() {
               <p style={{ ...bodyText, marginTop: '1.65em' }}>
                 On this screen, I wanted each element to answer something a skeptical buyer is silently asking. The fundraising progress bar answers &ldquo;are other people buying this?&rdquo;, the Achievements section answers &ldquo;is this project credible?&rdquo;, and links to the project and its white paper are there for anyone who wants to dig deeper. Also, I made the buy CTA sticky so that it stays visible as you scroll, so the action is one tap away the moment someone decides they&apos;re in.
               </p>
+            </div>
+
+            <div style={{
+              width: '100%', aspectRatio: '601/398',
+              background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+              border: isDark ? 'none' : '1px solid var(--color-border)',
+              borderRadius: 8, overflow: 'hidden',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={isDark ? '/screens/omro/token-info-dark.png' : '/screens/omro/token-info-light.png'}
+                alt="Token info page"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
             </div>
 
             {/* ─── Making the Buy Flow Clear ───────────────────────────────── */}
@@ -1270,13 +1340,26 @@ export default function OmroPage() {
                     <ArrowBullet color="var(--color-text-secondary)" />
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                       <p style={flowHeading}>{insight.title}</p>
-                      <p style={{ ...bodyText, color: 'var(--color-status-text)' }}>{insight.body}</p>
+                      <p style={bodyText}>{insight.body}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
+            <div style={{
+              width: '100%', aspectRatio: '601/398',
+              background: isDark ? '#ffffff' : 'var(--color-card-bg)',
+              border: isDark ? 'none' : '1px solid var(--color-border)',
+              borderRadius: 8, overflow: 'hidden',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={isDark ? '/screens/omro/buy-flow-dark.png' : '/screens/omro/buy-flow-light.png'}
+                alt="Buy flow"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
 
             {/* ─── Making the Transaction Reviewable ───────────────────────── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
