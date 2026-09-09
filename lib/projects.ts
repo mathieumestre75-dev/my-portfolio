@@ -1,3 +1,14 @@
+export interface CarouselHighlight {
+  type: 'carousel'
+  images: string[]
+  bg?: string
+}
+
+export interface VideoHighlight {
+  src: string
+  objectPosition?: string
+}
+
 export interface HomeProject {
   slug: string
   title: string
@@ -12,7 +23,7 @@ export interface HomeProject {
   animatedGradient?: boolean
   titleOverlay?: string
   tags: string[]
-  highlights: string[]
+  highlights: (string | CarouselHighlight | VideoHighlight)[]
   initialX: number
   initialY: number
   initialRotate: number
@@ -49,21 +60,26 @@ export const homeProjects: HomeProject[] = [
   },
   {
     slug: 'omro',
-    title: 'Omro',
-    client: 'Omro',
-    tagline: 'Designing a modern digital banking experience from the ground up.',
+    title: 'Best Wallet',
+    client: 'Best Wallet',
+    tagline: 'Making a crypto wallet\'s token presale feel exciting, simple and safe.',
     description: 'Mobile and brand design',
     gradient: '#2e26a6',
     video: '/videos/omro-card.mp4',
     videoPoster: '/images/omro-card-poster.jpg',
-    tags: ['Mobile Design', 'Brand Design'],
-    // Temporary — case-study videos from elishajeon.com/omro, spaced across
-    // the page (skipping kxDBV... which is the card video). Bottom-to-middle
-    // reorder per request, plus a more distinct third pick (3mxSu9tnz...).
+    tags: ['Mobile Design', 'Web3'],
     highlights: [
-      'https://framerusercontent.com/assets/FrArKFxbzSeQ8kp4FkNdJ2vEEM.mp4',
-      'https://framerusercontent.com/assets/YSKuDoMAMGuqcYd527S0P0hSUSY.mp4',
-      'https://framerusercontent.com/assets/3mxSu9tnzyKDV8V0XIU8CcCreUY.mp4',
+      { src: '/screens/omro/highlight-3.mp4', objectPosition: 'center 15%' },
+      {
+        type: 'carousel',
+        images: [
+          '/screens/omro/home.png',
+          '/screens/omro/buy-typing.png',
+          '/screens/omro/review.png',
+          '/screens/omro/success.png',
+        ],
+      },
+      '/screens/omro/edge-case-3.mp4',
     ],
     initialX: 160,
     initialY: -110,

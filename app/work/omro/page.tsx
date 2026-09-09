@@ -516,6 +516,7 @@ export default function OmroPage() {
   const [activeSection, setActiveSection] = useState('')
   const [hoveredWallet, setHoveredWallet] = useState<number | null>(null)
   const [contactVisible, setContactVisible] = useState(false)
+  const [backHover, setBackHover] = useState(false)
   const [themeToggleHover, setThemeToggleHover] = useState(false)
   const [decidedCardHeight, setDecidedCardHeight] = useState<number | undefined>(undefined)
   const decidedCardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -744,12 +745,16 @@ export default function OmroPage() {
       {/* ── Fixed: Back ─────────────────────────────────────────────────────── */}
       <Link
         href="/"
+        onMouseEnter={() => setBackHover(true)}
+        onMouseLeave={() => setBackHover(false)}
         style={{
           position: 'fixed', top: 20, left: 20, zIndex: 50,
           fontFamily: MONO, fontSize: 11.2, fontWeight: 400,
-          color: 'var(--color-status-text)', textDecoration: 'none',
+          color: backHover ? 'var(--color-text-primary)' : 'var(--color-status-text)',
+          textDecoration: 'none',
           letterSpacing: '-0.224px', lineHeight: '15.68px',
           display: 'flex', alignItems: 'center', gap: 6,
+          transition: 'color 0.2s ease',
         }}
       >
         <svg width="9" height="7" viewBox="0 0 8.5 6.812" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

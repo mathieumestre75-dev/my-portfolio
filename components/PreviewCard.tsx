@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { homeProjects } from '@/lib/projects'
+import { homeProjects, CarouselHighlight, VideoHighlight } from '@/lib/projects'
 
 interface PreviewCardProps {
   hoveredSlug: string | null
@@ -95,6 +95,14 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
             }}>
               Highlights
             </p>
+            <style>{`
+              @keyframes preview-carousel-scroll {
+                from { transform: translateX(0); }
+                to { transform: translateX(-50%); }
+              }
+              .preview-carousel-slot { background: var(--color-card-bg); }
+              .dark .preview-carousel-slot { background: #ffffff; }
+            `}</style>
             {project.highlights.map((src, i) => {
               if (!src) {
                 return (
@@ -104,11 +112,71 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
                   />
                 )
               }
-              const isVideo = /\.mp4(\?|$)/i.test(src)
+              if (typeof src === 'object' && (src as CarouselHighlight).type === 'carousel') {
+                const carousel = src as CarouselHighlight
+                const looped = [...carousel.images, ...carousel.images]
+                return (
+                  <div
+                    key={i}
+                    className="preview-carousel-slot"
+                    style={{
+                      width: '100%',
+                      flex: 1,
+                      minHeight: 0,
+                      borderRadius: 6,
+                      border: '1px solid var(--color-border)',
+                      overflow: 'hidden',
+                      position: 'relative',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 6,
+                        padding: '6px',
+                        height: '100%',
+                        animation: 'preview-carousel-scroll 6s linear infinite',
+                        willChange: 'transform',
+                      }}
+                    >
+                      {looped.map((img, j) => (
+                        <img
+                          key={j}
+                          src={img}
+                          alt=""
+                          style={{
+                            height: '100%',
+                            width: 'auto',
+                            flexShrink: 0,
+                            borderRadius: 4,
+                            display: 'block',
+                            objectFit: 'cover',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+              if (typeof src === 'object' && 'src' in src) {
+                const v = src as VideoHighlight
+                return (
+                  <video
+                    key={i}
+                    src={v.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', objectPosition: v.objectPosition ?? 'center center', borderRadius: 6, border: '1px solid var(--color-border)', display: 'block' }}
+                  />
+                )
+              }
+              const isVideo = /\.mp4(\?|$)/i.test(src as string)
               return isVideo ? (
                 <video
                   key={i}
-                  src={src}
+                  src={src as string}
                   autoPlay
                   muted
                   loop
@@ -118,7 +186,7 @@ export default function PreviewCard({ hoveredSlug }: PreviewCardProps) {
               ) : (
                 <img
                   key={i}
-                  src={src}
+                  src={src as string}
                   alt=""
                   style={{ width: '100%', flex: 1, minHeight: 0, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--color-border)', display: 'block' }}
                 />
