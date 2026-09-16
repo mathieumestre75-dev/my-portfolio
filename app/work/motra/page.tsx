@@ -491,7 +491,7 @@ export default function MotraPage() {
                     Usercentrics started as a consent management platform. As privacy regulation tightened, marketers running compliant setups started losing measurement data to browser restrictions and ad blockers. Usercentrics saw an opportunity to expand into privacy-led marketing infrastructure, and I worked on the first product in that direction: Server-Side Tagging (SST).
                   </p>
                   <p style={{ ...bodyText, marginTop: '1.65em' }}>
-                    In simple terms: right now, when a visitor&apos;s browser tries to tell Google or Meta directly that something happened (like a purchase after seeing an ad), ad blockers and browser privacy settings often catch and block it, since they recognize known tracking domains and stop the request before it&apos;s ever sent. SST fixes this by routing that data through a server the business controls instead, a &ldquo;container&rdquo; for Google Tag Manager, a &ldquo;Signals Gateway&rdquo; for Meta. The result: data that would otherwise vanish gets rescued instead. That server checks what the visitor consented to and only forwards what&apos;s allowed. This results in cleaner data, faster pages and compliance. The product didn&apos;t exist before this, and my role covered the full experience from scratch: information architecture, setup flows, built-in features, and the day-to-day management interface.
+                    To explain simply: right now, when a visitor&apos;s browser tries to tell Google or Meta directly that something happened (like a purchase after seeing an ad), ad blockers and browser privacy settings often catch the request and block it, since they recognize known tracking domains. SST fixes this by routing that data through a server the business controls instead, a &ldquo;container&rdquo; for Google Tag Manager, a &ldquo;Signals Gateway&rdquo; for Meta, making it first-party data. The result: data that would otherwise vanish gets rescued instead. That server checks what the visitor consented to and only forwards what&apos;s allowed. This results in cleaner data, faster pages and compliance. The product didn&apos;t exist before this, and my role covered the full experience from scratch: information architecture, setup flows, built-in features, and the day-to-day management interface.
                   </p>
                 </div>
               </div>
@@ -528,7 +528,7 @@ export default function MotraPage() {
                       The difficulty in this project was that there was no prior product to build on. No established flows, no feature baseline and no design to inherit from. Everything from setting up a container to inviting a teammate had to be figured out from scratch, in a space new to the company.
                     </p>
                     <p style={{ ...bodyText, marginTop: '1.65em' }}>
-                      SST is also genuinely technical: containers, DNS, custom domains, and parts of the setup happening inside Google Tag Manager or Meta&apos;s interface. Also, not every marketer has these technical skills, so the product needed to support delegation by letting users handoff to a consultant or a more technical colleague. Partners also had a clear list of features they expected before they&apos;d recommend the product to clients: bot detection, geolocation headers, a resilient script loader are some examples. The stake was thus to build a complete product from scratch that clients would trust, find easy to use, and that would bring value to their business by fixing the data loss problem.
+                      SST is also genuinely technical: containers, DNS, custom domains, and parts of the setup happening inside Google Tag Manager or Meta&apos;s interface. Also, not every marketer has these technical skills, so the product needed to support delegation by letting users handoff to a consultant or a more technical colleague. Partners also had a clear list of features they expected before they&apos;d recommend the product to clients: bot detection, geolocation headers, a resilient script loader are some examples. The stake for me was thus to build a complete product from scratch that clients would trust, find easy to use, and that would bring value to their business by fixing the data loss problem.
                     </p>
                   </div>
                 </div>
@@ -549,29 +549,74 @@ export default function MotraPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <h4 style={sectionH4}>Every surface of the product, from setup to day-to-day management.</h4>
                   <p style={bodyText}>
-                    With those stakes in mind, I designed during a year and half the full product experience. Here are some artifacts and snapshots from the SST product.
+                    With those stakes in mind, I collaborated with my team and designed during a year and half the full product experience. Here are some artifacts and snapshots from the SST product.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Product screenshot grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
-              {[
-                { mono: 'CONTAINER LIST',          label: 'Container list'           },
-                { mono: 'FEATURES TAB',            label: 'Features tab'             },
-                { mono: 'GSA',                     label: 'GSA'                      },
-                { mono: 'RESILIENT SCRIPT LOADER', label: 'Resilient Script Loader'  },
-                { mono: 'GEOLOCATION HEADERS',     label: 'Geolocation Headers'      },
-                { mono: 'BOT DETECTION',           label: 'Bot Detection'            },
-              ].map(item => (
-                <Placeholder
-                  key={item.mono}
-                  label={item.mono}
-                  caption={item.label}
-                  aspectRatio={1.8}
-                />
-              ))}
+            {/* Product artifact gallery */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+
+              {/* Row 1: full-width — video 3 (blue) */}
+              <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-overview-3.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Row 2: 2/3 dark (video 4) + 1/3 placeholder */}
+              <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-4.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+
+              {/* Row 3: full-width — video 6 */}
+              <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-6.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Row 4: 1/3 placeholder + 2/3 (video 7) */}
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+              <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-12.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Row 5: full-width — video 5 (dark) */}
+              <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-5.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Row 6: full-width — video 10 */}
+              <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-10.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Row 7: 2/3 (video 8) + 1/3 placeholder */}
+              <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-8.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+
+              {/* Row 8: full-width — video 11 */}
+              <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                  <source src="/screens/motra/video-13.mp4" type="video/mp4" />
+                </video>
+              </div>
+
             </div>
 
           </section>
