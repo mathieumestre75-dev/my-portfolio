@@ -170,7 +170,7 @@ export default function FloatingCard({ project, positionStyle, onHover, isGrid =
         setIsHovered(true)
         onHover(project.slug)
         gradientHoverRef.current = true
-        videoRef.current?.play()
+        setTimeout(() => videoRef.current?.play(), 300)
       }}
       onMouseLeave={() => {
         setIsHovered(false)
@@ -269,7 +269,7 @@ export default function FloatingCard({ project, positionStyle, onHover, isGrid =
                     position: 'absolute', inset: 0,
                     width: '100%', height: '100%', objectFit: 'cover',
                     opacity: isHovered ? 0 : 1,
-                    transition: 'opacity 0.3s ease',
+                    transition: 'opacity 0.35s ease',
                     pointerEvents: 'none',
                   }}
                 />

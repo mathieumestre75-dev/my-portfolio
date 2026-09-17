@@ -89,12 +89,13 @@ export const homeProjects: HomeProject[] = [
   },
   {
     slug: 'motra',
-    title: 'Best Wallet',
-    client: 'Best Wallet',
-    tagline: 'Making a crypto wallet\'s token presale feel exciting, simple and safe.',
-    description: 'Mobile and brand design',
+    title: 'Server-Side Tagging',
+    client: 'SST',
+    tagline: 'Designing the full experience for a brand new privacy-led tracking product.',
+    description: 'Product design',
     gradient: '#2e26a6',
-    video: 'https://framerusercontent.com/assets/kxDBVRmfj6B5ABnEZZ6mkmxKmrg.mp4',
+    video: '/videos/motra-card.mp4',
+    videoPoster: '/images/motra-card-poster.jpg',
     tags: ['Mobile Design', 'Web3'],
     highlights: [
       'https://framerusercontent.com/assets/FrArKFxbzSeQ8kp4FkNdJ2vEEM.mp4',

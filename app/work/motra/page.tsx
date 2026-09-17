@@ -507,7 +507,7 @@ export default function MotraPage() {
                 autoPlay muted loop playsInline
                 style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
               >
-                <source src="/screens/motra/overview-slide.mp4" type="video/mp4" />
+                <source src="/screens/motra/Frame.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -565,13 +565,17 @@ export default function MotraPage() {
                 </video>
               </div>
 
-              {/* Row 2: 2/3 dark (video 4) + 1/3 placeholder */}
+              {/* Row 2: 2/3 dark (video 4) + 1/3 video 15 */}
               <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
                 <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
                   <source src="/screens/motra/video-4.mp4" type="video/mp4" />
                 </video>
               </div>
-              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}>
+                  <source src="/screens/motra/video-15.mp4" type="video/mp4" />
+                </video>
+              </div>
 
               {/* Row 3: full-width — video 6 */}
               <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
@@ -580,8 +584,12 @@ export default function MotraPage() {
                 </video>
               </div>
 
-              {/* Row 4: 1/3 placeholder + 2/3 (video 7) */}
-              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+              {/* Row 4: 1/3 video 14 + 2/3 (video 12) */}
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}>
+                  <source src="/screens/motra/video-14.mp4" type="video/mp4" />
+                </video>
+              </div>
               <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
                 <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
                   <source src="/screens/motra/video-12.mp4" type="video/mp4" />
@@ -602,13 +610,15 @@ export default function MotraPage() {
                 </video>
               </div>
 
-              {/* Row 7: 2/3 (video 8) + 1/3 placeholder */}
+              {/* Row 7: 2/3 (video 8) + 1/3 textured gradient */}
               <div style={{ gridColumn: 'span 2', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
                 <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
                   <source src="/screens/motra/video-8.mp4" type="video/mp4" />
                 </video>
               </div>
-              <div style={{ gridColumn: 'span 1', borderRadius: 8, background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }} />
+              <div style={{ gridColumn: 'span 1', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--color-border)' }}>
+                <img src="/screens/motra/placeholder-bg-light.png" alt="" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
 
               {/* Row 8: full-width — video 11 */}
               <div style={{ gridColumn: 'span 3', borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
