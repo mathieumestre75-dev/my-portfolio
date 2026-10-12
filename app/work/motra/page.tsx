@@ -1,9 +1,9 @@
 'use client'
 
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { Sun, Moon } from 'lucide-react'
 
@@ -77,8 +77,51 @@ const flowLabel: React.CSSProperties = {
   lineHeight: '1.4em', letterSpacing: 0, color: 'var(--color-text-secondary)', margin: 0,
 }
 
+// ─── Carousel slide variants ─────────────────────────────────────────────────
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%' }),
+  center: { x: 0 },
+  exit:  (dir: number) => ({ x: dir > 0 ? '-100%' : '100%' }),
+}
+
 // ─── Section divider ─────────────────────────────────────────────────────────
 const DIVIDER = <div style={{ height: 1, background: 'var(--color-border)', margin: '100px 0' }} />
+
+// ─── Invite users decisions ───────────────────────────────────────────────────
+const INVITE_DECISIONS = [
+  '1. Two entry points: workspace or container, context pre-selected.',
+  '2. Workspace or container scope, with granular per-container permission levels.',
+  '3. Batch invite for multiple people at once, plus a one-click copy link.',
+  '4. Invited members and their permissions visible in the same modal.',
+  '5. Edit access from that same list, via a drawer that keeps users in context.',
+  '6. Easy workspace switching from within the product.',
+]
+
+// ─── Invite users carousel slides ────────────────────────────────────────────
+const INVITE_SLIDES: (string | null)[] = [
+  '/screens/motra/invite-slide-1.png',
+  '/screens/motra/invite-slide-2.png',
+  '/screens/motra/invite-slide-3.png',
+  '/screens/motra/invite-slide-4.png',
+  '/screens/motra/invite-slide-5.png',
+  '/screens/motra/invite-slide-6.png',
+]
+
+// ─── Arrow bullet SVG ────────────────────────────────────────────────────────
+function ArrowBullet({ color }: { color?: string } = {}) {
+  return (
+    <svg
+      viewBox="0 0 6 10" width={6} height={10}
+      overflow="visible" fill="transparent"
+      style={{ transform: 'rotate(-90deg)', flexShrink: 0, marginTop: 6 }}
+    >
+      <path
+        d="M 3 0 L 3 10 M 0 6.552 C 0 6.552 0.75 7.414 1.5 8.276 C 2.25 9.138 3 10 3 10 L 6 6.552"
+        strokeWidth="1.26" style={{ stroke: color ?? 'var(--noto-bullet-arrow)' }}
+      />
+    </svg>
+  )
+}
 
 // ─── Inline placeholder block ─────────────────────────────────────────────────
 function Placeholder({ label, caption, aspectRatio = 1.6 }: {
@@ -109,6 +152,10 @@ function Placeholder({ label, caption, aspectRatio = 1.6 }: {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function MotraPage() {
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
+  const [inviteSlide, setInviteSlide] = useState(0)
+  const [inviteDir, setInviteDir] = useState(1)
+  const [carouselHovered, setCarouselHovered] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [contactVisible, setContactVisible] = useState(false)
   const [backHover, setBackHover] = useState(false)
@@ -136,6 +183,36 @@ export default function MotraPage() {
     document.body.classList.add('noto-dark-route')
     return () => document.body.classList.remove('noto-dark-route')
   }, [isDark])
+
+  const [statsVisible, setStatsVisible] = useState(false)
+  const [statsProgress, setStatsProgress] = useState(0)
+  const statsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = statsRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true) },
+      { threshold: 0.4 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!statsVisible) return
+    const duration = 1400
+    const start = performance.now()
+    let raf = 0
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - t, 3)
+      setStatsProgress(eased)
+      if (t < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [statsVisible])
 
   const [portalNode, setPortalNode] = useState<HTMLDivElement | null>(null)
   useEffect(() => {
@@ -229,6 +306,26 @@ export default function MotraPage() {
 
   return (
     <div style={{ background: 'var(--color-page-bg)', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
+
+      {/* Lightbox — portalled to body to escape any stacking context */}
+      {lightboxSrc && mounted && createPortal(
+        <div
+          onClick={() => setLightboxSrc(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,0.85)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 32, cursor: 'zoom-out',
+          }}
+        >
+          <img
+            src={lightboxSrc}
+            alt=""
+            style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8, objectFit: 'contain' }}
+          />
+        </div>,
+        document.body
+      )}
 
       {portalNode && createPortal(
         <div aria-hidden style={{
@@ -641,9 +738,9 @@ export default function MotraPage() {
                   Three flows where the details mattered most.
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <h4 style={sectionH4}>Each one addresses a different place the product could break</h4>
+                  <h4 style={sectionH4}>Each one addresses an important part of the user journey</h4>
                   <p style={bodyText}>
-                    I picked these three because each one is where a wrong decision would&apos;ve hurt the most. Here&apos;s what I built and why.
+                    Below I will go into a bit more details on three key flows I worked on: 1) Create container 2) Invite other users 3) Monitor tracking activity (logs). I chose these flows because they all represent an important part of the user journey and address stakes that were specific to the product we were building.
                   </p>
                 </div>
               </div>
@@ -660,16 +757,121 @@ export default function MotraPage() {
                     <div style={{ height: 1, background: 'var(--color-border)' }} />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <h4 style={sectionH4}>One step at a time through an unfamiliar handoff.</h4>
+                    <h4 style={sectionH4}>First step crucial to the user activation</h4>
                     <p style={bodyText}>
-                      Partner interviews told me the same thing: the confusion wasn&apos;t about the product. It was about what to do inside GTM once the product handed you over. Roughly a quarter of people were completing setup, and I wanted to get that closer to half. I structured the flow one step at a time, no progress indicator front-loading the complexity. You see one thing, do it, move on. The GTM config step is the exception: it has two parts, client-side and then server-side, since both need to land independently. Custom domain setup is mandatory from the start and can&apos;t be deferred. DNS configuration and GTM config both depend on it. Skip it and nothing that follows works.
+                      Server-side tagging products have a steep setup curve. To get tracking running, a new user needs to create a server container, configure a custom domain, and connect their web container to their new server container so events actually start routing through it. What makes it particularly complicated is that parts of this happen outside our product, in the Google Tag Manager or Meta interface, with no in-product guidance.
+                    </p>
+                    <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                      Our first iteration reflected that most sign-ups dropped off before reaching a working setup, never getting far enough to see the product&apos;s value. Interviews I led with the PM surfaced why: users felt lost once inside GTM or Meta, and couldn&apos;t tell what steps were or weren&apos;t done, or whether their container was even active and receiving requests.
+                    </p>
+                    <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                      Before making design decisions, I looked at how competitors were solving the same problem of getting users through container setup and to an active, working state.
                     </p>
                   </div>
                 </div>
-                <Placeholder
-                  label={'CREATE CONTAINER FLOW\n(video placeholder)'}
-                  caption="Create container flow — placeholder, real recording to replace this."
-                />
+
+                <div
+                  onClick={() => setLightboxSrc('/screens/motra/competitor-analysis.png')}
+                  style={{
+                    width: '100%', aspectRatio: 1.6,
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 8, overflow: 'hidden',
+                    cursor: 'zoom-in',
+                  }}
+                >
+                  <img
+                    src="/screens/motra/competitor-analysis.png"
+                    alt="Competitor analysis"
+                    style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: '10% center' }}
+                  />
+                </div>
+
+                {/* Key design decisions */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                  <p style={bodyText}>
+                    With my research findings and to solve the problems mentioned above, here are the key design decisions I went with:
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    {[
+                      {
+                        label: 'A wizard to guide users through setup',
+                        body: 'I chose a setup wizard as the primary onboarding pattern, a single guided path from landing to a working setup, one step at a time, instead of dropping users into the full product UI to figure out the sequence themselves.',
+                        image: '/screens/motra/wizard-overview.png',
+                      },
+                      {
+                        label: 'Video tutorial with Picture-in-Picture',
+                        body: 'Each step includes a tutorial video. When users navigate to GTM or Meta to complete a step, the video automatically opens in Picture-in-Picture so they can follow our instructions in the context of another interface.',
+                        image: '/screens/motra/wizard-pip.png',
+                      },
+                      {
+                        label: 'Clear domain verification state',
+                        body: 'I wanted it to be clear to users that their container has been created and that we are verifying their domain automatically, no actions required. This step stays locked until confirmation. Previously, users could skip past this and end up with a broken setup.',
+                        image: '/screens/motra/wizard-dns-check.png',
+                      },
+                      {
+                        label: 'A clear way to verify the setup',
+                        body: 'The final step gives users a simple way to confirm everything is working: visit a URL in their browser to check the container is live. If something is misconfigured, their dashboard and container list surfaces it clearly with the actions required, so they\'re never left guessing.',
+                        image: '/screens/motra/wizard-verify.png',
+                      },
+                    ].map((item, i) => (
+                      <div key={i} style={{
+                        background: 'var(--color-card-bg)',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: 8,
+                        display: 'flex', flexDirection: 'column', gap: 16,
+                        overflow: 'hidden',
+                      }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 20, paddingBottom: 0 }}>
+                          <h6 style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.4em', color: 'var(--color-text-primary)', margin: 0 }}>
+                            {item.label}
+                          </h6>
+                          <p style={{ fontFamily: SANS, fontSize: 13.44, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.6em', color: 'var(--color-status-text)', margin: 0 }}>
+                            {item.body}
+                          </p>
+                        </div>
+                        {item.image ? (
+                          <div style={{ padding: '0 20px 20px' }}>
+                            <img
+                              src={item.image}
+                              alt={item.label}
+                              onClick={() => setLightboxSrc(item.image!)}
+                              style={{ width: '100%', display: 'block', borderRadius: 6, cursor: 'zoom-in' }}
+                            />
+                          </div>
+                        ) : (
+                          <div style={{
+                            width: '100%', aspectRatio: 1.4,
+                            background: 'var(--color-border)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            <p style={{ fontFamily: SANS, fontSize: 12, fontWeight: 500, color: 'var(--color-text-secondary)', opacity: 0.55, margin: 0 }}>
+                              Image placeholder
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p style={bodyText}>
+                  This is of course just a summary. I designed the entire flow, making every step clear and accounting for all edge cases such as failed domain verification, misconfigured containers, error states, and more. Below is the full happy path.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                    <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                      <source src="/screens/motra/video-create-container.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                  <p style={{
+                    fontFamily: SANS, fontSize: 14.08, fontWeight: 500,
+                    letterSpacing: '0.008em', lineHeight: '1.6em',
+                    color: 'var(--color-text-secondary)', textAlign: 'center', margin: 0,
+                  }}>
+                    Create container flow - Happy path
+                  </p>
+                </div>
               </div>
 
               {/* 02 INVITE USERS */}
@@ -680,16 +882,143 @@ export default function MotraPage() {
                     <div style={{ height: 1, background: 'var(--color-border)' }} />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <h4 style={sectionH4}>Access at two scales, without the spreadsheet feeling.</h4>
+                    <h4 style={sectionH4}>Most users need help to set up or manage containers</h4>
                     <p style={bodyText}>
-                      I needed to design access that worked at two scales at once: across an entire workspace and down to individual containers, while also letting users discover and switch between workspaces without it becoming a separate journey. Three tiers: Admin gets full access including subscription and billing, Editor can configure and create containers, Reader is view-only. My rule throughout, confirmed by partner interviews and access UX research: never hide a control someone can&apos;t use. Show it disabled and explain why. Invisible controls create more confusion than ones that are clearly off-limits.
+                      Research with customers and partners surfaced a clear pain point: over 70% said they&apos;d need outside help managing setup and containers, either with a technical colleague or an implementation partner. But SST had no invite flow yet and partners were working around it through billing account permissions which was creating friction. The goal was to make inviting someone and managing multi-account access for partners feel like an easy experience.
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: '1.65em' }}>
+                      <h5 style={flowLabel}>DESIGN CHALLENGES:</h5>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
+                      {[
+                        'Give scoped, granular access to specific containers or the whole workspace, simply and clearly, without overwhelming users',
+                        'Manage every invitation, permission, and role right from that same flow',
+                        'Let partners with multi-account access switch context without leaving the product',
+                      ].map((text, i) => (
+                        <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                          <div style={{ marginTop: 2, flexShrink: 0 }}><ArrowBullet /></div>
+                          <p style={bodyText}>{text}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                      After analyzing best SaaS UX practices for inviting users, I designed the flow and components from scratch. Here is the overview with some key design decisions.
                     </p>
                   </div>
                 </div>
-                <Placeholder
-                  label={'INVITE USERS FLOW\n(video placeholder)'}
-                  caption="Invite users flow — placeholder, real recording to replace this."
-                />
+
+                {/* Artefacts + Key design decisions — continuous block */}
+                <div style={{
+                  background: 'var(--color-card-bg)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 8, overflow: 'hidden',
+                  display: 'flex', flexDirection: 'column',
+                  gap: 0,
+                }}>
+                  {/* Image grid — 5 slots: col1 portrait full-height, col2 narrower 2-stack (top shorter), col3 2-stack (top taller) */}
+                  <div style={{ padding: 20, paddingBottom: 16 }}>
+                    {/* Carousel image */}
+                    <div
+                      onMouseEnter={() => setCarouselHovered(true)}
+                      onMouseLeave={() => setCarouselHovered(false)}
+                      style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', background: 'var(--color-card-bg)', aspectRatio: 1.6 }}
+                    >
+                      <AnimatePresence initial={false} custom={inviteDir}>
+                        <motion.div
+                          key={inviteSlide}
+                          custom={inviteDir}
+                          variants={slideVariants}
+                          initial="enter"
+                          animate="center"
+                          exit="exit"
+                          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                          style={{ position: 'absolute', inset: 0 }}
+                        >
+                          {INVITE_SLIDES[inviteSlide] ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={INVITE_SLIDES[inviteSlide]!}
+                              alt=""
+                              onClick={() => setLightboxSrc(INVITE_SLIDES[inviteSlide]!)}
+                              style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', cursor: 'zoom-in' }}
+                            />
+                          ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <p style={{ ...flowLabel, opacity: 0.4 }}>{inviteSlide + 1}</p>
+                            </div>
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
+                      <button
+                        onClick={() => { setInviteDir(-1); setInviteSlide(i => i - 1) }}
+                        style={{
+                          position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
+                          background: 'rgba(0,0,0,0.32)', border: 'none', borderRadius: 4,
+                          width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          cursor: 'pointer', color: '#fff', padding: 0, zIndex: 1,
+                          opacity: carouselHovered && inviteSlide > 0 ? 1 : 0,
+                          pointerEvents: carouselHovered && inviteSlide > 0 ? 'auto' : 'none',
+                          transition: 'opacity 0.18s ease',
+                        }}
+                      >
+                        <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M6 1.5L2 6.5L6 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                      <button
+                        onClick={() => { setInviteDir(1); setInviteSlide(i => i + 1) }}
+                        style={{
+                          position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                          background: 'rgba(0,0,0,0.32)', border: 'none', borderRadius: 4,
+                          width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          cursor: 'pointer', color: '#fff', padding: 0, zIndex: 1,
+                          opacity: carouselHovered && inviteSlide < INVITE_SLIDES.length - 1 ? 1 : 0,
+                          pointerEvents: carouselHovered && inviteSlide < INVITE_SLIDES.length - 1 ? 'auto' : 'none',
+                          transition: 'opacity 0.18s ease',
+                        }}
+                      >
+                        <svg width="8" height="13" viewBox="0 0 8 13" fill="none"><path d="M2 1.5L6 6.5L2 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                    </div>
+                    {/* Dot indicators */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 5, marginTop: 12 }}>
+                      {INVITE_SLIDES.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => { setInviteDir(i > inviteSlide ? 1 : -1); setInviteSlide(i) }}
+                          style={{
+                            width: 5, height: 5, borderRadius: '50%', padding: 0, border: 'none', cursor: 'pointer',
+                            background: i === inviteSlide ? 'var(--color-text-primary)' : 'var(--color-border)',
+                            transition: 'background 0.2s ease',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key design decisions label */}
+                  <div style={{ padding: '20px 20px 12px' }}>
+                    <h5 style={flowLabel}>KEY DESIGN DECISIONS</h5>
+                  </div>
+
+                  {/* Dynamic decision — synced to carousel slide */}
+                  <div style={{ padding: '0 20px 20px' }}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={inviteSlide}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                      >
+                        <div style={{ background: 'var(--color-card-bg)', borderRadius: 8, padding: '14px 16px' }}>
+                          <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, letterSpacing: '0.008em', lineHeight: '1.4em', color: 'var(--color-status-text)', margin: 0 }}>
+                            {INVITE_DECISIONS[inviteSlide]}
+                          </p>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+
               </div>
 
               {/* 03 LOGS */}
@@ -700,16 +1029,51 @@ export default function MotraPage() {
                     <div style={{ height: 1, background: 'var(--color-border)' }} />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <h4 style={sectionH4}>Once a container is live, something has to show it&apos;s working.</h4>
+                    <h4 style={sectionH4}>Once a container is live, users need to see that it&apos;s working</h4>
                     <p style={bodyText}>
-                      I designed Request Logs to surface what server-side tracking hides: a table of what&apos;s firing and whether it&apos;s succeeding, with states for an empty table, a Free-plan cap, and the live data view.
+                      Since containers run on servers and not in the browser, logs (a timestamped record of every request hitting the container) are the only way to see what it is receiving from the website and what it is forwarding to services like Meta or Google Analytics. Examples would be: a page view request coming in from Chrome, a click event forwarded to Google Analytics, a form submit returning a 500 error because a tag was misconfigured, etc. In short, designing a logs feature was essential for users to confirm their container is well set up and for debugging when it is not.
                     </p>
+                    <p style={{ ...bodyText, marginTop: '1.65em' }}>
+                      Logging was one of the first features partners asked for, and I worked with them through several iterations and live prototype testing, until the feature met their needs.
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: '1.65em' }}>
+                      <h5 style={flowLabel}>DESIGN CHALLENGES:</h5>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
+                      {[
+                        'Making a dense technical view readable for non-technical clients and experienced partners alike',
+                        'Precise filtering by date, time range, log type, and status code, so partners and clients can pinpoint specific events without scrolling through everything',
+                        'A scannable table giving a complete read of each request at a glance',
+                        'A log details panel to inspect the exact data each request carries, for deep debugging without leaving the log view',
+                        'Log history limited by plan tier, with a clear upgrade path to access more',
+                      ].map((text, i) => (
+                        <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                          <div style={{ marginTop: 2, flexShrink: 0 }}><ArrowBullet /></div>
+                          <p style={bodyText}>{text}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <Placeholder
-                  label={'LOGS FLOW\n(video placeholder)'}
-                  caption="Logs flow — placeholder, real recording to replace this."
-                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)', lineHeight: 0 }}>
+                  <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%' }}>
+                    <source src="/screens/motra/video-17.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'stretch', height: 240 }}>
+                  <div style={{ flex: 1, borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                    <video autoPlay muted loop playsInline ref={(el) => { if (el) el.currentTime = 3.5 }} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '90% center', transform: 'scale(1.08)', transformOrigin: 'center center' }}>
+                      <source src="/screens/motra/video-21.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                  <div style={{ flex: 1, borderRadius: 8, overflow: 'hidden', background: 'var(--color-card-bg)', border: '1px solid var(--color-border)' }}>
+                    <video autoPlay muted loop playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}>
+                      <source src="/screens/motra/video-20.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                </div>
+                </div>
               </div>
 
             </div>
@@ -723,15 +1087,44 @@ export default function MotraPage() {
               <p style={sectionLabel}>Impact</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <h2 style={sectionH2}>
-                  The design shipped, but the outcome data isn&apos;t in yet.
+                  From zero to a product generating real revenue.
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <h4 style={sectionH4}>Activation rate and onboarding success are being tracked; this section will be updated once there&apos;s real signal</h4>
+                  <h4 style={sectionH4}>Paying customers, good product feedbacks and growing week by week</h4>
                   <p style={bodyText}>
-                    SST went to production while this case study was being written. The create container flow activation rate and onboarding success for invited users are both being tracked, but the data hasn&apos;t stabilized long enough to report with confidence. I&apos;ll update this section once the numbers are in.
+                    SST launched as Usercentrics&apos; first product outside consent management. These numbers reflect early traction from a product that didn&apos;t exist a few months ago.
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Stat grid */}
+            <div ref={statsRef} style={{
+              display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+              border: '1px solid var(--color-border)', borderRadius: 8,
+              overflow: 'hidden', background: 'var(--color-card-bg)',
+            }}>
+              {[
+                { target: 754, decimals: 0, suffix: '', label: 'Containers created', sub: 'since launch' },
+                { target: 1.77, decimals: 2, suffix: 'B', label: 'Requests processed', sub: 'last 6 months' },
+                { target: 150, decimals: 0, suffix: '+', label: 'Paying customers', sub: 'cumulative' },
+              ].map((stat, i) => {
+                const raw = stat.target * statsProgress
+                const display = stat.decimals > 0 ? raw.toFixed(stat.decimals) + stat.suffix : Math.round(raw) + stat.suffix
+                return (
+                <div key={i} style={{
+                  background: 'var(--color-card-bg)', padding: '24px',
+                  display: 'flex', flexDirection: 'column', gap: 10,
+                  borderRight: i < 2 ? '1px solid var(--color-border)' : 'none',
+                  background: isDark ? 'var(--color-card-bg)' : 'linear-gradient(145deg, rgba(255,255,255,0.55) 0%, rgba(0,0,0,0.02) 100%), var(--color-card-bg)',
+                }}>
+                  <p style={{ fontFamily: SERIFM, fontSize: 36, fontWeight: 500, letterSpacing: '-0.04em', lineHeight: 1, color: 'var(--color-text-primary)', margin: 0 }}>{display}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, color: 'var(--color-text-primary)', margin: 0 }}>{stat.label}</p>
+                    <p style={{ fontFamily: SANS, fontSize: 12.8, fontWeight: 500, color: 'var(--color-text-secondary)', margin: 0 }}>{stat.sub}</p>
+                  </div>
+                </div>
+              )})}
             </div>
 
           </section>
