@@ -371,6 +371,10 @@ export default function MotraPage() {
         .noto-email-link:hover { color: rgba(255, 119, 0, 0.97) !important; }
         :root { --color-omro-subtitle: rgba(0, 0, 0, 0.75); }
         .dark { --color-omro-subtitle: rgba(255, 255, 255, 0.749); }
+        @keyframes motra-ticker {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-3290px); }
+        }
       `}</style>
 
       <div style={{
@@ -1113,10 +1117,10 @@ export default function MotraPage() {
                 const display = stat.decimals > 0 ? raw.toFixed(stat.decimals) + stat.suffix : Math.round(raw) + stat.suffix
                 return (
                 <div key={i} style={{
-                  background: 'var(--color-card-bg)', padding: '24px',
                   display: 'flex', flexDirection: 'column', gap: 10,
                   borderRight: i < 2 ? '1px solid var(--color-border)' : 'none',
                   background: isDark ? 'var(--color-card-bg)' : 'linear-gradient(145deg, rgba(255,255,255,0.55) 0%, rgba(0,0,0,0.02) 100%), var(--color-card-bg)',
+                  padding: '24px',
                 }}>
                   <p style={{ fontFamily: SERIFM, fontSize: 36, fontWeight: 500, letterSpacing: '-0.04em', lineHeight: 1, color: 'var(--color-text-primary)', margin: 0 }}>{display}</p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -1156,11 +1160,42 @@ export default function MotraPage() {
                 <h2 style={sectionH2}>What I learned from SST.</h2>
               </div>
 
+              {/* Photo ticker */}
+              <div style={{ height: 374, borderRadius: 10, overflow: 'hidden', width: '100%' }}>
+                <div style={{
+                  display: 'flex', flexDirection: 'row', alignItems: 'center',
+                  gap: 10, height: '100%', width: 'max-content',
+                  animation: 'motra-ticker 90s linear infinite',
+                }}>
+                  {([
+                    '/screens/motra/sst-photo-1.jpeg',
+                    '/screens/motra/sst-photo-2.jpeg',
+                    '/screens/motra/sst-photo-3.jpeg',
+                    '/screens/motra/sst-photo-4.jpeg',
+                    '/screens/motra/sst-photo-5.jpeg',
+                    '/screens/motra/sst-photo-6.jpeg',
+                    '/screens/motra/sst-photo-7.jpeg',
+                    '/screens/motra/sst-photo-1.jpeg',
+                    '/screens/motra/sst-photo-2.jpeg',
+                    '/screens/motra/sst-photo-3.jpeg',
+                    '/screens/motra/sst-photo-4.jpeg',
+                    '/screens/motra/sst-photo-5.jpeg',
+                    '/screens/motra/sst-photo-6.jpeg',
+                    '/screens/motra/sst-photo-7.jpeg',
+                  ]).map((src, i) => (
+                    <div key={i} style={{ width: 460, height: '100%', flexShrink: 0, borderRadius: 8, overflow: 'hidden' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt="" loading="eager" decoding="sync" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', objectPosition: src.includes('sst-photo-7') ? 'left center' : 'center center' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Pull quote */}
               <div style={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center', marginTop: 12 }}>
                 <div style={{ width: 3, alignSelf: 'stretch', background: 'var(--color-noto-accent)', flexShrink: 0 }} />
                 <h2 style={{ fontFamily: SERIFM, fontSize: 19.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.04em', color: 'var(--color-status-text)', margin: 0 }}>
-                  I kept designing for failure states I couldn&apos;t test, on a product that didn&apos;t exist yet. That shapes how you think about every decision.
+                  There&apos;s something deeply rewarding about building a product from scratch. Even more so when it becomes a major bet for the company.
                 </h2>
               </div>
             </div>
@@ -1175,12 +1210,12 @@ export default function MotraPage() {
               <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
                 <div style={{ width: '28%', flexShrink: 0 }}>
                   <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'var(--color-text-primary)', margin: 0 }}>
-                    Designing for a product you can&apos;t see in action. I had to understand it before I could simplify it.
+                    Designing for a technically complex product means becoming a practitioner first.
                   </h3>
                 </div>
                 <div style={{ flex: '1 0 0' }}>
                   <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
-                    Server-side tracking is invisible by design. Events fire on a server somewhere, and nothing shows up in the browser. Getting familiar enough with the product to design for it took real time, and I learned more from partner interviews than from any documentation. You can&apos;t design a setup flow for something you don&apos;t understand well enough to set up yourself.
+                    SST involves DNS, server infrastructure, and third-party platforms I had no prior experience with. I got there by reading documentation, going through competitor flows, and talking directly to partners. The design only became clear once I became more expert in this field.
                   </p>
                 </div>
               </div>
@@ -1190,12 +1225,27 @@ export default function MotraPage() {
               <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
                 <div style={{ width: '28%', flexShrink: 0 }}>
                   <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'var(--color-text-primary)', margin: 0 }}>
-                    The hardest step to design is the one that leaves your product. I spent more time on that screen than on anything I designed myself.
+                    The hardest step is the one that leaves your product.
                   </h3>
                 </div>
                 <div style={{ flex: '1 0 0' }}>
                   <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
-                    The GTM handoff is a small moment in the flow, but it&apos;s the one that determined whether users activated. I spent more design time on that step than on anything else, trying to make a seam as smooth as possible when the product on either side of it is someone else&apos;s. I didn&apos;t expect that going in.
+                    The GTM handoff looks like a minor moment but it&apos;s where most users dropped off. The core challenge I had was correctly guiding users when they were acting on a separate platform than ours. That context switch is easy to overlook as a designer and fatal as a user experience.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ height: 1, width: '100%', background: 'var(--color-border)' }} />
+
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 60, alignItems: 'flex-start' }}>
+                <div style={{ width: '28%', flexShrink: 0 }}>
+                  <h3 style={{ fontFamily: SERIFM, fontSize: 15.2, fontWeight: 500, lineHeight: '1.4em', letterSpacing: '-0.008em', color: 'var(--color-text-primary)', margin: 0 }}>
+                    Building 0 to 1 means no baselines. Every decision is a first.
+                  </h3>
+                </div>
+                <div style={{ flex: '1 0 0' }}>
+                  <p style={{ fontFamily: SANS, fontSize: 14.08, fontWeight: 500, lineHeight: '1.7em', letterSpacing: '0.008em', color: 'var(--color-status-text)', margin: 0 }}>
+                    There was no prior design to work from. I based early decisions on competitor research, close collaboration with the PM, and direct input from partners. Without a baseline, those inputs were essential and became the foundation for everything I built.
                   </p>
                 </div>
               </div>
