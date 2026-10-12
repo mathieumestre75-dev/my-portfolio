@@ -1092,7 +1092,7 @@ export default function MotraPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <h4 style={sectionH4}>Paying customers, good product feedbacks and growing week by week</h4>
                   <p style={bodyText}>
-                    SST launched as Usercentrics&apos; first product outside consent management. These numbers reflect early traction from a product that didn&apos;t exist a few months ago.
+                    SST launched as Usercentrics&apos; first product outside consent management, now positioned as a major bet for the company&apos;s future. These numbers reflect early traction from something that didn&apos;t exist a few months ago.
                   </p>
                 </div>
               </div>
@@ -1135,11 +1135,11 @@ export default function MotraPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
               <p style={sectionLabel}>Next Steps</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <h2 style={sectionH2}>From prototype to production.</h2>
+                <h2 style={sectionH2}>Measuring design impact and cobuilding with partners.</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <h4 style={sectionH4}>Faithful reproduction first, design system adaptation second</h4>
+                  <h4 style={sectionH4}>Amplitude tracking what we delivered, partners shaping what comes next</h4>
                   <p style={bodyText}>
-                    I handed the prototypes to the engineering team with specs ready for a faithful reproduction. From there, the plan was to adapt everything to Usercentrics&apos; Lodge design system, with usability testing running alongside. A fuller onboarding wizard for the create container flow was also scoped as a follow-up.
+                    After launching the new create container flow, I&apos;m now tracking in Amplitude whether it increases activation. Development also continues alongside partners and clients on requested features like Bot Detection, Resilient Script Loader, and Geolocation Headers, each aimed at making tracking data more complete and reliable. I&apos;ll be testing each flow early with partners to confirm it actually solves their problem.
                   </p>
                 </div>
               </div>
